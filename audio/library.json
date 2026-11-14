@@ -4,7 +4,7 @@
     "title": "10",
     "artist": "Эндшпиль",
     "album": "10",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/endshpil-10.jpg",
     "preview": "audio/endshpil-10.m4a",
     "duration": 164
@@ -14,7 +14,7 @@
     "title": "2 лимузина",
     "artist": "Napylniik",
     "album": "2 лимузина",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/napylniik-2-limuzina.jpg",
     "preview": "audio/napylniik-2-limuzina.m4a",
     "duration": 115
@@ -24,7 +24,7 @@
     "title": "23",
     "artist": "Bluefish",
     "album": "",
-    "genre": "Hip-hop/Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/bluefish-23.jpg",
     "preview": "audio/bluefish-23.m4a",
     "duration": 202,
@@ -35,7 +35,7 @@
     "title": "Алеха гаваи",
     "artist": "рэ.прэса",
     "album": "Накипело",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/re-presa-aleha-gavai.jpg",
     "preview": "audio/re-presa-aleha-gavai.m4a",
     "duration": 179
@@ -45,7 +45,7 @@
     "title": "БАНК",
     "artist": "ICEGERGERT; Zivert",
     "album": "БАНК",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/icegergert-zivert-bank.jpg",
     "preview": "audio/icegergert-zivert-bank.m4a",
     "duration": 178
@@ -55,7 +55,7 @@
     "title": "Белый 500",
     "artist": "Нурминский",
     "album": "Белый 500",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/nurminskiy-belyy-500.jpg",
     "preview": "audio/nurminskiy-belyy-500.m4a",
     "duration": 204
@@ -65,7 +65,7 @@
     "title": "Бог войны",
     "artist": "Хаски",
     "album": "Бог войны",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/haski-bog-voyny.jpg",
     "preview": "audio/haski-bog-voyny.m4a",
     "duration": 222
@@ -75,7 +75,7 @@
     "title": "в небо коза ёмоё",
     "artist": "pyrokinesis",
     "album": "в небо коза ёмоё",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/pyrokinesis-v-nebo-koza-emoe.jpg",
     "preview": "audio/pyrokinesis-v-nebo-koza-emoe.m4a",
     "duration": 177
@@ -85,7 +85,7 @@
     "title": "Выход в город",
     "artist": "Noize MC",
     "album": "Выход в город",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/noize-mc-vyhod-v-gorod.jpg",
     "preview": "audio/noize-mc-vyhod-v-gorod.m4a",
     "duration": 189
@@ -106,7 +106,7 @@
     "title": "герметика",
     "artist": "pyrokinesis",
     "album": "Геометрия тьмы",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/pyrokinesis-germetika.jpg",
     "preview": "audio/pyrokinesis-germetika.m4a",
     "duration": 219
@@ -116,7 +116,7 @@
     "title": "ГИМН КАЧКОВ",
     "artist": "maxxytren; bulk_machine",
     "album": "ГИМН КАЧКОВ",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/maxxytren-bulk-machine-gimn-kachkov.jpg",
     "preview": "audio/maxxytren-bulk-machine-gimn-kachkov.m4a",
     "duration": 141
@@ -126,7 +126,7 @@
     "title": "Грусть 2 (Соната)",
     "artist": "OG Buda; MAYOT",
     "album": "FREERIO 2",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/og-buda-mayot-grust-2-sonata.jpg",
     "preview": "audio/og-buda-mayot-grust-2-sonata.m4a",
     "duration": 144
@@ -136,7 +136,7 @@
     "title": "ДИНАСТИЯ",
     "artist": "VILLIAN; madk1d",
     "album": "Красивое Зло",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/villian-madk1d-dinastiya.jpg",
     "preview": "audio/villian-madk1d-dinastiya.m4a",
     "duration": 150
@@ -146,7 +146,7 @@
     "title": "Дорога дальняя",
     "artist": "Jakone",
     "album": "Дорога дальняя",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/jakone-doroga-dalnyaya.jpg",
     "preview": "audio/jakone-doroga-dalnyaya.m4a",
     "duration": 142
@@ -156,7 +156,7 @@
     "title": "Заново завоевать",
     "artist": "Pepel Nahudi",
     "album": "KINGDOM MADE",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/pepel-nahudi-zanovo-zavoevat.jpg",
     "preview": "audio/pepel-nahudi-zanovo-zavoevat.m4a",
     "duration": 112
@@ -166,7 +166,7 @@
     "title": "Идиот (feat. Ilya Konoplev)",
     "artist": "PHARAOH; Ilya Konoplev",
     "album": "PHILARMONIA",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/pharaoh-ilya-konoplev-idiot-feat-ilya-konoplev.jpg",
     "preview": "audio/pharaoh-ilya-konoplev-idiot-feat-ilya-konoplev.m4a",
     "duration": 190
@@ -176,7 +176,7 @@
     "title": "Как ты там",
     "artist": "Kamazz",
     "album": "Как ты там",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/kamazz-kak-ty-tam.jpg",
     "preview": "audio/kamazz-kak-ty-tam.m4a",
     "duration": 138
@@ -186,7 +186,7 @@
     "title": "Какая?",
     "artist": "whyspurky; whylovly",
     "album": "Какая?",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/whyspurky-whylovly-kakaya.jpg",
     "preview": "audio/whyspurky-whylovly-kakaya.m4a",
     "duration": 176
@@ -196,7 +196,7 @@
     "title": "Контакт (prod. by CONCENTRACIA)",
     "artist": "PUSSYKILLER; Экси",
     "album": "AMNESIA",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/pussykiller-eksi-kontakt-prod-by-concentracia.jpg",
     "preview": "audio/pussykiller-eksi-kontakt-prod-by-concentracia.m4a",
     "duration": 136
@@ -206,7 +206,7 @@
     "title": "кончил",
     "artist": "Enina",
     "album": "кончил",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/enina-konchil.jpg",
     "preview": "audio/enina-konchil.m4a",
     "duration": 130
@@ -226,7 +226,7 @@
     "title": "Кусай мои губы",
     "artist": "лучнадежды",
     "album": "Кусай мои губы",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/luchnadezhdy-kusay-moi-guby.jpg",
     "preview": "audio/luchnadezhdy-kusay-moi-guby.m4a",
     "duration": 151
@@ -236,7 +236,7 @@
     "title": "Ламбада",
     "artist": "N1NT3ND0",
     "album": "N1NT3ND0",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/n1nt3nd0-lambada.jpg",
     "preview": "audio/n1nt3nd0-lambada.m4a",
     "duration": 206
@@ -246,7 +246,7 @@
     "title": "Легенда о Богине Гроз",
     "artist": "pyrokinesis",
     "album": "Легенда о Богине Гроз",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/pyrokinesis-legenda-o-bogine-groz.jpg",
     "preview": "audio/pyrokinesis-legenda-o-bogine-groz.m4a",
     "duration": 205
@@ -277,7 +277,7 @@
     "title": "Мне это не нужно",
     "artist": "kizaru",
     "album": "Тебя любят там где меня нет",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/kizaru-mne-eto-ne-nuzhno.jpg",
     "preview": "audio/kizaru-mne-eto-ne-nuzhno.m4a",
     "duration": 207
@@ -287,7 +287,7 @@
     "title": "Молили небеса",
     "artist": "Jamik",
     "album": "Семья или бизнес",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/jamik-molili-nebesa.jpg",
     "preview": "audio/jamik-molili-nebesa.m4a",
     "duration": 162
@@ -297,7 +297,7 @@
     "title": "Моя роза",
     "artist": "Заточка",
     "album": "Вынь да положь",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/zatochka-moya-roza.png",
     "preview": "audio/zatochka-moya-roza.m4a",
     "duration": 205
@@ -307,7 +307,7 @@
     "title": "На белом",
     "artist": "Каспийский Груз; Гио Пика",
     "album": "Осторожно Окрашено",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/kaspiyskiy-gruz-gio-pika-na-belom.jpg",
     "preview": "audio/kaspiyskiy-gruz-gio-pika-na-belom.m4a",
     "duration": 243
@@ -317,7 +317,7 @@
     "title": "На один смысл меньше",
     "artist": "Jubilee",
     "album": "",
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/jubilee-na-odin-smysl-menshe.jpg",
     "preview": "audio/jubilee-na-odin-smysl-menshe.m4a",
     "duration": 256
@@ -327,7 +327,7 @@
     "title": "Народ задыхался от боли",
     "artist": "KAMILL’FO",
     "album": "Народ задыхался от боли",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/kamill-fo-narod-zadyhalsya-ot-boli.jpg",
     "preview": "audio/kamill-fo-narod-zadyhalsya-ot-boli.m4a",
     "duration": 153
@@ -337,7 +337,7 @@
     "title": "Наследство",
     "artist": "ICEGERGERT; SKY RAE",
     "album": "Наследство",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/icegergert-sky-rae-nasledstvo.jpg",
     "preview": "audio/icegergert-sky-rae-nasledstvo.m4a",
     "duration": 130
@@ -347,7 +347,7 @@
     "title": "Не твой",
     "artist": "Макс Корж",
     "album": "Не твой",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/maks-korzh-ne-tvoy.jpg",
     "preview": "audio/maks-korzh-ne-tvoy.m4a",
     "duration": 175
@@ -357,7 +357,7 @@
     "title": "Нимфоманка",
     "artist": "Santiz",
     "album": "Былое 2013/2017",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/santiz-nimfomanka.jpg",
     "preview": "audio/santiz-nimfomanka.m4a",
     "duration": 125
@@ -367,7 +367,7 @@
     "title": "Обнял, поцеловал",
     "artist": "Whole Lotta Swag",
     "album": "First Day In Therapy",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/whole-lotta-swag-obnyal-potseloval.jpg",
     "preview": "audio/whole-lotta-swag-obnyal-potseloval.m4a",
     "duration": 158
@@ -377,7 +377,7 @@
     "title": "ОКО",
     "artist": "pyrokinesis",
     "album": "ОКО",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/pyrokinesis-oko.jpg",
     "preview": "audio/pyrokinesis-oko.m4a",
     "duration": 161
@@ -387,7 +387,7 @@
     "title": "оставь себе",
     "artist": "mzlff; pyrokinesis",
     "album": "потерянный мир",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/mzlff-pyrokinesis-ostav-sebe.png",
     "preview": "audio/mzlff-pyrokinesis-ostav-sebe.m4a",
     "duration": 158
@@ -397,7 +397,7 @@
     "title": "Пацаны из падиков (prod. by karmv)",
     "artist": "ТАТАРИН; Татем",
     "album": "Районы",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/tatarin-tatem-patsany-iz-padikov-prod-by-karmv.jpg",
     "preview": "audio/tatarin-tatem-patsany-iz-padikov-prod-by-karmv.m4a",
     "duration": 124
@@ -407,7 +407,7 @@
     "title": "ПАЦАНЫ II",
     "artist": "GONE.Fludd",
     "album": "ПАЦАНЫ II",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/gone-fludd-patsany-ii.jpg",
     "preview": "audio/gone-fludd-patsany-ii.m4a",
     "duration": 217
@@ -417,7 +417,7 @@
     "title": "По статье",
     "artist": "Криминальный бит",
     "album": "По статье",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/kriminalnyy-bit-po-state.jpg",
     "preview": "audio/kriminalnyy-bit-po-state.m4a",
     "duration": 152
@@ -427,7 +427,7 @@
     "title": "Полярная звезда",
     "artist": "MOSOVICH & BATRAI",
     "album": "Полярная звезда",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/mosovich-batrai-polyarnaya-zvezda.jpg",
     "preview": "audio/mosovich-batrai-polyarnaya-zvezda.m4a",
     "duration": 143
@@ -448,7 +448,7 @@
     "title": "Прониклась мной",
     "artist": "T-Fest; Иван Дорн; DJ INSAMA",
     "album": "Прониклась мной",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/t-fest-ivan-dorn-dj-insama-proniklas-mnoy.jpg",
     "preview": "audio/t-fest-ivan-dorn-dj-insama-proniklas-mnoy.m4a",
     "duration": 174
@@ -469,7 +469,7 @@
     "title": "Пусто",
     "artist": "V $ X V PRiNCE; BOLLO",
     "album": "Сатпаева 32",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/v-x-v-prince-bollo-pusto.jpg",
     "preview": "audio/v-x-v-prince-bollo-pusto.m4a",
     "duration": 202
@@ -479,7 +479,7 @@
     "title": "Пусть Бог будет рядом с твоими планами",
     "artist": "MACAN; Баста",
     "album": "BRATLAND",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/macan-basta-pust-bog-budet-ryadom-s-tvoimi-planami.jpg",
     "preview": "audio/macan-basta-pust-bog-budet-ryadom-s-tvoimi-planami.m4a",
     "duration": 197
@@ -489,7 +489,7 @@
     "title": "ПЫХ-ПЫХ (Aggressive Version)",
     "artist": "SQWOZ BAB",
     "album": "GENERATION ПЫХ",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/sqwoz-bab-pyh-pyh-aggressive-version.jpg",
     "preview": "audio/sqwoz-bab-pyh-pyh-aggressive-version.m4a",
     "duration": 104
@@ -509,7 +509,7 @@
     "title": "распять",
     "artist": "greyrock; tewiq; madk1d",
     "album": "распять",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/greyrock-tewiq-madk1d-raspyat.jpg",
     "preview": "audio/greyrock-tewiq-madk1d-raspyat.m4a",
     "duration": 120
@@ -530,7 +530,7 @@
     "title": "Сиять",
     "artist": "Джон Гарик",
     "album": "Престиж (Deluxe)",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/dzhon-garik-siyat.jpg",
     "preview": "audio/dzhon-garik-siyat.m4a",
     "duration": 121
@@ -540,7 +540,7 @@
     "title": "Скажи мне кто ты",
     "artist": "xxxmanera",
     "album": "Скажи мне кто ты",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/xxxmanera-skazhi-mne-kto-ty.jpg",
     "preview": "audio/xxxmanera-skazhi-mne-kto-ty.m4a",
     "duration": 132
@@ -550,7 +550,7 @@
     "title": "Спонсор твоих проблем",
     "artist": "GUF; A.V.G",
     "album": "Спонсор твоих проблем",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/guf-a-v-g-sponsor-tvoih-problem.jpg",
     "preview": "audio/guf-a-v-g-sponsor-tvoih-problem.m4a",
     "duration": 237
@@ -560,7 +560,7 @@
     "title": "так по***",
     "artist": "madk1d",
     "album": "sexyswag",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/madk1d-tak-po.jpg",
     "preview": "audio/madk1d-tak-po.m4a",
     "duration": 108
@@ -570,7 +570,7 @@
     "title": "Тамагочи",
     "artist": "лил кидд",
     "album": "Улица №64",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/lil-kidd-tamagochi.jpg",
     "preview": "audio/lil-kidd-tamagochi.m4a",
     "duration": 115
@@ -580,7 +580,7 @@
     "title": "ТЕНИ ХИРОСИМЫ",
     "artist": "GONE.Fludd",
     "album": "ТЕНИ ХИРОСИМЫ",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/gone-fludd-teni-hirosimy.jpg",
     "preview": "audio/gone-fludd-teni-hirosimy.m4a",
     "duration": 134
@@ -601,7 +601,7 @@
     "title": "Трахаца",
     "artist": "ЛЯЛЬКА",
     "album": "Трахаца",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/lyalka-trahatsa.jpg",
     "preview": "audio/lyalka-trahatsa.m4a",
     "duration": 148
@@ -611,7 +611,7 @@
     "title": "Ты далеко",
     "artist": "Макс Корж",
     "album": "Ты далеко",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/maks-korzh-ty-daleko.jpg",
     "preview": "audio/maks-korzh-ty-daleko.m4a",
     "duration": 221
@@ -621,7 +621,7 @@
     "title": "Ты ли?",
     "artist": "Edvan",
     "album": "Ты ли?",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/edvan-ty-li.jpg",
     "preview": "audio/edvan-ty-li.m4a",
     "duration": 171
@@ -631,7 +631,7 @@
     "title": "Утюжок",
     "artist": "Ноггано",
     "album": "Палец на отсечение",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/noggano-utyuzhok.jpg",
     "preview": "audio/noggano-utyuzhok.m4a",
     "duration": 287
@@ -641,7 +641,7 @@
     "title": "Франция",
     "artist": "Jamik; PUSSYKILLER",
     "album": "Франция",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/jamik-pussykiller-frantsiya.jpg",
     "preview": "audio/jamik-pussykiller-frantsiya.m4a",
     "duration": 124
@@ -651,7 +651,7 @@
     "title": "ХАЙЕГОХО",
     "artist": "Toxi$",
     "album": "JAZZ DO IT",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/toxi-hayegoho.jpg",
     "preview": "audio/toxi-hayegoho.m4a",
     "duration": 97
@@ -672,7 +672,7 @@
     "title": "Харизма",
     "artist": "Wallem",
     "album": "Харизма",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/wallem-harizma.jpg",
     "preview": "audio/wallem-harizma.m4a",
     "duration": 136
@@ -693,7 +693,7 @@
     "title": "чапман ред",
     "artist": "pyrokinesis",
     "album": "чапман ред",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/pyrokinesis-chapman-red.jpg",
     "preview": "audio/pyrokinesis-chapman-red.m4a",
     "duration": 156
@@ -703,7 +703,7 @@
     "title": "Это любовь",
     "artist": "Скриптонит",
     "album": "Romantic Collection",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/skriptonit-eto-lyubov.jpg",
     "preview": "audio/skriptonit-eto-lyubov.m4a",
     "duration": 279
@@ -713,7 +713,7 @@
     "title": "Это наш путь",
     "artist": "Макс Корж",
     "album": "Это наш путь",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/maks-korzh-eto-nash-put.jpg",
     "preview": "audio/maks-korzh-eto-nash-put.m4a",
     "duration": 176
@@ -744,7 +744,7 @@
     "title": "Я тебя люблю",
     "artist": "Whole Lotta Swag",
     "album": "NO TYPE",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/whole-lotta-swag-ya-tebya-lyublyu.jpg",
     "preview": "audio/whole-lotta-swag-ya-tebya-lyublyu.m4a",
     "duration": 119
@@ -776,7 +776,7 @@
     "title": "AGENT-PROVOCATEUR",
     "artist": "NEWLIGHTCHILD",
     "album": "ENEMY",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/newlightchild-agent-provocateur.jpg",
     "preview": "audio/newlightchild-agent-provocateur.m4a",
     "duration": 103
@@ -798,7 +798,7 @@
     "artist": "Lil Pump",
     "album": "All The Sudden",
     "trackNumber": 1,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/lil-pump-all-the-sudden.jpg",
     "preview": "audio/lil-pump-all-the-sudden.m4a",
     "duration": 126
@@ -808,7 +808,7 @@
     "title": "astral step",
     "artist": "shadowraze",
     "album": "astral step",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/shadowraze-astral-step.jpg",
     "preview": "audio/shadowraze-astral-step.m4a",
     "duration": 121
@@ -817,9 +817,9 @@
     "id": "blueface-baby-momma-drama-bazenation-com",
     "title": "Baby Momma Drama",
     "artist": "Blueface",
-    "album": "Baby Momma Drama - Single",
+    "album": "",
     "trackNumber": 1,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/blueface-baby-momma-drama-bazenation-com.jpg",
     "preview": "audio/blueface-baby-momma-drama-bazenation-com.m4a",
     "duration": 148
@@ -840,7 +840,7 @@
     "title": "BLIND ZONE",
     "artist": "OBLADAET",
     "album": "PLAYERS CLUB",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/obladaet-blind-zone.jpg",
     "preview": "audio/obladaet-blind-zone.m4a",
     "duration": 125
@@ -860,7 +860,7 @@
     "title": "Boston",
     "artist": "Яд Добра",
     "album": "Boston",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/yad-dobra-boston.jpg",
     "preview": "audio/yad-dobra-boston.m4a",
     "duration": 157
@@ -871,7 +871,7 @@
     "artist": "Big Baby Tape",
     "album": "Hoodrich Tales",
     "trackNumber": 3,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/big-baby-tape-broke-day-www-muzoff-net.jpg",
     "preview": "audio/big-baby-tape-broke-day-www-muzoff-net.m4a",
     "duration": 246
@@ -903,7 +903,7 @@
     "title": "Chickenhead",
     "artist": "RAM",
     "album": "TRIBE",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/ram-chickenhead.jpg",
     "preview": "audio/ram-chickenhead.m4a",
     "duration": 135
@@ -924,7 +924,7 @@
     "title": "Civil War",
     "artist": "Russ",
     "album": "",
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/russ-civil-war-muzonov-net.jpg",
     "preview": "audio/russ-civil-war-muzonov-net.m4a",
     "duration": 144
@@ -935,7 +935,7 @@
     "artist": "Big Baby Tape",
     "album": "Hoodrich Tales",
     "trackNumber": 7,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/big-baby-tape-come-and-go-feat-tape-laflare-www-muzoff-net.jpg",
     "preview": "audio/big-baby-tape-come-and-go-feat-tape-laflare-www-muzoff-net.m4a",
     "duration": 146
@@ -945,7 +945,7 @@
     "title": "DAO",
     "artist": "Miyagi; HLOY; Даена",
     "album": "DAO",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/miyagi-hloy-daena-dao.jpg",
     "preview": "audio/miyagi-hloy-daena-dao.m4a",
     "duration": 222
@@ -967,7 +967,7 @@
     "artist": "Big Baby Tape",
     "album": "Hoodrich Tales",
     "trackNumber": 5,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/big-baby-tape-dead-heat-feat-boulevard-depo-www-muzoff-net.jpg",
     "preview": "audio/big-baby-tape-dead-heat-feat-boulevard-depo-www-muzoff-net.m4a",
     "duration": 191
@@ -987,7 +987,7 @@
     "title": "Diamond",
     "artist": "Кореш; PINQ",
     "album": "Diamond",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/koresh-pinq-diamond.jpg",
     "preview": "audio/koresh-pinq-diamond.m4a",
     "duration": 128
@@ -998,7 +998,7 @@
     "artist": "$NOT & A$AP Rocky",
     "album": "Doja",
     "trackNumber": 1,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/not-a-ap-rocky-doja.jpg",
     "preview": "audio/not-a-ap-rocky-doja.m4a",
     "duration": 171
@@ -1040,7 +1040,7 @@
     "id": "dazzlingbless-era-of-death",
     "title": "Era of Death",
     "artist": "dazzlingbless",
-    "album": "Era of Death - Single",
+    "album": "",
     "trackNumber": 1,
     "genre": "Electronic",
     "artwork": "audio/covers/dazzlingbless-era-of-death.jpg",
@@ -1065,7 +1065,7 @@
     "artist": "Big Baby Tape",
     "album": "Hoodrich Tales",
     "trackNumber": 4,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/big-baby-tape-gas-face-feat-polyana-www-muzoff-net.jpg",
     "preview": "audio/big-baby-tape-gas-face-feat-polyana-www-muzoff-net.m4a",
     "duration": 194
@@ -1076,7 +1076,7 @@
     "artist": "Big Baby Tape",
     "album": "Hoodrich Tales",
     "trackNumber": 1,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/big-baby-tape-go-go-tape-remastered-www-muzoff-net.jpg",
     "preview": "audio/big-baby-tape-go-go-tape-remastered-www-muzoff-net.m4a",
     "duration": 227
@@ -1097,7 +1097,7 @@
     "title": "GoodDayFlopTray",
     "artist": "DJ Stonik1917",
     "album": "Happy House",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/dj-stonik1917-gooddayfloptray.jpg",
     "preview": "audio/dj-stonik1917-gooddayfloptray.m4a",
     "duration": 186
@@ -1108,7 +1108,7 @@
     "artist": "Big Baby Tape",
     "album": "Hoodrich Tales",
     "trackNumber": 6,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/big-baby-tape-hustle-tales-feat-feduk-www-muzoff-net.jpg",
     "preview": "audio/big-baby-tape-hustle-tales-feat-feduk-www-muzoff-net.m4a",
     "duration": 192
@@ -1118,7 +1118,7 @@
     "title": "I GOT U",
     "artist": "Toxi$",
     "album": "I GOT U",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/toxi-i-got-u.jpg",
     "preview": "audio/toxi-i-got-u.m4a",
     "duration": 163
@@ -1150,7 +1150,7 @@
     "title": "IVL",
     "artist": "MACAN; SCIRENA",
     "album": "IVL",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/macan-scirena-ivl.jpg",
     "preview": "audio/macan-scirena-ivl.m4a",
     "duration": 200
@@ -1161,7 +1161,7 @@
     "artist": "House of Pain",
     "album": "House of Pain",
     "trackNumber": 1,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/radio-remix-house-of-pain-jump-around.jpg",
     "preview": "audio/radio-remix-house-of-pain-jump-around.m4a",
     "duration": 220
@@ -1172,7 +1172,7 @@
     "artist": "Drake, Future",
     "album": "What a Time to Be Alive",
     "trackNumber": 1,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/drake-future-jumpman.jpg",
     "preview": "audio/drake-future-jumpman.m4a",
     "duration": 206
@@ -1183,7 +1183,7 @@
     "artist": "Oxxxymiron",
     "album": "Вечный жид",
     "trackNumber": 1,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/oxxxymiron-konstrukt-muzfan-net.png",
     "preview": "audio/oxxxymiron-konstrukt-muzfan-net.m4a",
     "duration": 482
@@ -1213,7 +1213,7 @@
     "title": "Mazzaleen",
     "artist": "LIL KRYSTALLL",
     "album": "Mazzaleen",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/lil-krystalll-mazzaleen.jpg",
     "preview": "audio/lil-krystalll-mazzaleen.m4a",
     "duration": 176
@@ -1223,7 +1223,7 @@
     "title": "MB",
     "artist": "OBLADAET; LIL KRYSTALLL",
     "album": "PLAYERS CLUB 2",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/obladaet-lil-krystalll-mb.jpg",
     "preview": "audio/obladaet-lil-krystalll-mb.m4a",
     "duration": 216
@@ -1232,7 +1232,7 @@
     "id": "dazzlingbless-merry-christmas",
     "title": "Merry Christmas",
     "artist": "dazzlingbless",
-    "album": "Merry Christmas - Single",
+    "album": "",
     "trackNumber": 1,
     "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/dazzlingbless-merry-christmas.jpg",
@@ -1245,7 +1245,7 @@
     "title": "MiMiMaMaMu",
     "artist": "Exile; STOPBAN; DILBLIN",
     "album": "MiMiMaMaMu",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/exile-stopban-dilblin-mimimamamu.jpg",
     "preview": "audio/exile-stopban-dilblin-mimimamamu.m4a",
     "duration": 185
@@ -1255,7 +1255,7 @@
     "title": "MONSTER TRAKK",
     "artist": "OBLADAET",
     "album": "PLAYERS CLUB 2",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/obladaet-monster-trakk.jpg",
     "preview": "audio/obladaet-monster-trakk.m4a",
     "duration": 134
@@ -1265,7 +1265,7 @@
     "title": "MUTANT",
     "artist": "OBLADAET",
     "album": "PLAYERS CLUB 2",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/obladaet-mutant.jpg",
     "preview": "audio/obladaet-mutant.m4a",
     "duration": 172
@@ -1275,7 +1275,7 @@
     "title": "Never Broke Again",
     "artist": "xxxmanera",
     "album": "Never Broke Again",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/xxxmanera-never-broke-again.jpg",
     "preview": "audio/xxxmanera-never-broke-again.m4a",
     "duration": 108
@@ -1285,7 +1285,7 @@
     "title": "never enough",
     "artist": "zxcursed",
     "album": "never enough",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/zxcursed-never-enough.jpg",
     "preview": "audio/zxcursed-never-enough.m4a",
     "duration": 142
@@ -1295,7 +1295,7 @@
     "title": "OCG",
     "artist": "FRIENDLY THUG 52 NGG; SaintPrince 52",
     "album": "Graf Monte-Cristo / Most Valuable Pirate",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/friendly-thug-52-ngg-saintprince-52-ocg.jpg",
     "preview": "audio/friendly-thug-52-ngg-saintprince-52-ocg.m4a",
     "duration": 141
@@ -1316,7 +1316,7 @@
     "title": "ParisLove",
     "artist": "FORTUNA 812",
     "album": "ParisLove",
-    "genre": "rusrap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/fortuna-812-parislove.jpg",
     "preview": "audio/fortuna-812-parislove.m4a",
     "duration": 110
@@ -1327,7 +1327,7 @@
     "artist": "Big Baby Tape",
     "album": "Hoodrich Tales",
     "trackNumber": 2,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/big-baby-tape-rich-day-www-muzoff-net.jpg",
     "preview": "audio/big-baby-tape-rich-day-www-muzoff-net.m4a",
     "duration": 137
@@ -1360,7 +1360,7 @@
     "artist": "Oxxxymiron",
     "album": "Красота и Уродство",
     "trackNumber": 1,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/oxxxymiron-the-story-of-alisher.jpg",
     "preview": "audio/oxxxymiron-the-story-of-alisher.m4a",
     "duration": 437
@@ -1371,7 +1371,7 @@
     "artist": "Big Baby Tape",
     "album": "Hoodrich Tales",
     "trackNumber": 8,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/big-baby-tape-trap-medals-feat-tape-laflare-alizade-www-muzoff-net.jpg",
     "preview": "audio/big-baby-tape-trap-medals-feat-tape-laflare-alizade-www-muzoff-net.m4a",
     "duration": 191
@@ -1380,9 +1380,9 @@
     "id": "og-maco-u-guessed-it-cdq-vk-com-xclusives-zone",
     "title": "U Guessed It",
     "artist": "OG Maco",
-    "album": "U Guessed It - Single",
+    "album": "",
     "trackNumber": 1,
-    "genre": "Rap",
+    "genre": "Hip-Hop/Rap",
     "artwork": "audio/covers/og-maco-u-guessed-it-cdq-vk-com-xclusives-zone.jpg",
     "preview": "audio/og-maco-u-guessed-it-cdq-vk-com-xclusives-zone.m4a",
     "duration": 146
