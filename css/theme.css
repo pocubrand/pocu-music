@@ -3,17 +3,16 @@
    Подключается после css/app.css.
    Тёмная — дефолт (data-theme="dark" на <html>).
    Светлая — data-theme="light".
-   Управление — js/settings-ui.js + inline-скрипт в index.html.
    ================================================================ */
 
 /* ============ РАСШИРЕНИЕ :root ============ */
 :root {
   /* Поверхности */
-  --surface:         rgba(30,30,38,.92);   /* sheet, toast */
-  --surface-2:       rgba(36,36,46,.95);   /* context menu */
-  --surface-3:       rgba(30,30,38,.96);   /* np-volume popover */
-  --placeholder-bg:  #1c1c2e;              /* album-art, artist-photo без обложки */
-  --hero-bg:         #12121a;              /* pulse-hero, pulse-hero-bg */
+  --surface:         rgba(30,30,38,.92);
+  --surface-2:       rgba(36,36,46,.95);
+  --surface-3:       rgba(30,30,38,.96);
+  --placeholder-bg:  #1c1c2e;
+  --hero-bg:         #12121a;
   --input-bg:        rgba(255,255,255,.06);
 
   /* Слои «выше фона» */
@@ -49,7 +48,7 @@
   --surface-2:  rgba(255,255,255,.98);
   --surface-3:  rgba(255,255,255,.98);
   --placeholder-bg: #e3e3ea;
-  --hero-bg:        #eaeaf0;
+  --hero-bg:        #12121a;             /* pulse-hero остаётся тёмным */
   --input-bg:       rgba(0,0,0,.04);
 
   --ui-hi:    rgba(0,0,0,.05);
@@ -71,17 +70,11 @@
 }
 
 /* Плавный переход фона/цвета при переключении темы */
-body {
-  transition: color .3s ease;
-}
-html {
-  transition: background-color .3s ease;
-}
+body { transition: color .3s ease; }
+html { transition: background-color .3s ease; }
 
 /* ============ ФОН: приглушаем цветные блобы ============ */
-[data-theme="light"] .bg {
-  opacity: .35;
-}
+[data-theme="light"] .bg { opacity: .35; }
 
 /* ============ ТОПБАР ============ */
 [data-theme="light"] .topbar {
@@ -89,6 +82,13 @@ html {
     var(--topbar-from) 0%,
     var(--topbar-mid) 55%,
     var(--topbar-to) 100%);
+}
+
+/* ============ ЛОГОТИП (чёрный силуэт на светлом) ============ */
+[data-theme="light"] .logo-img,
+[data-theme="light"] .sidebar-brand-full,
+[data-theme="light"] .sidebar-brand-short {
+  filter: brightness(0);
 }
 
 /* ============ ИКОНКИ / КНОПКИ-КРУЖКИ ============ */
@@ -107,9 +107,16 @@ html {
 
 [data-theme="light"] .bubble { background: var(--ui-hi-2); }
 
-/* ============ ТАБЫ ============ */
+/* ============ ТАБ-БАР / САЙДБАР ============ */
 [data-theme="light"] .tab-item { color: var(--text); }
+
+/* ПК: сайдбар */
 @media (min-width: 900px) {
+  [data-theme="light"] .tabbar {
+    background: rgba(255,255,255,.75);
+    border-right: 1px solid var(--glass-brd);
+    box-shadow: none;
+  }
   [data-theme="light"] .tab-item { color: var(--text-dim); }
   [data-theme="light"] .tab-item:hover { background: var(--glass); }
   [data-theme="light"] .tab-item.active {
@@ -119,21 +126,46 @@ html {
   [data-theme="light"] .sidebar-toggle:hover { background: var(--glass); }
 }
 
+/* Мобилка: убираем тяжёлую тень у таб-бара */
+@media (max-width: 899px) {
+  [data-theme="light"] .tabbar {
+    box-shadow:
+      0 12px 28px rgba(0,0,0,.12),
+      inset 0 0 0 1px rgba(0,0,0,.05);
+  }
+}
+
 /* ============ КАРТОЧКИ / ТРЕКИ ============ */
-[data-theme="light"] .track:active   { background: var(--row-active); }
-[data-theme="light"] .track-art      { background: var(--glass); }
+[data-theme="light"] .track:active       { background: var(--row-active); }
 [data-theme="light"] .track-play {
   background: var(--ui-hi);
   border-color: var(--ui-hi-2);
   color: var(--text);
 }
-[data-theme="light"] .chip:active    { background: var(--ui-hi-2); }
+[data-theme="light"] .chip:active        { background: var(--ui-hi-2); }
 [data-theme="light"] .playlist-tile:active { background: var(--row-active); }
+
+/* ============ ОБЛОЖКИ — ВАЖНО: background-color, не background (иначе сбивается background-size) ============ */
+[data-theme="light"] .track-art,
+[data-theme="light"] .home-tile-art,
+[data-theme="light"] .recent-art,
+[data-theme="light"] .profile-avatar {
+  background-color: var(--glass);
+}
+
+/* Обложки-заглушки (когда нет картинки) — только цвет-подложка */
+[data-theme="light"] .artist-photo,
+[data-theme="light"] .album-art {
+  background-color: var(--placeholder-bg);
+}
 
 /* ============ МИНИ-ПЛЕЕР ============ */
 [data-theme="light"] .miniplayer {
   background: var(--glass);
   border-color: var(--glass-brd);
+  box-shadow:
+    0 8px 24px rgba(0,0,0,.10),
+    inset 0 0 0 1px rgba(0,0,0,.04);
 }
 [data-theme="light"] .mp-btn      { color: var(--text); }
 [data-theme="light"] .mp-progress { background: var(--ui-hi); }
@@ -154,7 +186,7 @@ html {
 [data-theme="light"] .np-close:active { background: var(--ui-hi-3); }
 [data-theme="light"] .np-grabber      { background: var(--ui-hi-3); }
 [data-theme="light"] .np-ctrl         { color: var(--text); }
-[data-theme="light"] .np-ctrl-play    { color: #fff; }         /* белая иконка на градиенте */
+[data-theme="light"] .np-ctrl-play    { color: #fff; }
 [data-theme="light"] .np-progress::before { background: var(--ui-hi-2); }
 [data-theme="light"] .np-progress-thumb   { background: var(--text); }
 [data-theme="light"] .np-eq-btn {
@@ -198,13 +230,7 @@ html {
   background: var(--text);
 }
 
-/* ============ ПЛЕЙСХОЛДЕРЫ ОБЛОЖЕК ============ */
-[data-theme="light"] .artist-photo,
-[data-theme="light"] .album-art {
-  background-color: var(--placeholder-bg);
-}
-
-/* ============ ОВЕРЛЕИ (playlist / artist / track / album / genre) ============ */
+/* ============ ОВЕРЛЕИ ============ */
 [data-theme="light"] .artist-overlay,
 [data-theme="light"] .playlist-overlay,
 [data-theme="light"] .track-overlay,
@@ -217,32 +243,22 @@ html {
     var(--bg);
 }
 
-/* ============ PULSE HERO ============ */
-[data-theme="light"] .pulse-hero { background: var(--hero-bg); }
-[data-theme="light"] .pulse-hero-bg { background-color: var(--hero-bg); }
-
-/* Пульс-hero остаётся тёмным поверх обложки, чтобы белый текст читался */
-[data-theme="light"] .pulse-hero-overlay {
-  background: linear-gradient(
-    to bottom,
-    rgba(8,8,12,0) 0%,
-    rgba(8,8,12,0) 38%,
-    rgba(8,8,12,.35) 62%,
-    rgba(8,8,12,.82) 88%,
-    rgba(8,8,12,.95) 100%);
+/* ============ PULSE HERO ============
+   Остаётся тёмным (как акцентная «витрина» на светлой странице).
+   Правим только тяжёлые тени, которые плохо смотрелись на светлом фоне. */
+[data-theme="light"] .pulse-hero {
+  box-shadow:
+    0 16px 40px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.06);
 }
-[data-theme="light"] .pulse-title { color: #fff; }
-[data-theme="light"] .pulse-sub   { color: rgba(255,255,255,.72); }
-[data-theme="light"] .pulse-hero.live .pulse-artist { color: rgba(255,255,255,.85); }
 
-/* Кнопки пульса */
-[data-theme="light"] .pulse-btn-refresh,
-[data-theme="light"] .pulse-btn-shuffle {
-  background: var(--ui-hi-2);
-}
-[data-theme="light"] .pulse-btn-play {
-  background: var(--text);
-  color: var(--bg);
+/* Виньетка — мягче */
+[data-theme="light"] .pulse-hero-vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(8,8,12,.30) 100%
+  );
 }
 
 /* ============ SHEET / TOAST / CONTEXT-MENU ============ */
@@ -268,9 +284,6 @@ html {
 }
 [data-theme="light"] .settings-info-row {
   border-bottom-color: var(--ui-line);
-}
-[data-theme="light"] .profile-avatar {
-  background: var(--glass);
 }
 [data-theme="light"] .profile-name-input {
   background: var(--input-bg);
@@ -314,12 +327,6 @@ html {
 [data-theme="light"] .album-heart.active,
 [data-theme="light"] .mp-heart.active {
   color: var(--heart);
-}
-
-/* ============ ОБЛОЖКИ-ТАЙЛЫ ============ */
-[data-theme="light"] .home-tile-art,
-[data-theme="light"] .recent-art {
-  background: var(--glass);
 }
 
 /* ============ ЧАРТЫ: позиция ============ */
