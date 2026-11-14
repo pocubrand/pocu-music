@@ -7,15 +7,14 @@
 
 /* ============ РАСШИРЕНИЕ :root ============ */
 :root {
-  /* Поверхности */
   --surface:         rgba(30,30,38,.92);
   --surface-2:       rgba(36,36,46,.95);
   --surface-3:       rgba(30,30,38,.96);
   --placeholder-bg:  #1c1c2e;
   --hero-bg:         #12121a;
+  --hero-bg-light:   #eaeaf0;
   --input-bg:        rgba(255,255,255,.06);
 
-  /* Слои «выше фона» */
   --ui-hi:    rgba(255,255,255,.08);
   --ui-hi-2:  rgba(255,255,255,.14);
   --ui-hi-3:  rgba(255,255,255,.20);
@@ -23,7 +22,6 @@
   --row-active: rgba(255,255,255,.10);
   --row-hover:  rgba(255,255,255,.12);
 
-  /* Topbar / Now-Playing градиенты */
   --topbar-from: rgba(8,8,12,.94);
   --topbar-mid:  rgba(8,8,12,.72);
   --topbar-to:   rgba(8,8,12,0);
@@ -31,7 +29,6 @@
   --np-dim-2:    rgba(8,8,12,.65);
   --np-dim-3:    rgba(8,8,12,.92);
 
-  /* Акценты */
   --heart:  #ff4d8d;
   --accent: #a78bfa;
 }
@@ -48,7 +45,7 @@
   --surface-2:  rgba(255,255,255,.98);
   --surface-3:  rgba(255,255,255,.98);
   --placeholder-bg: #e3e3ea;
-  --hero-bg:        #12121a;             /* pulse-hero остаётся тёмным */
+  --hero-bg:        #eaeaf0;
   --input-bg:       rgba(0,0,0,.04);
 
   --ui-hi:    rgba(0,0,0,.05);
@@ -69,11 +66,10 @@
   --accent: #6b4fe0;
 }
 
-/* Плавный переход фона/цвета при переключении темы */
 body { transition: color .3s ease; }
 html { transition: background-color .3s ease; }
 
-/* ============ ФОН: приглушаем цветные блобы ============ */
+/* ============ ФОН: приглушаем блобы ============ */
 [data-theme="light"] .bg { opacity: .35; }
 
 /* ============ ТОПБАР ============ */
@@ -84,7 +80,7 @@ html { transition: background-color .3s ease; }
     var(--topbar-to) 100%);
 }
 
-/* ============ ЛОГОТИП (чёрный силуэт на светлом) ============ */
+/* ============ ЛОГОТИП ============ */
 [data-theme="light"] .logo-img,
 [data-theme="light"] .sidebar-brand-full,
 [data-theme="light"] .sidebar-brand-short {
@@ -110,7 +106,6 @@ html { transition: background-color .3s ease; }
 /* ============ ТАБ-БАР / САЙДБАР ============ */
 [data-theme="light"] .tab-item { color: var(--text); }
 
-/* ПК: сайдбар */
 @media (min-width: 900px) {
   [data-theme="light"] .tabbar {
     background: rgba(255,255,255,.75);
@@ -126,7 +121,6 @@ html { transition: background-color .3s ease; }
   [data-theme="light"] .sidebar-toggle:hover { background: var(--glass); }
 }
 
-/* Мобилка: убираем тяжёлую тень у таб-бара */
 @media (max-width: 899px) {
   [data-theme="light"] .tabbar {
     box-shadow:
@@ -136,24 +130,22 @@ html { transition: background-color .3s ease; }
 }
 
 /* ============ КАРТОЧКИ / ТРЕКИ ============ */
-[data-theme="light"] .track:active       { background: var(--row-active); }
+[data-theme="light"] .track:active { background: var(--row-active); }
 [data-theme="light"] .track-play {
   background: var(--ui-hi);
   border-color: var(--ui-hi-2);
   color: var(--text);
 }
-[data-theme="light"] .chip:active        { background: var(--ui-hi-2); }
+[data-theme="light"] .chip:active { background: var(--ui-hi-2); }
 [data-theme="light"] .playlist-tile:active { background: var(--row-active); }
 
-/* ============ ОБЛОЖКИ — ВАЖНО: background-color, не background (иначе сбивается background-size) ============ */
+/* ============ ОБЛОЖКИ — background-color, не background (важно!) ============ */
 [data-theme="light"] .track-art,
 [data-theme="light"] .home-tile-art,
 [data-theme="light"] .recent-art,
 [data-theme="light"] .profile-avatar {
   background-color: var(--glass);
 }
-
-/* Обложки-заглушки (когда нет картинки) — только цвет-подложка */
 [data-theme="light"] .artist-photo,
 [data-theme="light"] .album-art {
   background-color: var(--placeholder-bg);
@@ -197,7 +189,6 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .np-ctrl-dislike  { color: var(--text-dim); }
 [data-theme="light"] .np-ctrl-heart    { color: var(--text-dim); }
 
-/* Громкость */
 [data-theme="light"] .np-volume-icon {
   background: var(--ui-hi);
   border-color: var(--glass-brd);
@@ -243,22 +234,137 @@ html { transition: background-color .3s ease; }
     var(--bg);
 }
 
-/* ============ PULSE HERO ============
-   Остаётся тёмным (как акцентная «витрина» на светлой странице).
-   Правим только тяжёлые тени, которые плохо смотрелись на светлом фоне. */
+/* ================================================================
+   PULSE HERO — СВЕТЛАЯ ТЕМА
+   Светлая «витрина» с мягким цветным свечением от обложки,
+   тёмным текстом и светлым overlay снизу.
+   ================================================================ */
+
+/* Фон + мягкая внешняя тень */
 [data-theme="light"] .pulse-hero {
+  background: var(--hero-bg-light);
   box-shadow:
-    0 16px 40px rgba(0,0,0,.18),
-    inset 0 1px 0 rgba(255,255,255,.06);
+    0 16px 40px rgba(0,0,0,.10),
+    inset 0 1px 0 rgba(255,255,255,.55);
 }
 
-/* Виньетка — мягче */
+/* Размытая обложка — цветное свечение, светлее и прозрачнее */
+[data-theme="light"] .pulse-hero-bg {
+  filter: blur(70px) saturate(160%) brightness(1.6) !important;
+  opacity: 0.45 !important;
+}
+
+/* Aurora — normal blend, полупрозрачные цветные пятна */
+[data-theme="light"] .aurora-blob {
+  mix-blend-mode: normal;
+  opacity: 0.42;
+}
+[data-theme="light"] .pulse-hero.live:not(.paused) .aurora-blob {
+  opacity: 0.55;
+}
+[data-theme="light"] .pulse-hero:hover .aurora-blob {
+  opacity: 0.60;
+  filter: blur(55px) saturate(1.1) brightness(1.05);
+}
+
+/* Шум — multiply, чтобы фактура читалась на светлом */
+[data-theme="light"] .pulse-hero-noise {
+  mix-blend-mode: multiply;
+  opacity: 0.06;
+}
+
+/* Виньетка — еле заметная, не «тёмное пятно» */
 [data-theme="light"] .pulse-hero-vignette {
   background: radial-gradient(
     ellipse at center,
-    transparent 40%,
-    rgba(8,8,12,.30) 100%
+    transparent 55%,
+    rgba(0,0,0,.06) 100%
   );
+}
+
+/* Overlay — теперь светлый: тёмный текст снизу читается */
+[data-theme="light"] .pulse-hero-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(234,234,240,0) 0%,
+    rgba(234,234,240,0) 40%,
+    rgba(234,234,240,.30) 62%,
+    rgba(234,234,240,.75) 88%,
+    rgba(234,234,240,.92) 100%
+  );
+}
+
+/* Текст — тёмный */
+[data-theme="light"] .pulse-title {
+  color: var(--text);
+  text-shadow: none;
+}
+[data-theme="light"] .pulse-sub {
+  color: var(--text-dim);
+  text-shadow: none;
+}
+[data-theme="light"] .pulse-hero.live .pulse-artist {
+  color: var(--text-dim);
+}
+[data-theme="light"] .pulse-hero.live .pulse-artist:hover {
+  color: var(--accent);
+}
+[data-theme="light"] .pulse-hero.live .pulse-title:hover {
+  color: #000;
+}
+
+/* Кнопки */
+[data-theme="light"] .pulse-btn-refresh,
+[data-theme="light"] .pulse-btn-shuffle {
+  background: rgba(0,0,0,.07);
+  border: 1px solid rgba(0,0,0,.10);
+  color: var(--text);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+[data-theme="light"] .pulse-btn-play {
+  background: var(--text);
+  color: #fff;
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.10);
+}
+
+/* Обложка-плейсхолдер — насыщенный градиент, чтобы «витрина» не была пустой */
+[data-theme="light"] .pulse-hero-art-placeholder {
+  background: linear-gradient(135deg,
+    rgba(124,92,255,.85),
+    rgba(255,64,158,.75) 55%,
+    rgba(56,132,255,.85));
+  color: rgba(255,255,255,.85);
+}
+
+/* Карточка обложки — смягчаем тень и внутреннюю рамку */
+[data-theme="light"] .pulse-hero-art-card,
+[data-theme="light"] .pulse-hero:hover .pulse-hero-art-card {
+  box-shadow:
+    0 16px 36px rgba(0,0,0,.18),
+    0 0 0 1px rgba(0,0,0,.06) inset;
+}
+
+/* Очередь (на ПК) */
+[data-theme="light"] .pulse-queue-item {
+  background: rgba(0,0,0,.05);
+  border-color: rgba(0,0,0,.08);
+}
+[data-theme="light"] .pulse-queue-item-title  { color: var(--text); }
+[data-theme="light"] .pulse-queue-item-artist { color: var(--text-dim); }
+
+/* Статус «LIVE» — инвертируем */
+[data-theme="light"] .pulse-hero-status {
+  background: rgba(0,0,0,.06);
+  border-color: rgba(0,0,0,.10);
+  color: var(--text);
+}
+[data-theme="light"] .pulse-hero.live:not(.paused) .pulse-hero-status {
+  background: rgba(255,64,158,.18);
+  border-color: rgba(255,64,158,.30);
+  color: #b0185a;
 }
 
 /* ============ SHEET / TOAST / CONTEXT-MENU ============ */
@@ -357,7 +463,7 @@ html { transition: background-color .3s ease; }
   cursor: pointer;
   transition: background .2s, color .2s;
 }
-.settings-theme-option:hover { color: var(--text); }
+.settings-theme-option:hover  { color: var(--text); }
 .settings-theme-option:active { background: var(--ui-hi); }
 .settings-theme-option[aria-checked="true"] {
   background: var(--ui-hi-2);
