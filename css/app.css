@@ -1,0 +1,4832 @@
+/* ============ ТОКЕНЫ ============ */
+:root{
+  --bg:#08080c;
+  --glass:rgba(255,255,255,.06);
+  --glass-brd:rgba(255,255,255,.09);
+  --blur:blur(30px) saturate(180%);
+  --r-card:20px;
+  --r-bar:24px;
+  --text:#f5f5f7;
+  --text-dim:rgba(235,235,245,.55);
+  --violet:#7c5cff;
+  --pink:#ff409e;
+  --blue:#3884ff;
+  --spring:cubic-bezier(.22,1.15,.36,1);
+  --spring-bounce:cubic-bezier(.2,1.35,.4,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+html {
+  background-color: var(--bg);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-user-select: none; user-select: none;
+}
+
+/* ============ ФОН ============ */
+.bg {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  transform: translateZ(0);
+  background:
+    radial-gradient(58% 38% at 16% 6%,  rgba(124,92,255,.28), transparent 64%),
+    radial-gradient(52% 34% at 90% 16%, rgba(255,64,158,.16), transparent 66%),
+    radial-gradient(70% 44% at 50% 102%,rgba(56,132,255,.22), transparent 68%);
+}
+
+/* ============ ШАПКА ============ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:40;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:calc(env(safe-area-inset-top) + 10px) 20px 14px;
+  background:linear-gradient(to bottom,
+      rgba(8,8,12,.94) 0%,
+      rgba(8,8,12,.72) 55%,
+      rgba(8,8,12,0) 100%);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 76%,transparent 100%);
+          mask-image:linear-gradient(to bottom,#000 76%,transparent 100%);
+}
+/* Логотип в топбаре (мобилка) */
+.logo-img {
+  height: 22px;       /* Уменьшили размер */
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+.icon-btn{
+  width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.10);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  color:rgba(235,235,245,.85);
+  cursor:pointer;
+  transition:transform .35s var(--spring),background .2s ease;
+}
+.icon-btn:active{transform:scale(.9);background:rgba(255,255,255,.15);}
+
+/* ============ КОНТЕНТ ============ */
+main{
+  position:fixed;inset:0;z-index:10;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  scrollbar-width:none;-ms-overflow-style:none;
+  padding:
+    calc(env(safe-area-inset-top) + 78px)
+    20px
+    calc(100px + env(safe-area-inset-bottom));
+}
+main::-webkit-scrollbar{display:none;}
+
+.screen{display:none;}
+.screen.active{display:block;}
+
+@keyframes rise{
+  from{opacity:0;transform:translateY(16px) scale(.985);}
+  to  {opacity:1;transform:none;}
+}
+.screen.active > *{animation:rise .62s var(--spring) both;}
+
+/* ============ ТИПОГРАФИКА ============ */
+.greeting{
+  font-size:12.5px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-dim);
+}
+.title{
+  font-size:30px;font-weight:700;letter-spacing:-.035em;line-height:1.12;
+  margin:8px 0 22px;
+}
+.hint{color:var(--text-dim);font-size:15px;line-height:1.5;}
+
+/* ============ КАРТОЧКИ ============ */
+.card{
+  background:var(--glass);
+  border:1px solid var(--glass-brd);
+  border-radius:var(--r-card);
+  backdrop-filter:var(--blur);
+  -webkit-backdrop-filter:var(--blur);
+  box-shadow:
+    0 12px 34px rgba(0,0,0,.38),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  padding:16px;
+}
+
+.hero{display:flex;gap:14px;align-items:center;}
+.cover{
+  width:76px;height:76px;border-radius:16px;flex:none;
+  background:linear-gradient(135deg,rgba(124,92,255,.55),rgba(255,64,158,.34) 55%,rgba(56,132,255,.45));
+  background-size:cover;background-position:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.20), 0 8px 24px rgba(0,0,0,.42);
+  transition:background .4s ease;
+}
+.hero-meta{min-width:0;}
+.hero-label{font-size:11.5px;font-weight:650;letter-spacing:.09em;text-transform:uppercase;color:var(--text-dim);}
+.hero-title{font-size:17px;font-weight:650;letter-spacing:-.02em;margin:6px 0 3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
+.hero-sub{font-size:13.5px;color:var(--text-dim);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
+
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin:30px 0 12px;}
+.section-head h2{font-size:19px;font-weight:700;letter-spacing:-.025em;margin:0;}
+.section-head a{font-size:13.5px;color:#a78bfa;text-decoration:none;font-weight:550;}
+
+.row{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
+.row::-webkit-scrollbar{display:none;}
+.tile{
+  width:118px;height:118px;border-radius:18px;flex:none;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+}
+
+/* ============ ПОИСК ============ */
+.search-bar{
+  display:flex;align-items:center;gap:10px;
+  padding:0 14px;height:46px;
+  border-radius:14px;
+  background:var(--glass);
+  border:1px solid var(--glass-brd);
+  backdrop-filter:var(--blur);
+  -webkit-backdrop-filter:var(--blur);
+  margin-bottom:22px;
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+.search-bar:focus-within{
+  border-color:rgba(167,139,250,.42);
+  box-shadow:0 0 0 3px rgba(167,139,250,.12);
+}
+.search-bar input{
+  flex:1;border:0;background:transparent;outline:none;
+  color:var(--text);font-size:16px;
+  -webkit-appearance:none;appearance:none;
+  min-width:0;
+}
+.search-bar input::placeholder{color:var(--text-dim);}
+.search-bar input::-webkit-search-cancel-button{-webkit-appearance:none;display:none;}
+.clear-btn{
+  flex:none;width:24px;height:24px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.14);
+  border:0;color:#fff;cursor:pointer;
+  transition:background .15s;
+}
+.clear-btn:active{background:rgba(255,255,255,.25);}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  padding:9px 16px;border-radius:999px;
+  background:var(--glass);
+  border:1px solid var(--glass-brd);
+  backdrop-filter:var(--blur);
+  -webkit-backdrop-filter:var(--blur);
+  color:var(--text);font-size:14px;font-weight:550;
+  cursor:pointer;
+  transition:transform .35s var(--spring), background .2s;
+}
+.chip:active{transform:scale(.94);background:rgba(255,255,255,.12);}
+
+/* ============ СПИСОК ТРЕКОВ ============ */
+.results{display:flex;flex-direction:column;gap:10px;}
+
+.track{
+  display:flex;gap:12px;align-items:center;
+  width:100%;padding:10px;
+  border-radius:16px;
+  background:var(--glass);
+  border:1px solid var(--glass-brd);
+  backdrop-filter:var(--blur);
+  -webkit-backdrop-filter:var(--blur);
+  color:var(--text);text-align:left;
+  cursor:pointer;
+  transition:transform .3s var(--spring), background .2s;
+  will-change:transform;
+}
+.track:active{transform:scale(.98);background:rgba(255,255,255,.10);}
+.track-art{
+  width:52px;height:52px;border-radius:12px;flex:none;
+  object-fit:cover;background:rgba(255,255,255,.06);
+}
+.track-meta{flex:1;min-width:0;}
+.track-title{
+  font-size:15px;font-weight:600;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.track-artist{
+  font-size:13px;color:var(--text-dim);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin-top:2px;
+}
+.track-play{
+  flex:none;width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.14);
+  color:#fff;
+  transition:background .25s, transform .35s var(--spring);
+}
+.track.playing .track-play{
+  background:linear-gradient(135deg,#a78bfa,#6aa8ff);
+  border-color:transparent;
+}
+.track-play .icon-pause{display:none;}
+.track.playing .track-play .icon-play{display:none;}
+.track.playing .track-play .icon-pause{display:block;}
+
+/* ============ СОСТОЯНИЯ ============ */
+.state-block{padding:40px 20px;text-align:center;}
+.state-title{font-size:17px;font-weight:650;letter-spacing:-.02em;margin-bottom:6px;}
+.state-sub{font-size:14px;color:var(--text-dim);line-height:1.45;}
+
+/* ============ СКЕЛЕТОНЫ ============ */
+.skeleton{
+  background:linear-gradient(90deg,
+    rgba(255,255,255,.04) 25%,
+    rgba(255,255,255,.10) 50%,
+    rgba(255,255,255,.04) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s infinite;
+  border-radius:8px;
+}
+@keyframes shimmer{
+  0%{background-position:-200% 0;}
+  100%{background-position:200% 0;}
+}
+.skeleton-row{cursor:default;pointer-events:none;}
+
+/* ============ ТАБ-БАР ============ */
+.tabbar{
+  position:fixed;
+  left:12px;right:12px;
+  bottom: calc(2px + env(safe-area-inset-bottom));
+  z-index:50;
+  height:62px;
+  display:flex;align-items:center;
+  padding:0 8px;
+  border-radius:var(--r-bar);
+  background:var(--glass);
+  backdrop-filter:var(--blur);
+  -webkit-backdrop-filter:var(--blur);
+  box-shadow:
+    0 16px 44px rgba(0,0,0,.55),
+    inset 0 0 0 1px var(--glass-brd),
+    inset 0 1px 0 rgba(255,255,255,.07);
+  touch-action:none;
+}
+
+.bubble{
+  position:absolute;top:50%;left:0;
+  width:46px;height:46px;border-radius:50%;
+  transform:translate3d(0,-50%,0);
+  pointer-events:none;z-index:1;will-change:transform;
+  background:rgba(255,255,255,.10);
+  backdrop-filter:blur(16px) saturate(180%);
+  -webkit-backdrop-filter:blur(16px) saturate(180%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.16),
+    inset  3px 0 10px -4px rgba(255,45,85,.85),
+    inset -3px 0 10px -4px rgba(45,170,255,.85),
+    0 6px 20px rgba(0,0,0,.48),
+    0 0 24px rgba(124,92,255,.22);
+  transition:transform .58s var(--spring-bounce);
+}
+.bubble.no-anim{transition:none !important;}
+.bubble.lifted{
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.22),
+    inset  4px 0 14px -4px rgba(255,45,85,.95),
+    inset -4px 0 14px -4px rgba(45,170,255,.95),
+    0 10px 30px rgba(0,0,0,.55),
+    0 0 34px rgba(124,92,255,.42);
+}
+.tabbar.dragging .bubble{transition:none;}
+.tabbar.dragging .tab-item{transition:transform .1s ease, opacity .1s ease;}
+
+.tab-item{
+  position:relative;z-index:2;
+  flex:1 1 0;height:46px;
+  display:grid;place-items:center;
+  margin:0;padding:0;border:0;background:none;
+  color:#fff;cursor:pointer;
+  opacity:.62;
+  transition:transform .5s var(--spring), opacity .25s ease;
+  will-change:transform;
+}
+.tab-item svg{width:26px;height:26px;display:block;pointer-events:none;}
+
+/* ================================================================
+   МИНИ-ПЛЕЕР + NOW PLAYING
+   ================================================================ */
+
+/* ============ МИНИ-ПЛЕЕР ============ */
+.miniplayer {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(72px + env(safe-area-inset-bottom));
+  z-index: 45;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.10);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  box-shadow:
+    0 12px 34px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  overflow: hidden;
+  cursor: pointer;
+  will-change: transform;
+  animation: miniIn .5s var(--spring) both;
+}
+.miniplayer[hidden] { display: none; }
+.miniplayer:active { transform: scale(.98); }
+
+@keyframes miniIn {
+  from { opacity: 0; transform: translateY(20px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+.mp-art {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  flex: none;
+  object-fit: cover;
+  background: linear-gradient(135deg, rgba(124,92,255,.5), rgba(255,64,158,.35));
+}
+.mp-meta { flex: 1; min-width: 0; padding: 0 4px; }
+.mp-title {
+  font-size: 14px; font-weight: 650; letter-spacing: -.01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mp-artist {
+  font-size: 12px; color: var(--text-dim); margin-top: 1px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mp-btn {
+  flex: none;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 0; background: transparent;
+  color: #fff;
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: background .2s, transform .3s var(--spring);
+}
+.mp-btn:active { transform: scale(.9); background: rgba(255,255,255,.10); }
+.mp-btn .mp-icon-pause { display: none; }
+.mp-btn.playing .mp-icon-play  { display: none; }
+.mp-btn.playing .mp-icon-pause { display: block; }
+
+.mp-progress {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: rgba(255,255,255,.08);
+}
+.mp-progress-fill {
+  height: 100%; width: 0;
+  background: linear-gradient(90deg, var(--violet), var(--pink));
+  transition: width .2s linear;
+}
+
+body.has-miniplayer main {
+  padding-bottom: calc(156px + env(safe-area-inset-bottom));
+}
+
+/* ============ NOW PLAYING ============ */
+.now-playing {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #08080c;
+  transform: translateY(100%);
+  transition: transform .55s var(--spring);
+  display: flex;
+  flex-direction: column;
+  padding: calc(env(safe-area-inset-top) + 6px) 0 env(safe-area-inset-bottom);
+  will-change: transform;
+  overflow: hidden;
+}
+.now-playing.open { transform: translateY(0); }
+.now-playing.dragging { transition: none; }
+
+.np-bg {
+  position: absolute;
+  inset: -25%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(70px) saturate(200%);
+  opacity: .55;
+  z-index: 0;
+  transform: scale(1.15);
+  transition: background-image .4s ease;
+}
+.np-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(8,8,12,.35) 0%,
+    rgba(8,8,12,.65) 50%,
+    rgba(8,8,12,.92) 100%);
+}
+
+.np-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  flex: none;
+  padding: 0 16px;
+  touch-action: none;
+  cursor: grab;
+}
+.np-header:active { cursor: grabbing; }
+.np-grabber {
+  width: 42px; height: 5px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.30);
+}
+.np-close {
+  position: absolute;
+  right: 10px;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255,255,255,.10);
+  color: #fff;
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: background .2s, transform .3s var(--spring);
+}
+.np-close:active { transform: scale(.9); background: rgba(255,255,255,.20); }
+
+.np-body {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 28px calc(24px + env(safe-area-inset-bottom));
+  min-height: 0;
+}
+
+.np-art-wrap {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 3vh 0;
+}
+.np-art {
+  width: min(76vw, 330px);
+  height: min(76vw, 330px);
+  border-radius: 22px;
+  object-fit: cover;
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.55),
+    0 8px 24px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(255,255,255,.10);
+  background: linear-gradient(135deg, rgba(124,92,255,.5), rgba(255,64,158,.35));
+}
+
+.np-meta { text-align: center; margin-bottom: 18px; }
+.np-title {
+  font-size: 22px; font-weight: 700; letter-spacing: -.025em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.np-artist {
+  font-size: 16px; color: var(--text-dim); margin-top: 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.np-scrubber { margin-bottom: 22px; }
+.np-progress {
+  position: relative;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  touch-action: none;
+}
+.np-progress::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.14);
+}
+.np-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 0;
+  background: linear-gradient(90deg, var(--violet), var(--pink));
+  border-radius: 999px;
+  pointer-events: none;
+  transition: width .2s linear;
+}
+.np-progress-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translate(-50%, -50%) scale(.85);
+  box-shadow: 0 2px 8px rgba(0,0,0,.5);
+  pointer-events: none;
+  transition: left .2s linear, transform .2s ease;
+}
+.np-progress.scrubbing .np-progress-fill,
+.np-progress.scrubbing .np-progress-thumb { transition: none; }
+.np-progress:active .np-progress-thumb,
+.np-progress.scrubbing .np-progress-thumb {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+.np-times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  margin-top: 4px;
+  padding: 0 2px;
+}
+
+.np-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.np-ctrl {
+  position: relative;
+  flex: none;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: transform .35s var(--spring), background .2s, color .2s;
+}
+.np-ctrl:active {
+  transform: scale(.9);
+  background: rgba(255,255,255,.08);
+}
+#npShuffle { opacity: .55; }
+#npShuffle.active { opacity: 1; color: var(--violet); }
+
+#npRepeat[data-mode="off"]  { opacity: .55; }
+#npRepeat[data-mode="all"],
+#npRepeat[data-mode="one"]  { opacity: 1; color: var(--violet); }
+#npRepeat .rep-one { display: none; }
+#npRepeat[data-mode="one"] .rep-all { display: none; }
+#npRepeat[data-mode="one"] .rep-one { display: block; }
+
+.np-ctrl-lg { width: 56px; height: 56px; }
+
+.np-ctrl-play {
+  width: 74px; height: 74px;
+  background: linear-gradient(135deg, #a78bfa, #6aa8ff);
+  box-shadow: 0 12px 30px rgba(124,92,255,.45);
+}
+.np-ctrl-play:active {
+  transform: scale(.94);
+  background: linear-gradient(135deg, #9176f0, #558ff0);
+}
+.np-ctrl-play .np-icon-pause { display: none; }
+.np-ctrl-play.playing .np-icon-play  { display: none; }
+.np-ctrl-play.playing .np-icon-pause { display: block; }
+
+body.np-open { overflow: hidden; }
+
+/* ================================================================
+   ЭТАП 3 — ЛАЙКИ, МЕДИАТЕКА, ИЗБРАННОЕ
+   ================================================================ */
+
+/* ============ HEART BUTTON ============ */
+.track-heart {
+  flex: none;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: rgba(235,235,245,.5);
+  display: grid; place-items: center;
+  cursor: pointer;
+  margin-right: -2px;
+  transition: transform .35s var(--spring), color .2s, background .2s;
+}
+.track-heart:active {
+  transform: scale(.85);
+  background: rgba(255,255,255,.08);
+}
+.track-heart svg {
+  width: 18px; height: 18px;
+  fill: none;
+  transition: fill .25s ease, color .2s ease;
+}
+.track-heart.active { color: #ff4d8d; }
+.track-heart.active svg { fill: currentColor; }
+
+.track-heart.just-activated {
+  animation: heartPop .45s var(--spring-bounce);
+}
+@keyframes heartPop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+/* карточка трека стала div'ом (внутри теперь кнопки) */
+.track {
+  user-select: none;
+}
+
+/* ============ МЕДИАТЕКА: СЕКЦИИ ============ */
+.lib-section { margin-bottom: 6px; }
+.lib-section:first-of-type .section-head { margin-top: 4px; }
+
+/* горизонтальный блок «Недавно прослушано» */
+.recent-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+}
+.recent-row::-webkit-scrollbar { display: none; }
+
+.recent-tile {
+  width: 110px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: transform .35s var(--spring);
+}
+.recent-tile:active { transform: scale(.96); }
+
+.recent-art {
+  width: 110px; height: 110px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.05);
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 8px 24px rgba(0,0,0,.42),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+.recent-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 2px;
+}
+
+/* ================================================================
+   ЭТАП 4 — ПЛЕЙЛИСТЫ И КОНТЕКСТНОЕ МЕНЮ
+   ================================================================ */
+
+/* ============ КНОПКИ-ТЕКСТ ============ */
+.btn-text {
+  background: none;
+  border: none;
+  color: #a78bfa;
+  font-size: 14px;
+  font-weight: 550;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background .2s;
+}
+.btn-text:active { background: rgba(167,139,250,.12); }
+
+/* ============ СПИСОК ПЛЕЙЛИСТОВ ============ */
+.playlists-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.playlist-tile {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  border-radius: 16px;
+  background: var(--glass);
+  border: 1px solid var(--glass-brd);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: transform .3s var(--spring), background .2s;
+}
+.playlist-tile:active { transform: scale(.98); background: rgba(255,255,255,.10); }
+
+.playlist-tile-art {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  flex: none;
+  background: linear-gradient(135deg, rgba(124,92,255,.6), rgba(255,64,158,.4) 55%, rgba(56,132,255,.5));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+.playlist-tile-meta { flex: 1; min-width: 0; }
+.playlist-tile-name {
+  font-size: 15px; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.playlist-tile-count {
+  font-size: 12px; color: var(--text-dim); margin-top: 2px;
+}
+
+/* ============ ЭКРАН ПЛЕЙЛИСТА ============ */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #a78bfa;
+  font-size: 15px;
+  font-weight: 550;
+  cursor: pointer;
+  padding: 8px 0;
+  margin-bottom: 12px;
+}
+.back-btn:active { opacity: .7; }
+
+.playlist-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 24px;
+}
+.playlist-actions .btn {
+  flex: 1 1 auto;
+  min-width: 100px;
+}
+
+.btn {
+  padding: 12px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--glass-brd);
+  background: var(--glass);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .3s var(--spring), background .2s;
+}
+.btn:active { transform: scale(.96); background: rgba(255,255,255,.10); }
+.btn-primary {
+  background: linear-gradient(135deg, #a78bfa, #6aa8ff);
+  border-color: transparent;
+  color: #fff;
+}
+.btn-primary:active { opacity: .85; }
+.btn-secondary { background: rgba(255,255,255,.06); }
+
+/* ============ SHEET ============ */
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+.sheet-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.sheet-panel {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(30,30,38,.92);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border-radius: 24px 24px 0 0;
+  border: 1px solid rgba(255,255,255,.10);
+  border-bottom: none;
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform .4s var(--spring);
+}
+.sheet-overlay.open .sheet-panel { transform: translateY(0); }
+
+.sheet-header { margin-bottom: 16px; }
+.sheet-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+.sheet-body { margin-bottom: 20px; }
+.sheet-body input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--glass-brd);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  font-size: 16px;
+  outline: none;
+  transition: border-color .2s;
+}
+.sheet-body input:focus { border-color: rgba(167,139,250,.5); }
+.sheet-body input::placeholder { color: var(--text-dim); }
+
+.sheet-actions {
+  display: flex;
+  gap: 10px;
+}
+.sheet-actions .btn { flex: 1; }
+
+/* ============ КОНТЕКСТНОЕ МЕНЮ ============ */
+.context-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0,0,0,.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+.context-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.context-menu {
+  position: absolute;
+  min-width: 220px;
+  max-width: 280px;
+  background: rgba(36,36,46,.95);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  padding: 8px 0;
+  overflow: hidden;
+}
+
+.context-header {
+  padding: 12px 16px 10px;
+}
+.context-title {
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.context-artist {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.context-divider {
+  height: 1px;
+  background: rgba(255,255,255,.08);
+  margin: 4px 0;
+}
+.context-subheader {
+  padding: 8px 16px 4px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.context-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s;
+}
+.context-item:active { background: rgba(255,255,255,.08); }
+.context-count {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.context-empty {
+  padding: 8px 16px 12px;
+  font-size: 13px;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* ================================================================
+   ЭТАП 4.1 — OVERLAY ПЛЕЙЛИСТА
+   ================================================================ */
+
+.playlist-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: #08080c;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  transform: translateX(100%);
+  transition: transform .45s var(--spring);
+  will-change: transform;
+}
+.playlist-overlay::-webkit-scrollbar { display: none; }
+
+.playlist-overlay.open {
+  transform: translateX(0);
+}
+
+.playlist-overlay-inner {
+  padding:
+    calc(env(safe-area-inset-top) + 14px)
+    20px
+    calc(120px + env(safe-area-inset-bottom));
+  min-height: 100%;
+}
+
+/* Блокируем скролл `<main>`, пока плейлист открыт */
+body.playlist-open main {
+  overflow: hidden;
+}
+
+/* ============ ARTIST OVERLAY ============ */
+.artist-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  /* Убираем скролл с самого оверлея, чтобы фон стоял на месте */
+  overflow: hidden; 
+  transform: translateX(100%);
+  transition: transform .45s var(--spring);
+  will-change: transform;
+  /* Наш градиент теперь тут и он не скроллится */
+  background:
+    radial-gradient(58% 38% at 16% 6%,  rgba(124,92,255,.22), transparent 64%),
+    radial-gradient(52% 34% at 90% 16%, rgba(255,64,158,.14), transparent 66%),
+    radial-gradient(70% 44% at 50% 102%,rgba(56,132,255,.18), transparent 68%),
+    #08080c;
+}
+.artist-overlay.open { transform: translateX(0); }
+
+/* Внутренняя часть теперь — скролл-контейнер */
+.artist-overlay-inner {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding:
+    calc(env(safe-area-inset-top) + 14px)
+    20px
+    calc(120px + env(safe-area-inset-bottom));
+  min-height: 100%;
+}
+.artist-overlay-inner::-webkit-scrollbar { display: none; }
+
+/* ============ PLAYLIST OVERLAY ============ */
+.playlist-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  /* Убираем скролл */
+  overflow: hidden;
+  transform: translateX(100%);
+  transition: transform .45s var(--spring);
+  will-change: transform;
+  /* Градиент */
+  background:
+    radial-gradient(58% 38% at 16% 6%,  rgba(124,92,255,.22), transparent 64%),
+    radial-gradient(52% 34% at 90% 16%, rgba(255,64,158,.14), transparent 66%),
+    radial-gradient(70% 44% at 50% 102%,rgba(56,132,255,.18), transparent 68%),
+    #08080c;
+}
+.playlist-overlay.open { transform: translateX(0); }
+
+.playlist-overlay-inner {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding:
+    calc(env(safe-area-inset-top) + 14px)
+    20px
+    calc(120px + env(safe-area-inset-bottom));
+  min-height: 100%;
+}
+.playlist-overlay-inner::-webkit-scrollbar { display: none; }
+
+/* ================================================================
+   ЭТАП 5 — POCU PULSE HERO + ГЛАВНАЯ
+   ================================================================ */
+
+/* ============ PULSE HERO ============ */
+.pulse-hero {
+  position: relative;
+  width: 100%;
+  height: clamp(260px, 40vh, 340px);
+  border-radius: 28px;
+  overflow: hidden;
+  cursor: pointer;
+  margin-bottom: 6px;
+  background: #12121a;
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  transition: transform .4s var(--spring);
+  isolation: isolate;
+}
+.pulse-hero:active { transform: scale(.99); }
+
+.pulse-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-color: #12121a;
+  background-image: linear-gradient(135deg,
+    rgba(124,92,255,.75),
+    rgba(255,64,158,.55) 55%,
+    rgba(56,132,255,.7));
+  background-size: cover;
+  background-position: center;
+  transition: background-image .8s ease;
+  z-index: 0;
+}
+
+.pulse-hero-ambient {
+  position: absolute;
+  inset: -25%;
+  background: conic-gradient(from 0deg,
+    rgba(124,92,255,.55),
+    rgba(255,64,158,.4),
+    rgba(56,132,255,.55),
+    rgba(124,92,255,.55));
+  filter: blur(60px);
+  opacity: 0;
+  z-index: 1;
+  mix-blend-mode: screen;
+  animation: pulseSpin 20s linear infinite;
+  transition: opacity .6s ease;
+  pointer-events: none;
+}
+.pulse-hero.live:not(.paused) .pulse-hero-ambient { opacity: .65; }
+
+@keyframes pulseSpin {
+  to { transform: rotate(360deg); }
+}
+
+.pulse-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(8,8,12,0) 0%,
+    rgba(8,8,12,0) 38%,
+    rgba(8,8,12,.35) 62%,
+    rgba(8,8,12,.82) 88%,
+    rgba(8,8,12,.95) 100%);
+}
+
+.pulse-hero-header {
+  position: absolute;
+  top: 18px; left: 20px; right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.pulse-hero-brand {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .32em;
+  color: rgba(255,255,255,.92);
+  text-shadow: 0 1px 4px rgba(0,0,0,.4);
+}
+
+.pulse-hero-status {
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .12em;
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: rgba(255,255,255,.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.92);
+  opacity: 0;
+  transition: opacity .35s ease, background .3s ease;
+}
+.pulse-hero.live .pulse-hero-status { opacity: 1; }
+.pulse-hero.live:not(.paused) .pulse-hero-status {
+  background: rgba(255,64,158,.35);
+  border-color: rgba(255,120,180,.4);
+  color: #fff;
+}
+
+.pulse-hero-rings {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.5);
+  opacity: 0;
+}
+.pulse-hero.live:not(.paused) .pulse-ring {
+  animation: pulseWave 3s ease-out infinite;
+}
+.pulse-hero.live:not(.paused) .pulse-ring:nth-child(2) { animation-delay: 1s; }
+.pulse-hero.live:not(.paused) .pulse-ring:nth-child(3) { animation-delay: 2s; }
+
+@keyframes pulseWave {
+  0%   { transform: scale(1);   opacity: .55; }
+  100% { transform: scale(3.5); opacity: 0; }
+}
+
+.pulse-hero-content {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 20px 20px 22px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  z-index: 4;
+}
+
+.pulse-hero-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.pulse-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -.025em;
+  line-height: 1.15;
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0,0,0,.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pulse-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,.72);
+  margin-top: 4px;
+  text-shadow: 0 1px 4px rgba(0,0,0,.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pulse-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+
+.pulse-btn {
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: #fff;
+  transition: transform .3s var(--spring), background .2s;
+}
+.pulse-btn:active { transform: scale(.9); }
+
+.pulse-btn-play {
+  width: 60px; height: 60px;
+  background: rgba(255,255,255,.96);
+  color: #08080c;
+  box-shadow:
+    0 10px 28px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.9);
+}
+.pulse-btn-play .pulse-icon-pause { display: none; }
+.pulse-btn-play.playing .pulse-icon-play  { display: none; }
+.pulse-btn-play.playing .pulse-icon-pause { display: block; }
+
+.pulse-btn-shuffle {
+  width: 48px; height: 48px;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.22);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* ============ HOME ROW / TILE ============ */
+.home-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+.home-row::-webkit-scrollbar { display: none; }
+
+.home-tile {
+  width: 118px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: transform .3s var(--spring);
+}
+.home-tile:active { transform: scale(.95); }
+
+.home-tile-art {
+  width: 118px; height: 118px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.05);
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 8px 22px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  margin-bottom: 8px;
+}
+.home-tile-art--round { border-radius: 50%; }
+
+.home-tile-name {
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.home-tile-artist {
+  font-size: 12px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+/* ============ SWIPE: MINI-PLAYER + NOW PLAYING ============ */
+.miniplayer {
+  transition: transform .35s var(--spring), opacity .25s ease, background .2s, bottom .4s var(--spring);
+  touch-action: pan-y;
+}
+.miniplayer.swiping {
+  transition: none;
+}
+
+.np-art {
+  touch-action: pan-y;
+  will-change: transform;
+  transition: transform .4s var(--spring), opacity .25s ease;
+}
+.np-art.swiping {
+  transition: none;
+}
+
+/* ============ HOME ROW / TILE ============ */
+.home-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+.home-row::-webkit-scrollbar { display: none; }
+
+.home-tile {
+  width: 118px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: transform .3s var(--spring);
+}
+.home-tile:active { transform: scale(.95); }
+
+.home-tile-art {
+  width: 118px; height: 118px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.05);
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 8px 22px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  margin-bottom: 8px;
+}
+.home-tile-art--round { border-radius: 50%; }
+
+.home-tile-name {
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.home-tile-artist {
+  font-size: 12px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+/* ============ TOAST ============ */
+.pulse-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(160px + env(safe-area-inset-bottom));
+  transform: translateX(-50%) translateY(12px);
+  padding: 10px 18px;
+  border-radius: 14px;
+  background: rgba(30,30,38,.92);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255,255,255,.12);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  z-index: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease, transform .35s var(--spring);
+}
+.pulse-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ================================================================
+   ЭТАП 6 — АРТИСТЫ POCU
+   ================================================================ */
+
+/* ============ ARTIST OVERLAY ============ */
+.artist-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: #08080c;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  transform: translateX(100%);
+  transition: transform .45s var(--spring);
+  will-change: transform;
+}
+.artist-overlay::-webkit-scrollbar { display: none; }
+.artist-overlay.open { transform: translateX(0); }
+
+.artist-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 38% at 16% 6%,  rgba(124,92,255,.22), transparent 64%),
+    radial-gradient(52% 34% at 90% 16%, rgba(255,64,158,.14), transparent 66%),
+    radial-gradient(70% 44% at 50% 102%,rgba(56,132,255,.18), transparent 68%);
+}
+
+.artist-overlay-inner {
+  padding:
+    calc(env(safe-area-inset-top) + 14px)
+    20px
+    calc(120px + env(safe-area-inset-bottom));
+  min-height: 100%;
+}
+
+body.artist-open main { overflow: hidden; }
+
+.artist-overlay.open .artist-overlay-inner > * {
+  animation: rise .5s var(--spring) both;
+}
+.artist-overlay.open .artist-overlay-inner > *:nth-child(1) { animation-delay: 40ms;  }
+.artist-overlay.open .artist-overlay-inner > *:nth-child(2) { animation-delay: 90ms;  }
+.artist-overlay.open .artist-overlay-inner > *:nth-child(3) { animation-delay: 140ms; }
+.artist-overlay.open .artist-overlay-inner > *:nth-child(4) { animation-delay: 190ms; }
+
+/* ============ ARTIST HERO ============ */
+.artist-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 16px 0 24px;
+}
+
+.artist-photo {
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background-color: #1c1c2e;
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 12px 34px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  margin-bottom: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 44px;
+  font-weight: 700;
+  color: rgba(255,255,255,.85);
+  letter-spacing: -.03em;
+}
+
+.artist-name {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  margin: 0 0 8px;
+  color: var(--text);
+}
+
+.artist-bio {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--text-dim);
+  margin: 0;
+  max-width: 340px;
+}
+
+/* ============ ТАЙЛ-ЗАГЛУШКА (без фото) ============ */
+.home-tile-art--placeholder {
+  background: linear-gradient(135deg,
+    rgba(124,92,255,.6),
+    rgba(255,64,158,.4) 55%,
+    rgba(56,132,255,.5));
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  font-weight: 700;
+  color: rgba(255,255,255,.85);
+}
+
+/* ================================================================
+   ЭТАП 7 — НАСТРОЙКИ
+   ================================================================ */
+.settings-info {
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--glass-brd);
+  border-radius: 14px;
+  padding: 8px 16px;
+  margin-bottom: 20px;
+}
+.settings-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 15px;
+  color: var(--text);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.settings-info-row:last-child { border-bottom: 0; }
+.settings-dim { color: var(--text-dim); font-variant-numeric: tabular-nums; }
+
+.settings-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-btn {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--glass-brd);
+  background: var(--glass);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 550;
+  text-align: left;
+  cursor: pointer;
+  transition: transform .3s var(--spring), background .2s;
+}
+.settings-btn:active {
+  transform: scale(.98);
+  background: rgba(255,255,255,.10);
+}
+.settings-btn-danger { color: #ff4d8d; }
+.settings-btn-danger:active { background: rgba(255,77,141,.12); }
+
+/* Базовые стили новых элементов (на мобиле не видно) */
+.sidebar-brand,
+.sidebar-toggle,
+.tab-item-settings { display: none; }
+
+/* ============ DESKTOP LAYOUT (ПК) ============ */
+@media (min-width: 900px) {
+
+  /* ===== САЙДБАР ===== */
+  .tabbar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 260px;
+    height: 100vh;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    border-radius: 0;
+    border-right: 1px solid var(--glass-brd);
+    border-bottom: none;
+    padding: calc(env(safe-area-inset-top) + 20px) 12px 20px;
+    background: rgba(8,8,12,.7);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    box-shadow: none;
+    overflow: hidden;
+    transition: width 0.25s ease-out;
+  }
+  body.sidebar-collapsed .tabbar { width: 76px; }
+
+  /* Бренд */
+  .sidebar-brand {
+    position: relative;
+    height: 48px;
+    margin: 0 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex: none;
+    overflow: hidden;
+  }
+  /* Логотип в сайдбаре на ПК */
+  .sidebar-brand-full {
+    padding-left: 12px;
+    height: 24px;      /* Уменьшили размер */
+    width: auto;
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.25s ease, transform 0.4s cubic-bezier(.4, 0, .2, 1);
+  }
+  .sidebar-brand-short {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 28px;      /* Уменьшили размер */
+    width: auto;
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.4s cubic-bezier(.4, 0, .2, 1);
+  }
+  body.sidebar-collapsed .sidebar-brand-full {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  body.sidebar-collapsed .sidebar-brand-short {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Шапка */
+  .topbar .logo { display: none; }
+  .topbar #settingsBtn { display: none; }
+  .topbar {
+    padding-left: 300px;
+    padding-top: calc(env(safe-area-inset-top) + 20px);
+    transition: padding-left 0.25s ease-out;
+  }
+  body.sidebar-collapsed .topbar { padding-left: 116px; }
+
+  .bubble { display: none !important; }
+
+  /* ===== ПУНКТЫ МЕНЮ (текст через flex — точно слева) ===== */
+  .tab-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    height: 52px;
+    flex: none;
+    margin: 0 0 4px;
+    padding: 0 12px;
+    gap: 14px;
+    border-radius: 12px;
+    overflow: hidden;
+    transform: none !important;
+    opacity: 1 !important;
+    color: var(--text-dim);
+    transition: padding 0.35s cubic-bezier(.4, 0, .2, 1),
+                background 0.15s ease;
+  }
+  .tab-item:hover { background: rgba(255,255,255,.06); }
+  .tab-item.active { background: rgba(255,255,255,.10); color: var(--text); }
+
+  .tab-item svg {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    margin: 0;
+  }
+
+  /* Текст — flex-ребёнок, точно слева */
+  .tab-item::after {
+    content: attr(aria-label);
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 15px;
+    font-weight: 550;
+    color: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+
+  /* Свёрнутое состояние */
+  body.sidebar-collapsed .tab-item { padding: 0 15px; }
+  body.sidebar-collapsed .tab-item::after {
+    flex: 0 0 0;
+    width: 0;
+    min-width: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Настройки внизу */
+  .tab-item-settings {
+    display: flex;
+    margin-top: auto;
+  }
+
+  /* Кнопка сворачивания */
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 40px;
+    margin-top: 8px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-radius: 10px;
+    flex: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .sidebar-toggle:hover { background: rgba(255,255,255,.06); color: var(--text); }
+  .sidebar-toggle svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.4s cubic-bezier(.4, 0, .2, 1);
+  }
+  body.sidebar-collapsed .sidebar-toggle svg { transform: rotate(180deg); }
+
+  /* Контент — без overshoot, иначе рывок */
+  main {
+    padding-top: calc(env(safe-area-inset-top) + 40px);
+    padding-right: 40px;
+    padding-bottom: 120px;
+    padding-left: 300px;
+    transition: padding-left 0.25s ease-out;
+  }
+  body.sidebar-collapsed main { padding-left: 116px; }
+
+  /* Фиксированное количество колонок, чтобы при сворачивании сайдбара сетка не прыгала */
+  .results, .recent-row, .playlists-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+  .home-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+  
+  @media (min-width: 1400px) {
+    .results, .recent-row, .playlists-list { grid-template-columns: repeat(4, 1fr); }
+    .home-row { grid-template-columns: repeat(8, 1fr); }
+  }
+  @media (min-width: 1800px) {
+    .results, .recent-row, .playlists-list { grid-template-columns: repeat(5, 1fr); }
+    .home-row { grid-template-columns: repeat(10, 1fr); }
+  }
+
+  .track { padding: 12px; }
+
+  .miniplayer {
+    left: 300px;
+    right: 40px;
+    bottom: 16px;
+    transition: left 0.25s ease-out;
+  }
+  body.sidebar-collapsed .miniplayer { left: 116px; }
+
+  .artist-overlay-inner, .playlist-overlay-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  /* Изоляция layout — карточки не пересчитываются глобально */
+  .track { contain: layout paint; }
+
+  /* Пока анимируется сайдбар — пауза тяжёлых эффектов */
+  body.sidebar-transitioning .pulse-hero-ambient {
+    animation-play-state: paused;
+    opacity: 0.15;
+  }
+  body.sidebar-transitioning .track {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(30, 30, 40, 0.55);
+  }
+}
+
+/* ================================================================
+   PULSE: убираем волны, добавляем плавный градиент
+   ================================================================ */
+.pulse-hero-rings { display: none !important; }
+
+.pulse-hero-ambient {
+  position: absolute;
+  inset: -30%;
+  background: conic-gradient(from 0deg,
+    rgba(124,92,255,.65),
+    rgba(255,64,158,.45),
+    rgba(56,132,255,.6),
+    rgba(124,92,255,.65));
+  filter: blur(60px);
+  z-index: 1;
+  mix-blend-mode: screen;
+  opacity: 0.4;                                  /* видно всегда */
+  animation: pulseSpin 24s linear infinite;
+  transition: opacity .6s ease;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.pulse-hero.live:not(.paused) .pulse-hero-ambient {
+  opacity: 0.8;
+  animation-duration: 14s;
+}
+
+@keyframes pulseSpin {
+  0%   { transform: rotate(0deg)   scale(1); }
+  50%  { transform: rotate(180deg) scale(1.08); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ============ АВТОРИЗАЦИЯ ============ */
+.settings-account {
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--glass-brd);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.account-state {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.account-title {
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--text);
+}
+.account-sub {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 2px;
+  word-break: break-all;
+}
+.settings-account .btn {
+  flex: none;
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+
+.auth-error {
+  background: rgba(255,77,141,.15);
+  border: 1px solid rgba(255,77,141,.3);
+  color: #ff6b9f;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+.auth-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+  font-size: 13.5px;
+  color: var(--text-dim);
+}
+.auth-switch button {
+  background: none;
+  border: none;
+  color: #a78bfa;
+  font-size: 13.5px;
+  font-weight: 550;
+  cursor: pointer;
+  padding: 0;
+}
+.auth-forgot-btn {
+  display: block;
+  margin: 14px auto 0;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color .15s, background .15s;
+}
+.auth-forgot-btn:hover,
+.auth-forgot-btn:active {
+  color: #a78bfa;
+}
+
+.auth-success {
+  background: rgba(80, 200, 120, .15);
+  border: 1px solid rgba(80, 200, 120, .3);
+  color: #7ee2a8;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+/* ================================================================
+   FIX: скругление в Pulse Hero (iOS Safari bug с filter + overflow)
+   ================================================================ */
+.pulse-hero-visual {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;    /* совпадает с .pulse-hero */
+  overflow: hidden;
+  z-index: 0;
+  /* Ускоряем слой, чтобы не мигало при первом рендере */
+  transform: translateZ(0);
+}
+
+.track-remove {
+  flex: none;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: rgba(235,235,245,.4);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: transform .35s var(--spring), color .2s, background .2s;
+}
+.track-remove:active {
+  transform: scale(.85);
+  background: rgba(255,77,141,.15);
+  color: #ff4d8d;
+}
+.track-remove svg { width: 15px; height: 15px; }
+
+/* ================================================================
+   DESKTOP FIXES v2 — overflow, recent-row, home-row
+   ================================================================ */
+@media (min-width: 900px) {
+
+  /* --- Фикс: сетки не вылезают за границы --- */
+  .results,
+  .recent-row,
+  .playlists-list {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .results > *,
+  .recent-row > *,
+  .playlists-list > * {
+    min-width: 0;
+  }
+
+  /* Убираем тяжёлые эффекты, которые могли ломать отрисовку сетки */
+  .track {
+    will-change: auto;
+    contain: none;
+  }
+
+  /* --- Фикс: «Недавно прослушано» — плотная сетка --- */
+  .recent-row {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+  .recent-tile {
+    width: 100%;
+  }
+  .recent-art {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  /* --- Фикс: Главная — плотная сетка тайлов --- */
+  .home-row {
+    grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  }
+  .home-tile {
+    width: 100%;
+  }
+  .home-tile-art {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  /* Троеточие: только ПК */
+  .track-menu { display: grid; }
+}
+
+/* ============ HOVER PLAY OVERLAY (ПК) ============ */
+.track-art-wrap {
+  position: relative;
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.track-art-wrap .track-art {
+  width: 100%;
+  height: 100%;
+}
+.track-art-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.55);
+  opacity: 0;
+  transition: opacity .18s ease;
+  pointer-events: none;
+  color: #fff;
+}
+.track-art-overlay svg {
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.6));
+}
+@media (hover: hover) and (pointer: fine) {
+  .track:hover .track-art-overlay { opacity: 1; }
+}
+
+/* ============ MENU (⋯) на карточке трека ============ */
+.track-menu {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: rgba(235,235,245,.55);
+  display: none;               /* ПК — включается через @media */
+  place-items: center;
+  cursor: pointer;
+  transition: transform .35s var(--spring), color .2s, background .2s;
+}
+.track-menu:active {
+  transform: scale(.85);
+  background: rgba(255,255,255,.10);
+}
+.track-menu:hover {
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+}
+.track-menu svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ================================================================
+   LAYOUT v3 — дыхание, hover-play, вертикальное меню
+   ================================================================ */
+
+/* --- Hover-play overlay для больших тайлов (главная + недавние) --- */
+.home-tile,
+.recent-tile { position: relative; }
+
+.home-tile-play-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.45);
+  opacity: 0;
+  transition: opacity .2s ease;
+  pointer-events: none;
+  color: #fff;
+  z-index: 2;
+}
+.recent-tile .home-tile-play-overlay { border-radius: 14px; }
+
+.home-tile-play-overlay svg {
+  width: 38px; height: 38px;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.7));
+}
+.home-tile-play-overlay .icon-pause { display: none; }
+.home-tile.playing .home-tile-play-overlay .icon-play,
+.recent-tile.playing .home-tile-play-overlay .icon-play { display: none; }
+.home-tile.playing .home-tile-play-overlay .icon-pause,
+.recent-tile.playing .home-tile-play-overlay .icon-pause { display: block; }
+
+@media (hover: hover) and (pointer: fine) {
+  .home-tile:hover .home-tile-play-overlay,
+  .recent-tile:hover .home-tile-play-overlay { opacity: 1; }
+}
+
+/* --- Мобилка: ещё крупнее тайлы --- */
+.home-tile { width: 155px; }
+.home-tile-art { width: 155px; height: 155px; }
+.recent-tile { width: 140px; }
+.recent-art { width: 140px; height: 140px; }
+.home-row { gap: 16px; }
+.recent-row { gap: 16px; }
+
+/* ================================================================
+   FIX v4 — topbar скрыт, мини-плеер поверх, ⋮ под обложкой
+   ================================================================ */
+
+/* Скрываем topbar при открытых оверлеях */
+body.playlist-open .topbar,
+body.artist-open .topbar {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Мини-плеер всегда поверх оверлеев */
+.miniplayer { z-index: 90 !important; }
+
+/* Обёртка обложки тайла (для overlay-play) */
+.home-tile-art-wrap,
+.recent-art-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0,0,0,.4);
+}
+.recent-art-wrap { border-radius: 14px; }
+
+.home-tile-art-wrap .home-tile-art,
+.recent-art-wrap .recent-art {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+/* Нижняя часть тайла: текст + ⋮ */
+.home-tile-info,
+.recent-tile-info {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 0 2px;
+}
+.home-tile-text,
+.recent-tile-text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Убираем gap у .recent-tile, чтобы margin-top работал корректно */
+.recent-tile { gap: 0; }
+
+/* Троеточие: без кружка, справа от названия */
+.tile-menu {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(235,235,245,.5);
+  display: none;
+  place-items: center;
+  cursor: pointer;
+  transition: color .2s;
+  margin-top: 1px;
+}
+.tile-menu:hover { color: var(--text); }
+.tile-menu { width: 26px; height: 26px; }
+.tile-menu svg { width: 20px; height: 20px; }
+
+@media (min-width: 900px) {
+  .tile-menu { display: grid; }
+}
+
+/* --- Троеточие ⋮ — вертикальное, только ПК --- */
+.track-menu {
+  flex: none;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: rgba(235,235,245,.55);
+  display: none;
+  place-items: center;
+  cursor: pointer;
+  transition: transform .35s var(--spring), color .2s, background .2s;
+}
+.track-menu:hover {
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+}
+.track-menu:active { transform: scale(.85); }
+.track-menu svg { width: 16px; height: 16px; }
+
+/* --- ПК: крупные «дышащие» карточки --- */
+@media (min-width: 900px) {
+  .home-row,
+  .recent-row {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 16px;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  /* Тайлы тянутся на всю ширину ячейки */
+  .home-tile,
+  .recent-tile {
+    width: 100%;
+    flex: none;
+  }
+  .home-tile-art-wrap,
+  .recent-art-wrap {
+    width: 100%;
+    aspect-ratio: 1;
+  }
+
+  .home-tile-name   { font-size: 14px; }
+  .home-tile-artist { font-size: 12.5px; }
+  .recent-title     { font-size: 13px; }
+
+  .results {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  /* Логотип скрываем в топбаре на ПК */
+  .topbar .logo-img { display: none; }
+
+  /* Карточка трека: просторнее */
+  .track { padding: 14px; gap: 14px; }
+  .track-art-wrap { width: 60px; height: 60px; border-radius: 14px; }
+  .track-title { font-size: 16px; }
+  .track-artist { font-size: 13.5px; }
+  .track-play { width: 42px; height: 42px; }
+  .track-heart { width: 34px; height: 34px; }
+  .track-menu { display: grid; }
+
+  /* Плейлисты/артисты — одна колонка */
+  .playlist-overlay .results,
+  .artist-overlay .results {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .playlist-overlay .track,
+  .artist-overlay .track {
+    padding: 12px;
+    gap: 12px;
+  }
+}
+
+/* Плавно добавляем колонок на очень широких экранах */
+@media (min-width: 1200px) {
+  .home-row, .recent-row { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (min-width: 1500px) {
+  .home-row, .recent-row { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .results { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1800px) {
+  .home-row, .recent-row { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+}
+
+/* Страховка от расширения контента сверх ячейки */
+.home-tile, .recent-tile, .results > * { min-width: 0; }
+
+/* --- Мобилка: ⋮ не показываем (там контекстное меню по лонг-тапу) --- */
+@media (max-width: 899px) {
+  .track-menu { display: none !important; }
+}
+
+/* ================================================================
+   FIX v5 — таб-бар скрывается при открытых оверлеях (мобилка)
+   ================================================================ */
+.tabbar {
+  transition: transform .4s var(--spring), opacity .25s ease;
+}
+
+@media (max-width: 899px) {
+  body.playlist-open .tabbar,
+  body.artist-open .tabbar {
+    transform: translateY(calc(100% + 40px));
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* ================================================================
+   HEARTS в плеере — mini + now-playing
+   ================================================================ */
+
+/* Mini-player */
+.mp-heart {
+  flex: none;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: rgba(235,235,245,.5);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: transform .35s var(--spring), color .2s, background .2s;
+}
+.mp-heart:active {
+  transform: scale(.85);
+  background: rgba(255,255,255,.08);
+}
+.mp-heart svg {
+  width: 18px; height: 18px;
+  fill: none;
+  transition: fill .25s ease, color .2s;
+}
+.mp-heart.active { color: #ff4d8d; }
+.mp-heart.active svg { fill: currentColor; }
+.mp-heart.just-activated { animation: heartPop .45s var(--spring-bounce); }
+
+/* Now Playing — переделываем .np-meta в flex */
+.np-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  position: relative;
+}
+.np-info {
+  flex: 0 1 auto;
+  min-width: 0;
+  text-align: center;
+}
+
+.np-heart {
+  flex: none;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255,255,255,.08);
+  color: rgba(235,235,245,.65);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: transform .35s var(--spring), color .2s, background .2s;
+}
+.np-heart:active { transform: scale(.9); }
+.np-heart svg {
+  width: 20px; height: 20px;
+  fill: none;
+  transition: fill .25s ease, color .2s;
+}
+.np-heart.active {
+  color: #ff4d8d;
+  background: rgba(255,77,141,.15);
+}
+.np-heart.active svg { fill: currentColor; }
+.np-heart.just-activated { animation: heartPop .45s var(--spring-bounce); }
+
+/* ================================================================
+   FIX v7 — сердечко в контролах + мини-плеер падает без таб-бара
+   ================================================================ */
+
+/* --- Сердечко как np-ctrl (без абсолютного позиционирования) --- */
+.np-ctrl-heart {
+  color: rgba(235,235,245,.7);
+}
+.np-ctrl-heart svg {
+  fill: none;
+  transition: fill .25s ease, color .2s;
+}
+.np-ctrl-heart.active {
+  color: #ff4d8d;
+}
+.np-ctrl-heart.active svg {
+  fill: currentColor;
+}
+.np-ctrl-heart.just-activated {
+  animation: heartPop .45s var(--spring-bounce);
+}
+
+/* --- Чистим старые стили сердечка в шапке (fix v6) --- */
+.np-heart { display: none; }
+.np-info { all: unset; }
+.np-meta {
+  display: block;
+  text-align: center;
+  margin-bottom: 18px;
+  position: static;
+}
+
+/* --- Мини-плеер: плавное опускание, когда таб-бар уезжает --- */
+@media (max-width: 899px) {
+  body.playlist-open .miniplayer,
+  body.artist-open .miniplayer {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ================================================================
+   ЭТАП 3 — дислайк + кликабельный артист
+   ================================================================ */
+
+/* Кнопка дизлайка */
+.np-ctrl-dislike {
+  color: rgba(235,235,245,.7);
+  transition: transform .35s var(--spring), background .2s, color .2s;
+}
+.np-ctrl-dislike svg {
+  fill: none;
+  transition: color .2s, stroke .2s;
+}
+.np-ctrl-dislike.active {
+  color: #ff5c5c;
+}
+.np-ctrl-dislike.active svg {
+  stroke: #ff5c5c;
+}
+
+/* Кликабельные имена артистов */
+.track-artist,
+.mp-artist,
+.np-artist {
+  cursor: pointer;
+  transition: color .2s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .track-artist:hover,
+  .mp-artist:hover,
+  .np-artist:hover {
+    color: #a78bfa;
+  }
+}
+
+/* ================================================================
+   FIX v8 — ПК-меню поверх оверлеев + поддержка свайпа
+   ================================================================ */
+
+/* На ПК сайдбар всегда кликабельный, даже когда открыта история */
+@media (min-width: 900px) {
+  .tabbar {
+    z-index: 85 !important;
+  }
+}
+
+/* Разрешаем вертикальный скролл, но перехватываем горизонтальные свайпы */
+.playlist-overlay,
+.artist-overlay {
+  touch-action: pan-y;
+}
+
+/* ================================================================
+   ЭТАП 4 — Страница трека (Track Page)
+   ================================================================ */
+.track-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  overflow: hidden;
+  transform: translateX(100%);
+  transition: transform .45s var(--spring);
+  will-change: transform;
+  background:
+    radial-gradient(58% 38% at 16% 6%,  rgba(124,92,255,.22), transparent 64%),
+    radial-gradient(52% 34% at 90% 16%, rgba(255,64,158,.14), transparent 66%),
+    radial-gradient(70% 44% at 50% 102%,rgba(56,132,255,.18), transparent 68%),
+    #08080c;
+  touch-action: pan-y;
+}
+.track-overlay.open { transform: translateX(0); }
+
+.track-overlay-inner {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding:
+    calc(env(safe-area-inset-top) + 14px)
+    20px
+    calc(120px + env(safe-area-inset-bottom));
+  min-height: 100%;
+}
+.track-overlay-inner::-webkit-scrollbar { display: none; }
+
+body.track-open main { overflow: hidden; }
+
+.track-page-art-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 24px;
+}
+.track-page-art {
+  width: min(72vw, 320px);
+  height: min(72vw, 320px);
+  border-radius: 22px;
+  object-fit: cover;
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.55),
+    0 8px 24px rgba(0,0,0,.4);
+  background: linear-gradient(135deg, rgba(124,92,255,.5), rgba(255,64,158,.35));
+}
+
+.track-page-meta {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.track-page-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  margin: 0 0 6px;
+  color: var(--text);
+}
+.track-page-artist {
+  font-size: 16px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: color .2s;
+}
+.track-page-artist:hover { color: #a78bfa; }
+.track-page-info {
+  font-size: 13px;
+  color: var(--text-dim);
+  opacity: .75;
+}
+
+.track-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.track-page-actions .btn {
+  flex: 1 1 auto;
+  min-width: 120px;
+}
+
+/* ПК: страница трека в центре, макс-ширина */
+@media (min-width: 900px) {
+  .track-overlay-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .track-page-art {
+    width: 340px;
+    height: 340px;
+  }
+  .track-page-title { font-size: 32px; }
+}
+
+/* ================================================================
+   ГРОМКОСТЬ — только ПК (мобилка использует системные кнопки)
+   ================================================================ */
+.np-volume,
+.mp-volume { display: none; }
+
+.np-volume {
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 16px;
+  padding: 0 4px;
+}
+.mp-volume {
+  align-items: center;
+  gap: 4px;
+  padding: 0 4px;
+  flex: 0 0 auto;
+}
+
+@media (min-width: 900px) {
+  .np-volume { display: flex; }
+  .mp-volume { display: flex; }
+}
+
+.np-volume-icon,
+.mp-volume-icon {
+  flex: none;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: rgba(235,235,245,.7);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: color .2s, background .2s;
+}
+.np-volume-icon:active,
+.mp-volume-icon:active {
+  background: rgba(255,255,255,.08);
+}
+
+/* Иконка mute */
+.np-volume-icon .vol-off,
+.mp-volume-icon .vol-off { display: none; }
+.np-volume-icon.is-muted .vol-on,
+.mp-volume-icon.is-muted .vol-on { display: none; }
+.np-volume-icon.is-muted .vol-off,
+.mp-volume-icon.is-muted .vol-off { display: block; }
+
+.np-volume-slider,
+.mp-volume-slider {
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255,255,255,.15);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  accent-color: #a78bfa;
+}
+.np-volume-slider { flex: 1; }
+.mp-volume-slider { width: 90px; flex: none; }
+
+.np-volume-slider::-webkit-slider-thumb,
+.mp-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.45);
+  cursor: pointer;
+}
+.np-volume-slider::-moz-range-thumb,
+.mp-volume-slider::-moz-range-thumb {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,.45);
+}
+
+/* ================================================================
+   FIX v9 — громкость (вертикальная на ПК), миниплеер, z-index, topbar
+   ================================================================ */
+
+/* --- 1. Обёртка прогресс + громкость --- */
+.np-scrubber-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.np-scrubber-row .np-scrubber {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* --- 2. Миниплеер — крупнее --- */
+.miniplayer {
+  height: 72px;
+  padding: 0 12px;
+  gap: 12px;
+  /* default для mobile — вплотную к таббару */
+  bottom: calc(66px + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 900px) {
+  /* на ПК сайдбара таббара нет — можно опустить к самому низу */
+  .miniplayer {
+    bottom: 16px;
+  }
+}
+.mp-art { width: 56px; height: 56px; }
+.mp-title { font-size: 15px; }
+.mp-artist { font-size: 13px; }
+.mp-heart { width: 40px; height: 40px; }
+.mp-btn { width: 44px; height: 44px; }
+body.has-miniplayer main {
+  padding-bottom: calc(172px + env(safe-area-inset-bottom));
+}
+
+/* --- 3. Кликабельные name/artist на тайлах --- */
+.home-tile-name,
+.recent-title,
+.home-tile-artist {
+  cursor: pointer;
+  transition: color .2s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .home-tile-name:hover,
+  .recent-title:hover { color: #fff; }
+  .home-tile-artist:hover { color: #a78bfa; }
+}
+
+/* --- 4. Прячем topbar/tabbar при открытой странице трека --- */
+body.track-open .topbar {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (max-width: 899px) {
+  body.track-open .tabbar {
+    transform: translateY(calc(100% + 40px));
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* --- 5. ПК: вертикальный слайдер громкости справа от прогресса --- */
+.np-volume { display: none; }
+
+@media (min-width: 900px) {
+  .np-volume {
+    display: flex;
+    flex: none;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+  }
+
+  /* Мостик для ховера — на РОДИТЕЛЕ, без overflow: hidden */
+  .np-volume::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 100%;
+    width: 40px;
+    height: 20px;
+    /* невидимый, но ловит мышь */
+    background: transparent;
+  }
+
+  .np-volume-icon {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.1);
+    color: rgba(235,235,245,.85);
+    display: grid; place-items: center;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+    position: relative;
+    z-index: 2;
+  }
+  .np-volume-icon:hover  { background: rgba(255,255,255,.14); }
+  .np-volume-icon:active { background: rgba(255,255,255,.20); }
+
+  .np-volume-icon .vol-off { display: none; }
+  .np-volume-icon.is-muted .vol-on { display: none; }
+  .np-volume-icon.is-muted .vol-off { display: block; }
+
+  .np-volume-track {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 6px);
+    transform: translateX(-50%);
+    width: 42px;
+    height: 0;
+    padding: 0;
+    border-radius: 20px;
+    background: rgba(30,30,38,.96);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255,255,255,.12);
+    box-shadow: 0 12px 40px rgba(0,0,0,.55);
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, height .3s var(--spring), padding .3s var(--spring);
+    z-index: 1;
+  }
+
+  .np-volume:hover .np-volume-track,
+  .np-volume.is-open .np-volume-track {
+    height: 140px;
+    padding: 14px 0;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .np-volume-track .np-volume-slider {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    width: 110px;
+    height: 4px;
+    background: rgba(255,255,255,.18);
+    border-radius: 999px;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* Центровка ползунка на треке */
+  .np-volume-track .np-volume-slider::-webkit-slider-runnable-track {
+    height: 4px;
+    background: transparent;
+    border-radius: 999px;
+  }
+  .np-volume-track .np-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;           /* (14-4)/2 = центровка на треке */
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,.5);
+    cursor: pointer;
+  }
+  .np-volume-track .np-volume-slider::-moz-range-track {
+    height: 4px;
+    background: rgba(255,255,255,.18);
+    border-radius: 999px;
+  }
+  .np-volume-track .np-volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,.5);
+  }
+}
+
+/* --- 6. Страница трека выше артиста и плейлиста по z-index --- */
+.track-overlay { z-index: 82; }
+.artist-overlay { z-index: 81; }
+.playlist-overlay { z-index: 80; }
+
+/* ================================================================
+   FIX v10 — мобильные контролы плеера не вылезают
+   ================================================================ */
+@media (max-width: 899px) {
+  .np-body {
+    padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
+  }
+
+  .np-controls {
+    gap: 0;
+    margin: 0 -4px;   /* используем чуть больше ширины */
+    justify-content: space-between;
+  }
+
+  .np-ctrl {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  .np-ctrl svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .np-ctrl-lg {
+    width: 42px;
+    height: 42px;
+  }
+  .np-ctrl-lg svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .np-ctrl-play {
+    width: 60px;
+    height: 60px;
+  }
+  .np-ctrl-play svg {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* ================================================================
+   AURORA PULSE — живой mesh-градиент из цветов обложки
+   ================================================================ */
+
+.pulse-hero {
+  --aurora-1: rgb(124, 92, 255);
+  --aurora-2: rgb(255, 64, 158);
+  --aurora-3: rgb(56, 132, 255);
+  contain: layout paint;
+}
+
+/* Обложка — тонкая база под aurora, приглушённая и размытая */
+.pulse-hero-bg {
+  filter: blur(70px) saturate(180%) brightness(0.4) !important;
+  opacity: 0.5 !important;
+  transform: scale(1.4);
+  transition: background-image .8s ease, opacity .6s ease;
+}
+
+/* --- Blobs --- */
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  mix-blend-mode: screen;
+  opacity: 0.8;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 1;
+  transition: background .8s ease, opacity .6s ease;
+}
+
+.aurora-blob-1 {
+  width: 60%;
+  aspect-ratio: 1;
+  top: -15%;
+  left: -15%;
+  background: radial-gradient(circle, var(--aurora-1) 0%, transparent 70%);
+  animation: auroraDrift1 18s ease-in-out infinite;
+}
+
+.aurora-blob-2 {
+  width: 65%;
+  aspect-ratio: 1;
+  top: -20%;
+  right: -20%;
+  background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
+  animation: auroraDrift2 22s ease-in-out infinite;
+}
+
+.aurora-blob-3 {
+  width: 55%;
+  aspect-ratio: 1;
+  bottom: -20%;
+  left: 20%;
+  background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
+  animation: auroraDrift3 20s ease-in-out infinite;
+}
+
+/* Ускоряем движение, когда трек играет */
+.pulse-hero.live:not(.paused) .aurora-blob-1 { animation-duration: 12s; }
+.pulse-hero.live:not(.paused) .aurora-blob-2 { animation-duration: 15s; }
+.pulse-hero.live:not(.paused) .aurora-blob-3 { animation-duration: 13s; }
+.pulse-hero.live:not(.paused) .aurora-blob { opacity: 1; }
+
+@keyframes auroraDrift1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(45%, 30%) scale(1.25); }
+  66%  { transform: translate(15%, -25%) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes auroraDrift2 {
+  0%   { transform: translate(0, 0) scale(1.1); }
+  50%  { transform: translate(-35%, 45%) scale(0.85); }
+  100% { transform: translate(0, 0) scale(1.1); }
+}
+
+@keyframes auroraDrift3 {
+  0%   { transform: translate(0, 0) scale(0.9); }
+  40%  { transform: translate(-45%, -35%) scale(1.3); }
+  70%  { transform: translate(25%, -40%) scale(1.05); }
+  100% { transform: translate(0, 0) scale(0.9); }
+}
+
+/* --- Шум (премиум-текстура) --- */
+.pulse-hero-noise {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* --- Виньетка (глубина, фокус на центр) --- */
+.pulse-hero-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 35%,
+    rgba(8, 8, 12, 0.55) 100%
+  );
+}
+
+/* Старый ambient больше не нужен — убираем */
+.pulse-hero-ambient { display: none !important; }
+
+/* Замедляем анимации при скрытом окне — экономим CPU */
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob { animation: none !important; }
+}
+
+/* --- Контейнер для обложки --- */
+.pulse-hero-art-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 140px;
+  height: 140px;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  overflow: hidden;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.5s var(--spring);
+}
+
+/* Когда трек активен — обложка появляется */
+.pulse-hero.live .pulse-hero-art-card {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Стили для самой картинки */
+.pulse-hero-art-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Корректируем прозрачность фоновых слоёв, чтобы обложка не терялась */
+.pulse-hero-bg {
+  opacity: 0.25 !important; /* Было 0.5 */
+}
+.pulse-hero .aurora-blob {
+  opacity: 0.5; /* Было 0.8 */
+}
+
+/* ПК-версия */
+@media (min-width: 900px) {
+  .pulse-hero-art-card {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+/* ================================================================
+   FIX v11 — Pulse: обложка выше, PC-двухколонка, очередь
+   ================================================================ */
+
+/* --- Мобилка: обложка выше + очередь скрыта --- */
+.pulse-hero-art-card {
+  top: 40% !important;
+}
+.pulse-queue { display: none; }
+
+/* --- ПК: двухколоночный layout --- */
+@media (min-width: 900px) {
+  .pulse-hero {
+    height: auto;
+    min-height: 340px;
+  }
+
+  /* Обложка крупная слева */
+  .pulse-hero-art-card {
+    top: 50% !important;
+    left: 32px !important;
+    transform: translateY(-50%) !important;
+    width: 270px;
+    height: 270px;
+    border-radius: 22px;
+  }
+  .pulse-hero.live .pulse-hero-art-card {
+    transform: translateY(-50%) !important;
+  }
+
+  /* Контент — справа от обложки */
+  .pulse-hero-content {
+    inset: 0 0 0 334px;
+    padding: 28px 32px 28px 0;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .pulse-hero-meta {
+    text-align: left;
+    width: 100%;
+  }
+
+  .pulse-title { font-size: 30px; }
+  .pulse-sub   { font-size: 15px; margin-top: 6px; }
+
+  /* Очередь видна */
+  .pulse-queue {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .pulse-actions {
+    flex-direction: row;
+    gap: 12px;
+  }
+}
+
+/* --- Элемент очереди --- */
+.pulse-queue-item {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 160px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 5px 8px 5px 5px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.pulse-queue-item img {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  flex: none;
+  object-fit: cover;
+  background: rgba(255,255,255,.1);
+}
+
+.pulse-queue-item-meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.pulse-queue-item-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pulse-queue-item-artist {
+  font-size: 10.5px;
+  color: rgba(255,255,255,.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+/* ================================================================
+   FIX v12 — Pulse: placeholder, bigger mobile cover, clickable
+   ================================================================ */
+
+/* Обложка ВСЕГДА видна (даже без трека — placeholder) */
+.pulse-hero-art-card {
+  opacity: 1 !important;
+  transform: translate(-50%, -50%) scale(1) !important;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 180px;
+  height: 180px;
+  border-radius: 22px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.08) inset;
+  overflow: hidden;
+  z-index: 3;
+}
+
+/* Placeholder (нота) */
+.pulse-hero-art-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(124,92,255,.55), rgba(255,64,158,.4) 55%, rgba(56,132,255,.55));
+  color: rgba(255,255,255,.6);
+  transition: opacity .4s ease;
+  pointer-events: none;
+}
+.pulse-hero-art-placeholder svg {
+  width: 56px;
+  height: 56px;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.4));
+}
+
+.pulse-hero-art-card.has-track .pulse-hero-art-placeholder {
+  opacity: 0;
+}
+
+/* Кликабельные элементы в live-состоянии */
+.pulse-hero.live .pulse-title,
+.pulse-hero.live .pulse-artist,
+.pulse-hero.live .pulse-hero-art-card {
+  cursor: pointer;
+}
+
+.pulse-hero.live .pulse-artist {
+  color: rgba(255,255,255,.85);
+  transition: color .2s;
+}
+.pulse-hero.live .pulse-artist:hover {
+  color: #a78bfa;
+}
+
+.pulse-hero.live .pulse-title:hover {
+  color: rgba(255,255,255,.9);
+}
+
+/* Кнопка refresh — стилизуем как shuffle */
+.pulse-btn-refresh {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.22);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  transition: transform .5s var(--spring), background .2s;
+}
+.pulse-btn-refresh:active {
+  transform: scale(.9) rotate(-180deg);
+  background: rgba(255,255,255,.24);
+}
+
+/* ПК: обложка крупнее и слева */
+@media (min-width: 900px) {
+  .pulse-hero-art-card {
+    top: 50%;
+    left: 32px;
+    transform: translateY(-50%) !important;
+    width: 270px;
+    height: 270px;
+  }
+  .pulse-hero-art-placeholder svg {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* Мобилка: чуть больше, чем было (было 140) */
+@media (max-width: 899px) {
+  .pulse-hero-art-card {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+/* ================================================================
+   FIX v13 — Aurora hover boost (ПК)
+   ================================================================ */
+
+/* Плавный переход при наведении */
+.aurora-blob {
+  transition: opacity .5s ease, filter .5s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pulse-hero:hover .aurora-blob {
+    opacity: 1;
+    filter: blur(55px) brightness(1.25) saturate(1.4);
+  }
+
+  /* Дополнительно: чуть ярче обложка и виньетка */
+  .pulse-hero:hover .pulse-hero-art-card {
+    box-shadow:
+      0 24px 50px rgba(0,0,0,.5),
+      0 0 40px rgba(124,92,255,.35),
+      0 0 0 1px rgba(255,255,255,.12) inset;
+    transition: box-shadow .5s ease;
+  }
+
+  .pulse-hero:hover .pulse-hero-noise {
+    opacity: 0.14;
+  }
+}
+
+/* ================================================================
+   FIX v14 — мини-плеер: воздух над таб-баром + опускание на треке
+   ================================================================ */
+
+@media (max-width: 899px) {
+  /* 1. Поднимаем мини-плеер: зазор ~14px до таб-бара */
+  .miniplayer {
+    bottom: calc(78px + env(safe-area-inset-bottom));
+  }
+
+  /* 2. На ВСЕХ оверлеях мини-плеер опускается к низу экрана */
+  body.playlist-open .miniplayer,   /* плейлист + история */
+  body.artist-open .miniplayer,
+  body.track-open  .miniplayer {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+
+  /* 3. Обновляем отступ у main под новую позицию плеера */
+  body.has-miniplayer main {
+    padding-bottom: calc(186px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ================================================================
+   FIX v15 — Play-иконка убрана с обложек .track + страница альбома
+   ================================================================ */
+
+/* 1. Убираем hover-play overlay у маленьких карточек трека */
+.track-art-overlay { display: none !important; }
+
+/* 2. Строка альбома под артистом в .track */
+.track-album {
+  font-size: 12px;
+  color: rgba(235,235,245,.42);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: color .2s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .track-album:hover { color: #a78bfa; }
+}
+
+/* 3. Экран альбома */
+.album-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 83;
+  overflow: hidden;
+  transform: translateX(100%);
+  transition: transform .45s var(--spring);
+  will-change: transform;
+  background:
+    radial-gradient(58% 38% at 16% 6%,  rgba(124,92,255,.22), transparent 64%),
+    radial-gradient(52% 34% at 90% 16%, rgba(255,64,158,.14), transparent 66%),
+    radial-gradient(70% 44% at 50% 102%,rgba(56,132,255,.18), transparent 68%),
+    #08080c;
+  touch-action: pan-y;
+}
+.album-overlay.open { transform: translateX(0); }
+
+.album-overlay-inner {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding:
+    calc(env(safe-area-inset-top) + 14px)
+    20px
+    calc(120px + env(safe-area-inset-bottom));
+  min-height: 100%;
+}
+.album-overlay-inner::-webkit-scrollbar { display: none; }
+
+body.album-open main { overflow: hidden; }
+
+.album-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 8px 0 24px;
+}
+
+.album-art {
+  width: 180px;
+  height: 180px;
+  border-radius: 18px;
+  background-color: #1c1c2e;
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 20px 44px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  margin-bottom: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 54px;
+  font-weight: 700;
+  color: rgba(255,255,255,.85);
+  letter-spacing: -.03em;
+}
+
+.album-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  margin: 0 0 6px;
+  color: var(--text);
+}
+
+.album-artist {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+
+.album-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.album-actions .btn {
+  flex: 0 1 auto;
+  min-width: 120px;
+}
+
+.album-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Скрытие topbar/tabbar на мобиле при открытом альбоме */
+body.album-open .topbar {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (max-width: 899px) {
+  body.album-open .tabbar {
+    transform: translateY(calc(100% + 40px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  /* мини-плеер опускаем на альбоме (как на других оверлеях) */
+  body.album-open .miniplayer {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ПК: контент альбома по центру */
+@media (min-width: 900px) {
+  .album-overlay-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .album-art { width: 220px; height: 220px; }
+  .album-title { font-size: 30px; }
+  .album-hero { margin: 16px 0 32px; }
+}
+
+/* ================================================================
+   FIX v16 — сердечко на странице альбома
+   ================================================================ */
+.album-heart {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-brd);
+  background: rgba(255,255,255,.08);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  color: rgba(235,235,245,.65);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform .35s var(--spring), color .2s, background .2s;
+}
+.album-heart:active { transform: scale(.9); }
+.album-heart svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  transition: fill .25s ease, color .2s;
+}
+.album-heart.active {
+  color: #ff4d8d;
+  background: rgba(255,77,141,.15);
+  border-color: rgba(255,77,141,.35);
+}
+.album-heart.active svg { fill: currentColor; }
+.album-heart.just-activated {
+  animation: heartPop .45s var(--spring-bounce);
+}
+
+/* ================================================================
+   FIX v17 — секция альбомов в «Избранном» + кликабельный альбом на треке
+   ================================================================ */
+
+/* Секция с избранными альбомами внутри .results */
+.favorites-albums-section {
+  margin-bottom: 20px;
+}
+.favorites-albums-section .section-head {
+  margin-top: 0;
+}
+@media (min-width: 900px) {
+  .favorites-albums-section {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Кликабельный альбом в метаданных страницы трека */
+.track-page-album {
+  cursor: pointer;
+  color: rgba(235,235,245,.75);
+  transition: color .2s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .track-page-album:hover {
+    color: #a78bfa;
+  }
+}
+.track-page-album:active {
+  color: #a78bfa;
+}
+
+/* ================================================================
+   FIX v18 — единый стиль .fav-heart + секции в «Избранном»
+   ================================================================ */
+
+/* ---- Универсальное сердечко (альбом / артист / трек) ---- */
+.fav-heart {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-brd);
+  background: rgba(255,255,255,.08);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  color: rgba(235,235,245,.65);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform .35s var(--spring), color .2s, background .2s, border-color .2s;
+}
+.fav-heart:active { transform: scale(.9); }
+.fav-heart svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  transition: fill .25s ease, color .2s;
+}
+.fav-heart.active {
+  color: #ff4d8d;
+  background: rgba(255,77,141,.15);
+  border-color: rgba(255,77,141,.35);
+}
+.fav-heart.active svg { fill: currentColor; }
+.fav-heart.just-activated {
+  animation: heartPop .45s var(--spring-bounce);
+}
+
+/* Старое имя (на всякий случай) — оставляем алиас */
+.album-heart { /* больше не используется, но пусть не ломается */ }
+
+/* ---- Секции в «Избранном» ---- */
+.favorites-section {
+  margin-bottom: 20px;
+}
+.favorites-section .section-head {
+  margin-top: 0;
+}
+@media (min-width: 900px) {
+  .favorites-section {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Круглая обёртка обложки артиста */
+.home-tile-art-wrap--round {
+  border-radius: 50%;
+}
+
+/* ================================================================
+   FIX v19 — убрана строка альбома под артистом в .track-карточках
+   ================================================================ */
+.track-album { display: none !important; }
+
+/* ================================================================
+   FIX v20 — Чарты, Профиль, Настройки (страница), объединённое Избранное
+   ================================================================ */
+
+/* Настройки в сайдбаре — внизу */
+@media (min-width: 900px) {
+  .tab-item[data-tab="profile"] {
+    margin-top: auto;
+    margin-bottom: 0;
+  }
+  .tab-item-settings {
+    margin-top: 4px;
+  }
+}
+
+/* На мобилке — 5 табов, всё ок */
+@media (max-width: 899px) {
+  .tab-item-settings { display: none !important; }
+}
+
+/* ---- Чипы (Чарты) ---- */
+.chip-active {
+  background: linear-gradient(135deg, rgba(167,139,250,.28), rgba(106,168,255,.28)) !important;
+  border-color: rgba(167,139,250,.5) !important;
+  color: #fff !important;
+}
+
+/* ---- Строка чарта с номером позиции ---- */
+.chart-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.chart-row .track { flex: 1; min-width: 0; }
+.chart-position {
+  flex: none;
+  width: 28px;
+  text-align: right;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: rgba(235,235,245,.55);
+  font-variant-numeric: tabular-nums;
+}
+.chart-row:nth-child(1) .chart-position { color: #ffd23f; }
+.chart-row:nth-child(2) .chart-position { color: #d0d0d8; }
+.chart-row:nth-child(3) .chart-position { color: #d98956; }
+
+/* ---- Профиль ---- */
+.profile-guest {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.profile-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 24px;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.06);
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  place-items: center;
+  font-size: 46px;
+  font-weight: 700;
+  color: rgba(255,255,255,.85);
+  box-shadow: 0 16px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1);
+  border: 1px solid var(--glass-brd);
+}
+
+.profile-name-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.profile-name-input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-brd);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  font-size: 15px;
+  outline: none;
+}
+.profile-name-input:focus { border-color: rgba(167,139,250,.5); }
+
+.profile-email {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* ---- Настройки: toggle-строка ---- */
+.settings-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.settings-toggle {
+  position: relative;
+  width: 44px; height: 26px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(255,255,255,.14);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .25s;
+}
+.settings-toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform .3s var(--spring);
+  box-shadow: 0 2px 6px rgba(0,0,0,.4);
+}
+.settings-toggle:checked {
+  background: linear-gradient(135deg, #a78bfa, #6aa8ff);
+}
+.settings-toggle:checked::after {
+  transform: translateX(18px);
+}
+
+/* ---- Профиль: страница статистики ---- */
+.profile-stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  font-size: 14px;
+  color: var(--text);
+}
+.profile-stat-row:last-child { border-bottom: 0; }
+.profile-stat-row span:last-child {
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Настройки: страница ---- */
+#settingsScreen .back-btn {
+  margin-bottom: 8px;
+}
+#settingsScreen .account-state .btn {
+  padding: 10px 20px;
+}
+
+/* Плавные переходы выключаются (если пользователь выключил) */
+body.no-smooth *,
+body.no-smooth *::before,
+body.no-smooth *::after {
+  transition-duration: 0.01ms !important;
+  animation-duration: 0.01ms !important;
+}
+
+/* ---- «Избранное»: legacy-кнопка (скрыта) ---- */
+#favHistoryBtn { display: none !important; }
+
+/* ================================================================
+   FIX v21 — Чарты-жанры, профиль-настройки, поиск-артисты
+   ================================================================ */
+
+/* ---- Жанры (big tiles) ---- */
+.genre-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 8px;
+}
+@media (min-width: 900px) {
+  .genre-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+}
+@media (min-width: 1400px) {
+  .genre-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.genre-tile {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 12px 30px rgba(0,0,0,.4);
+  padding: 0;
+  transition: transform .3s var(--spring);
+}
+.genre-tile:active { transform: scale(.96); }
+.genre-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.25), transparent 55%);
+  z-index: 0;
+}
+.genre-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.65) 0%, transparent 55%);
+  z-index: 0;
+}
+.genre-tile-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 16px;
+  z-index: 1;
+  text-align: left;
+}
+.genre-tile-name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,.5);
+  margin-bottom: 2px;
+}
+@media (min-width: 900px) {
+  .genre-tile-name { font-size: 22px; }
+  .genre-tile-content { padding: 20px; }
+}
+.genre-tile-count {
+  font-size: 12px;
+  color: rgba(255,255,255,.8);
+  font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0,0,0,.4);
+}
+
+/* ---- Чарт: 3 колонки × 5 рядов на ПК ---- */
+.charts-top-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+@media (min-width: 900px) {
+  .charts-top-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(5, auto);
+    grid-auto-flow: column;
+    gap: 12px 16px;
+  }
+}
+
+/* ---- Профиль: имя в шапке ---- */
+.profile-display-name {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  margin: 12px 0 4px;
+  color: var(--text);
+  text-align: center;
+}
+
+.profile-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px 0 24px;
+}
+
+/* ---- Настройки: маленький аватар + имя ---- */
+.profile-hero-small {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.profile-avatar--sm {
+  width: 96px;
+  height: 96px;
+  font-size: 36px;
+}
+
+/* ---- Genre overlay ---- */
+.genre-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 84;
+  overflow: hidden;
+  transform: translateX(100%);
+  transition: transform .45s var(--spring);
+  will-change: transform;
+  background:
+    radial-gradient(58% 38% at 16% 6%,  rgba(124,92,255,.22), transparent 64%),
+    radial-gradient(52% 34% at 90% 16%, rgba(255,64,158,.14), transparent 66%),
+    radial-gradient(70% 44% at 50% 102%,rgba(56,132,255,.18), transparent 68%),
+    #08080c;
+  touch-action: pan-y;
+}
+.genre-overlay.open { transform: translateX(0); }
+
+.genre-overlay-inner {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding:
+    calc(env(safe-area-inset-top) + 14px)
+    20px
+    calc(120px + env(safe-area-inset-bottom));
+  min-height: 100%;
+}
+.genre-overlay-inner::-webkit-scrollbar { display: none; }
+
+body.genre-open main { overflow: hidden; }
+body.genre-open .topbar {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (max-width: 899px) {
+  body.genre-open .tabbar {
+    transform: translateY(calc(100% + 40px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  body.genre-open .miniplayer {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+}
+
+.genre-hero {
+  position: relative;
+  border-radius: 20px;
+  padding: 32px 24px;
+  margin: 12px 0 24px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0,0,0,.5);
+}
+.genre-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.25), transparent 55%);
+  pointer-events: none;
+}
+.genre-hero-name {
+  position: relative;
+  z-index: 1;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,.5);
+}
+.genre-hero-sub {
+  position: relative;
+  z-index: 1;
+  font-size: 14px;
+  color: rgba(255,255,255,.85);
+  margin-top: 4px;
+  font-weight: 600;
+}
+@media (min-width: 900px) {
+  .genre-overlay-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .genre-hero-name { font-size: 40px; }
+}
+
+/* ================================================================
+   FIX v22 — тайлы жанров, профиль/настройки сетка
+   ================================================================ */
+
+/* ---- Жанровый тайл в стиле .home-tile ---- */
+.genre-art {
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.genre-art::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.28), transparent 55%);
+  z-index: 0;
+  pointer-events: none;
+}
+.genre-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 60%);
+  z-index: 0;
+  pointer-events: none;
+}
+.genre-art-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  z-index: 1;
+  text-align: left;
+}
+.genre-art-name {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.genre-art-count {
+  font-size: 11px;
+  color: rgba(255,255,255,.8);
+  font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0,0,0,.5);
+  margin-top: 1px;
+}
+@media (min-width: 900px) {
+  .genre-art-name  { font-size: 15px; }
+  .genre-art-count { font-size: 12px; }
+  .genre-art-content { padding: 12px; }
+}
+
+/* ---- Настройки: кнопка «Сохранить» не выпирает ---- */
+.profile-name-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.profile-name-input {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+.profile-name-row .btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+@media (max-width: 400px) {
+  .profile-name-row { flex-direction: column; }
+  .profile-name-row .btn { width: 100%; }
+}
+
+/* ---- Вкусы / статистика: не ломаем сетку длинными именами ---- */
+.settings-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 15px;
+  color: var(--text);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  gap: 12px;
+}
+.settings-info-row > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.settings-info-row > :last-child {
+  flex: 0 1 auto;
+  min-width: 0;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.settings-info-row:last-child { border-bottom: 0; }
+.settings-dim {
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Плейлисты в Избранном: пустое состояние ---- */
+#libPlaylists .hint {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+/* Профиль: имя и email центр ---- */
+.profile-display-name {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  margin: 12px 0 4px;
+  color: var(--text);
+  text-align: center;
+  word-break: break-word;
+  max-width: 100%;
+  padding: 0 12px;
+}
+
+/* ================================================================
+   FIX v23 — жанры-списком, EQ, preferences, микрофиксы
+   ================================================================ */
+
+/* ---- Жанры списком (1 колонка) ---- */
+.genre-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.genre-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 16px;
+  background: var(--glass);
+  border: 1px solid var(--glass-brd);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: transform .3s var(--spring), background .2s;
+  width: 100%;
+}
+.genre-row:active { transform: scale(.98); background: rgba(255,255,255,.10); }
+
+.genre-row-art {
+  flex: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15);
+  overflow: hidden;
+  position: relative;
+}
+.genre-row-art::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.25), transparent 60%);
+}
+.genre-row-art-name {
+  position: relative;
+  z-index: 1;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,.5);
+  text-align: center;
+  padding: 0 4px;
+  line-height: 1.1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.genre-row-meta { flex: 1; min-width: 0; }
+.genre-row-name {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.genre-row-count {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+.genre-row-arrow {
+  flex: none;
+  color: var(--text-dim);
+  display: grid;
+  place-items: center;
+}
+
+/* ---- EQ sheet ---- */
+.eq-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.eq-bands {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  height: 180px;
+  padding: 8px 4px;
+}
+.eq-band {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+}
+.eq-slider {
+  flex: 1;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 32px;
+  height: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.eq-slider::-webkit-slider-runnable-track {
+  width: 4px;
+  background: rgba(255,255,255,.15);
+  border-radius: 999px;
+}
+.eq-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.5);
+  margin-left: -7px;
+  cursor: pointer;
+}
+.eq-slider::-moz-range-track {
+  width: 4px;
+  background: rgba(255,255,255,.15);
+  border-radius: 999px;
+}
+.eq-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,.5);
+}
+.eq-val {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  min-height: 14px;
+}
+.eq-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+/* ---- Preferences sheet ---- */
+.sheet-panel--tall {
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+.sheet-body--scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  min-height: 0;
+}
+.prefs-subhead {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 16px 0 10px;
+}
+.prefs-subhead:first-child { margin-top: 0; }
+.prefs-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.prefs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.prefs-artist-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background .15s;
+}
+.prefs-artist-row:active { background: rgba(255,255,255,.06); }
+.prefs-artist-row input[type="checkbox"] {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  accent-color: #a78bfa;
+  cursor: pointer;
+}
+.prefs-artist-row > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.prefs-artist-count {
+  flex: none;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* ---- Микро-фикс «Вкусов» ---- */
+#profileFavArtist, #profileFavGenre {
+  max-width: 60%;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+}
+
+/* ================================================================
+   FIX v24 — жанры-тайлы, настройки-компакт, mp-eq
+   ================================================================ */
+
+/* Жанровые тайлы в стиле home-tile (уже есть из v22 — оставляем) */
+.genre-art { position: relative; background-size: cover; background-position: center; }
+.genre-art::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.28), transparent 55%);
+  z-index: 0; pointer-events: none;
+}
+.genre-art::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 60%);
+  z-index: 0; pointer-events: none;
+}
+.genre-art-content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 10px; z-index: 1; text-align: left;
+}
+.genre-art-name {
+  font-size: 14px; font-weight: 800; letter-spacing: -.02em;
+  color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,.55);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.genre-art-count {
+  font-size: 11px; color: rgba(255,255,255,.8); font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0,0,0,.5); margin-top: 1px;
+}
+@media (min-width: 900px) {
+  .genre-art-name  { font-size: 15px; }
+  .genre-art-count { font-size: 12px; }
+  .genre-art-content { padding: 12px; }
+}
+
+/* Внутри жанра треки — всегда 1 колонка, даже на ПК */
+.genre-tracks {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+.genre-tracks .track { padding: 12px; gap: 12px; }
+
+/* Кнопка эквалайзера на мини-плеере */
+.mp-eq { color: rgba(235,235,245,.75); }
+.mp-eq:active { transform: scale(.9); background: rgba(255,255,255,.10); }
+
+/* ПК-версия: можно чуть компактнее */
+@media (min-width: 900px) {
+  .mp-eq { width: 40px; height: 40px; }
+}
+
+/* ---- Настройки: компактный блок с именем и аватаром ---- */
+@media (max-width: 899px) {
+  #settingsUserBlock .profile-hero-small {
+    margin-bottom: 12px;
+    gap: 6px;
+  }
+  #settingsUserBlock .profile-avatar--sm {
+    width: 72px;
+    height: 72px;
+    font-size: 28px;
+  }
+  #settingsUserBlock .profile-name-row {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 0;
+  }
+  #settingsUserBlock .profile-name-row .btn {
+    width: 100%;
+  }
+  #settingsUserBlock .profile-name-input {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  #settingsUserBlock .settings-info {
+    padding: 6px 14px;
+    margin-bottom: 12px;
+  }
+  #settingsUserBlock .settings-info-row {
+    padding: 8px 0;
+    font-size: 14px;
+  }
+  #settingsUserBlock .settings-actions {
+    gap: 6px;
+  }
+  #settingsUserBlock .settings-btn {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+}
+
+/* Общее уплотнение settings-account на мобилке */
+@media (max-width: 899px) {
+  .settings-account { padding: 12px; margin-bottom: 16px; }
+}
+
+/* ================================================================
+   FIX v25 — EQ popover на ПК, мобильные горизонт. ползунки, громкость
+   ================================================================ */
+
+/* ---- 1. EQ как popover (ПК) ---- */
+.sheet-overlay.as-popover {
+  display: block;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.sheet-overlay.as-popover .sheet-panel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 280px;
+  max-width: 320px;
+  background: rgba(30,30,38,.98);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 14px;
+  transform: none !important;
+  transition: none;
+  box-shadow: 0 16px 50px rgba(0,0,0,.6);
+}
+.sheet-overlay.as-popover.open .sheet-panel {
+  animation: eqPopIn .18s ease-out;
+}
+@keyframes eqPopIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sheet-overlay.as-popover .sheet-header { margin-bottom: 10px; }
+.sheet-overlay.as-popover .sheet-header h2 { font-size: 15px; }
+.sheet-overlay.as-popover .sheet-body { margin-bottom: 10px; }
+.sheet-overlay.as-popover .eq-presets { gap: 6px; margin-bottom: 10px; }
+.sheet-overlay.as-popover .chip { padding: 6px 10px; font-size: 12px; }
+.sheet-overlay.as-popover .eq-bands {
+  height: 140px;
+  padding: 4px 0;
+  gap: 4px;
+}
+.sheet-overlay.as-popover .eq-slider { width: 24px; }
+.sheet-overlay.as-popover .eq-label { font-size: 9px; letter-spacing: -0.02em; }
+.sheet-overlay.as-popover .eq-val { font-size: 10px; }
+.sheet-overlay.as-popover .sheet-actions { gap: 6px; }
+.sheet-overlay.as-popover .sheet-actions .btn { padding: 8px 12px; font-size: 13px; }
+
+/* ---- 2. #mpEq скрыт на мобилке ---- */
+@media (max-width: 899px) {
+  #mpEq { display: none !important; }
+}
+
+/* ---- 3. Мобильные горизонтальные ползунки эквалайзера ---- */
+@media (max-width: 899px) {
+  .eq-bands {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 8px 0;
+    height: auto;
+    align-items: stretch;
+  }
+  .eq-band {
+    display: grid;
+    grid-template-columns: 52px 1fr 36px;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+  }
+  .eq-band .eq-label {
+    order: 1;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    letter-spacing: 0;
+    color: var(--text-dim);
+  }
+  .eq-band .eq-slider {
+    order: 2;
+    width: 100%;
+    height: 4px;
+    flex: 1 1 auto;
+    writing-mode: horizontal-tb;
+    direction: ltr;
+    max-width: none;
+    min-width: 0;
+  }
+  .eq-band .eq-val {
+    order: 3;
+    font-size: 12px;
+    min-height: 16px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .eq-band .eq-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,.15);
+    border-radius: 999px;
+  }
+  .eq-band .eq-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    margin-top: -8px;
+    margin-left: 0;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,.5);
+    cursor: pointer;
+  }
+  .eq-band .eq-slider::-moz-range-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,.15);
+    border-radius: 999px;
+  }
+  .eq-band .eq-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,.5);
+  }
+}
+
+/* ---- 4. Громкость — thumb строго по центру ---- */
+/* Переделываем на writing-mode, убираем rotate и margin-top */
+.np-volume-track .np-volume-slider {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 110px;
+  writing-mode: vertical-lr;
+  direction: rtl;
+  background: transparent;
+  border-radius: 999px;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+.np-volume-track .np-volume-slider::-webkit-slider-runnable-track {
+  width: 4px;
+  height: 100%;
+  background: rgba(255,255,255,.18);
+  border-radius: 999px;
+}
+.np-volume-track .np-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-left: -5px;
+  margin-top: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.5);
+  cursor: pointer;
+}
+.np-volume-track .np-volume-slider::-moz-range-track {
+  width: 4px;
+  height: 100%;
+  background: rgba(255,255,255,.18);
+  border-radius: 999px;
+}
+.np-volume-track .np-volume-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,.5);
+}
+
+/* ================================================================
+   FIX v26 — Now Playing: вариант C (7 иконок), Eq в шапке
+   ================================================================ */
+
+/* ---- 1. Eq кнопка в шапке np-header (слева) ---- */
+.np-eq-btn {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255,255,255,.10);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background .2s, transform .3s var(--spring);
+  z-index: 3;
+}
+.np-eq-btn:active {
+  transform: translateY(-50%) scale(.9);
+  background: rgba(255,255,255,.20);
+}
+
+/* ---- 2. Увеличенные иконки управления ---- */
+.np-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+  margin: 0 -4px;
+}
+
+.np-ctrl {
+  flex: 0 0 auto;
+  width: clamp(32px, 10.5vw, 52px);
+  height: clamp(32px, 10.5vw, 52px);
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform .35s var(--spring), background .2s, color .2s;
+}
+.np-ctrl svg {
+  width: clamp(20px, 6vw, 26px);
+  height: clamp(20px, 6vw, 26px);
+  display: block;
+}
+
+.np-ctrl-lg {
+  width: clamp(40px, 12.5vw, 62px);
+  height: clamp(40px, 12.5vw, 62px);
+}
+.np-ctrl-lg svg {
+  width: clamp(24px, 7.5vw, 32px);
+  height: clamp(24px, 7.5vw, 32px);
+}
+
+.np-ctrl-play {
+  width: clamp(58px, 18vw, 88px);
+  height: clamp(58px, 18vw, 88px);
+}
+.np-ctrl-play svg {
+  width: clamp(28px, 8.5vw, 36px);
+  height: clamp(28px, 8.5vw, 36px);
+}
+
+/* ---- 3. Скрываем #mpEq на мобилке ---- */
+@media (max-width: 899px) {
+  #mpEq { display: none !important; }
+}
+
+/* ---- 4. На ПК чуть просторнее ---- */
+@media (min-width: 900px) {
+  .np-controls { gap: 8px; }
+  .np-eq-btn { width: 42px; height: 42px; }
+}
+
+/* ---- 5. Маленькие экраны (iPhone SE 320px) — ужимаем зазор ---- */
+@media (max-width: 340px) {
+  .np-controls { gap: 0; }
+  .np-ctrl { width: 30px; height: 30px; }
+  .np-ctrl-lg { width: 38px; height: 38px; }
+  .np-ctrl-play { width: 56px; height: 56px; }
+  .np-ctrl svg { width: 18px; height: 18px; }
+  .np-ctrl-lg svg { width: 22px; height: 22px; }
+  .np-ctrl-play svg { width: 26px; height: 26px; }
+}
+
+/* ================================================================
+   FIX v27 — Фикс кнопки Play и обрезки эквалайзера на ПК
+   ================================================================ */
+
+/* ---- 1. Возвращаем фон кнопке Play на Now Playing ---- */
+.np-ctrl-play {
+  background: linear-gradient(135deg, #a78bfa, #6aa8ff) !important;
+}
+.np-ctrl-play:active {
+  background: linear-gradient(135deg, #9176f0, #558ff0) !important;
+}
+
+/* ---- 2. Фикс обрезки EQ на ПК (вертикальные ползунки) ---- */
+@media (min-width: 900px) {
+  /* Убираем жесткую высоту, чтобы контейнер подстраивался под контент */
+  .eq-bands {
+    height: auto;
+    padding-bottom: 0;
+  }
+  .eq-band {
+    height: auto;
+  }
+  
+  /* Задаем фиксированную высоту самому вертикальному ползунку */
+  .eq-slider {
+    height: 120px;
+    flex: none;
+  }
+  
+  /* Поповер (открытие с мини-плеера или Now Playing) */
+  .sheet-overlay.as-popover .sheet-panel {
+    padding-bottom: 20px; /* Дополнительный отступ снизу, чтобы подписи не прилипали к краю */
+  }
+  .sheet-overlay.as-popover .eq-slider {
+    height: 100px; /* Чуть компактнее в поповере */
+  }
+}
+
+/* ================================================================
+   FIX v28 — Фикс гигантского поля ввода имени на мобилке
+   ================================================================ */
+@media (max-width: 899px) {
+  /* Сбрасываем flex-basis (180px), из-за которого инпут растягивался в колонку */
+  .profile-name-input {
+    flex: 0 0 auto !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    padding: 0 16px !important;
+    font-size: 15px !important;
+  }
+
+  /* Чуть увеличиваем отступ между инпутом и кнопкой */
+  #settingsUserBlock .profile-name-row {
+    gap: 12px;
+  }
+}

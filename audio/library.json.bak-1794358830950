@@ -1,0 +1,1652 @@
+[
+  {
+    "id": "bluefish-23",
+    "title": "23",
+    "artist": "Bluefish",
+    "album": "",
+    "genre": "Hip-hop/Rap",
+    "artwork": "audio/covers/bluefish-23.jpg",
+    "preview": "audio/bluefish-23.m4a",
+    "duration": 202
+  },
+  {
+    "id": "jubilee-na-odin-smysl-menshe",
+    "title": "На один смысл меньше",
+    "artist": "Jubilee",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/jubilee-na-odin-smysl-menshe.jpg",
+    "preview": "audio/jubilee-na-odin-smysl-menshe.m4a",
+    "duration": 256
+  },
+  {
+    "id": "mc-gustta-abusadamente",
+    "title": "Abusadamente",
+    "artist": "MC Gustta",
+    "album": "Zumba 2020: Rumba Fitness",
+    "genre": "Latin",
+    "artwork": "audio/covers/mc-gustta-abusadamente.jpg",
+    "preview": "audio/mc-gustta-abusadamente.m4a",
+    "duration": 216
+  },
+  {
+    "id": "lil-pump-all-the-sudden",
+    "title": "All The Sudden",
+    "artist": "Lil Pump",
+    "album": "All The Sudden",
+    "genre": "Rap",
+    "artwork": "audio/covers/lil-pump-all-the-sudden.jpg",
+    "preview": "audio/lil-pump-all-the-sudden.m4a",
+    "duration": 126
+  },
+  {
+    "id": "blueface-baby-momma-drama-bazenation-com",
+    "title": "Baby Momma Drama",
+    "artist": "Blueface",
+    "album": "Baby Momma Drama - Single",
+    "genre": "Rap",
+    "artwork": "audio/covers/blueface-baby-momma-drama-bazenation-com.jpg",
+    "preview": "audio/blueface-baby-momma-drama-bazenation-com.m4a",
+    "duration": 148
+  },
+  {
+    "id": "big-baby-tape-broke-day-www-muzoff-net",
+    "title": "Broke Day",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-broke-day-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-broke-day-www-muzoff-net.m4a",
+    "duration": 246
+  },
+  {
+    "id": "russ-civil-war-muzonov-net",
+    "title": "Civil War",
+    "artist": "Russ",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/russ-civil-war-muzonov-net.jpg",
+    "preview": "audio/russ-civil-war-muzonov-net.m4a",
+    "duration": 144
+  },
+  {
+    "id": "big-baby-tape-come-and-go-feat-tape-laflare-www-muzoff-net",
+    "title": "Come and Go (feat. Tape LaFlare)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-come-and-go-feat-tape-laflare-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-come-and-go-feat-tape-laflare-www-muzoff-net.m4a",
+    "duration": 146
+  },
+  {
+    "id": "big-baby-tape-dead-heat-feat-boulevard-depo-www-muzoff-net",
+    "title": "Dead Heat (feat. Boulevard Depo)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-dead-heat-feat-boulevard-depo-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-dead-heat-feat-boulevard-depo-www-muzoff-net.m4a",
+    "duration": 191
+  },
+  {
+    "id": "headhunterz-kshmr-dharma-extended-mix",
+    "title": "Dharma (Extended Mix)",
+    "artist": "Headhunterz & KSHMR",
+    "album": "",
+    "genre": "Dance",
+    "artwork": "audio/covers/headhunterz-kshmr-dharma-extended-mix.jpg",
+    "preview": "audio/headhunterz-kshmr-dharma-extended-mix.m4a",
+    "duration": 237
+  },
+  {
+    "id": "not-a-ap-rocky-doja",
+    "title": "Doja",
+    "artist": "$NOT & A$AP Rocky",
+    "album": "Doja",
+    "genre": "Rap",
+    "artwork": "audio/covers/not-a-ap-rocky-doja.jpg",
+    "preview": "audio/not-a-ap-rocky-doja.m4a",
+    "duration": 171
+  },
+  {
+    "id": "cd1-dj-khalil-elevate",
+    "title": "Elevate",
+    "artist": "DJ Khalil",
+    "album": "Spider-Man: Into the Spider-Verse (OST)",
+    "genre": "Soundtrack",
+    "artwork": "audio/covers/cd1-dj-khalil-elevate.jpg",
+    "preview": "audio/cd1-dj-khalil-elevate.m4a",
+    "duration": 219
+  },
+  {
+    "id": "big-baby-tape-gas-face-feat-polyana-www-muzoff-net",
+    "title": "Gas Face (feat. Polyana)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-gas-face-feat-polyana-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-gas-face-feat-polyana-www-muzoff-net.m4a",
+    "duration": 194
+  },
+  {
+    "id": "big-baby-tape-go-go-tape-remastered-www-muzoff-net",
+    "title": "Go Go Tape (Remastered)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-go-go-tape-remastered-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-go-go-tape-remastered-www-muzoff-net.m4a",
+    "duration": 227
+  },
+  {
+    "id": "big-baby-tape-hustle-tales-feat-feduk-www-muzoff-net",
+    "title": "Hustle Tales (feat. Feduk)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-hustle-tales-feat-feduk-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-hustle-tales-feat-feduk-www-muzoff-net.m4a",
+    "duration": 192
+  },
+  {
+    "id": "radio-remix-house-of-pain-jump-around",
+    "title": "Jump Around",
+    "artist": "House of Pain",
+    "album": "House of Pain",
+    "genre": "Rap",
+    "artwork": "audio/covers/radio-remix-house-of-pain-jump-around.jpg",
+    "preview": "audio/radio-remix-house-of-pain-jump-around.m4a",
+    "duration": 220
+  },
+  {
+    "id": "drake-future-jumpman",
+    "title": "Jumpman",
+    "artist": "Drake, Future",
+    "album": "What a Time to Be Alive",
+    "genre": "Rap",
+    "artwork": "audio/covers/drake-future-jumpman.jpg",
+    "preview": "audio/drake-future-jumpman.m4a",
+    "duration": 206
+  },
+  {
+    "id": "oxxxymiron-konstrukt-muzfan-net",
+    "title": "Konstrukt",
+    "artist": "Oxxxymiron",
+    "album": "Вечный жид",
+    "genre": "Rap",
+    "artwork": "audio/covers/oxxxymiron-konstrukt-muzfan-net.png",
+    "preview": "audio/oxxxymiron-konstrukt-muzfan-net.m4a",
+    "duration": 482
+  },
+  {
+    "id": "big-baby-tape-rich-day-www-muzoff-net",
+    "title": "Rich Day",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-rich-day-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-rich-day-www-muzoff-net.m4a",
+    "duration": 137
+  },
+  {
+    "id": "jeff-danna-akira-yamaoka-silent-hill-revelation",
+    "title": "Silent Hill Revelation",
+    "artist": "Jeff Danna & Akira Yamaoka",
+    "album": "Silent Hill: Revelation 3D (OST)",
+    "genre": "Soundtrack",
+    "artwork": "audio/covers/jeff-danna-akira-yamaoka-silent-hill-revelation.jpg",
+    "preview": "audio/jeff-danna-akira-yamaoka-silent-hill-revelation.m4a",
+    "duration": 150
+  },
+  {
+    "id": "cd1-duckwrth-start-a-riot",
+    "title": "Start a Riot",
+    "artist": "Duckwrth",
+    "album": "Spider-Man: Into the Spider-Verse (OST)",
+    "genre": "Soundtrack",
+    "artwork": "audio/covers/cd1-duckwrth-start-a-riot.jpg",
+    "preview": "audio/cd1-duckwrth-start-a-riot.m4a",
+    "duration": 171
+  },
+  {
+    "id": "oxxxymiron-the-story-of-alisher",
+    "title": "The Story Of Alisher",
+    "artist": "Oxxxymiron",
+    "album": "Красота и Уродство",
+    "genre": "Rap",
+    "artwork": "audio/covers/oxxxymiron-the-story-of-alisher.jpg",
+    "preview": "audio/oxxxymiron-the-story-of-alisher.m4a",
+    "duration": 437
+  },
+  {
+    "id": "big-baby-tape-trap-medals-feat-tape-laflare-alizade-www-muzoff-net",
+    "title": "Trap Medals (feat. Tape LaFlare & Alizade)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-trap-medals-feat-tape-laflare-alizade-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-trap-medals-feat-tape-laflare-alizade-www-muzoff-net.m4a",
+    "duration": 191
+  },
+  {
+    "id": "og-maco-u-guessed-it-cdq-vk-com-xclusives-zone",
+    "title": "U Guessed It",
+    "artist": "OG Maco",
+    "album": "U Guessed It - Single",
+    "genre": "Rap",
+    "artwork": "audio/covers/og-maco-u-guessed-it-cdq-vk-com-xclusives-zone.jpg",
+    "preview": "audio/og-maco-u-guessed-it-cdq-vk-com-xclusives-zone.m4a",
+    "duration": 146
+  },
+  {
+    "id": "billie-eilish-when-the-partys-over",
+    "title": "when the party's over",
+    "artist": "Billie Eilish",
+    "album": "WHEN WE ALL FALL ASLEEP, WHERE DO WE GO?",
+    "genre": "Pop",
+    "artwork": "audio/covers/billie-eilish-when-the-partys-over.jpg",
+    "preview": "audio/billie-eilish-when-the-partys-over.m4a",
+    "duration": 194
+  },
+  {
+    "id": "morgenshtern-12-mp3uk-net",
+    "title": "12",
+    "artist": "MORGENSHTERN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/morgenshtern-12-mp3uk-net.jpg",
+    "preview": "audio/morgenshtern-12-mp3uk-net.m4a",
+    "duration": 180
+  },
+  {
+    "id": "sidodzhi-duboshit-808-problem-dilozor-com",
+    "title": "808 Problem",
+    "artist": "Сидоджи Дубоshit",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/sidodzhi-duboshit-808-problem-dilozor-com.m4a",
+    "duration": 221
+  },
+  {
+    "id": "slava-marlow-agoniya-mp3uk-net",
+    "title": "Агония",
+    "artist": "SLAVA MARLOW",
+    "album": "",
+    "genre": "Pop",
+    "artwork": "audio/covers/slava-marlow-agoniya-mp3uk-net.jpg",
+    "preview": "audio/slava-marlow-agoniya-mp3uk-net.m4a",
+    "duration": 140
+  },
+  {
+    "id": "kbbeatz-azamat-aytaliev-tiktok-song-muzonov-net",
+    "title": "Азамат Айталиев (TikTok Song)",
+    "artist": "Kbbeatz",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/kbbeatz-azamat-aytaliev-tiktok-song-muzonov-net.png",
+    "preview": "audio/kbbeatz-azamat-aytaliev-tiktok-song-muzonov-net.m4a",
+    "duration": 105
+  },
+  {
+    "id": "sqwoz-bab-auf-muzbear-net",
+    "title": "Ауф",
+    "artist": "SQWOZ BAB",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/sqwoz-bab-auf-muzbear-net.jpg",
+    "preview": "audio/sqwoz-bab-auf-muzbear-net.m4a",
+    "duration": 214
+  },
+  {
+    "id": "soda-luv-why-berry-bigass-mp3uk-net",
+    "title": "Бигасс",
+    "artist": "SODA LUV, WHY BERRY",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/soda-luv-why-berry-bigass-mp3uk-net.jpg",
+    "preview": "audio/soda-luv-why-berry-bigass-mp3uk-net.m4a",
+    "duration": 143
+  },
+  {
+    "id": "slava-marlow-morgenshtern-bystro-muztune-net",
+    "title": "Быстро",
+    "artist": "SLAVA MARLOW, MORGENSHTERN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/slava-marlow-morgenshtern-bystro-muztune-net.jpg",
+    "preview": "audio/slava-marlow-morgenshtern-bystro-muztune-net.m4a",
+    "duration": 116
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-morgenshtern-daleko-muzati-net",
+    "title": "Далеко",
+    "artist": "MORGENSHTERN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/neizvestnyy-ispolnitel-morgenshtern-daleko-muzati-net.jpg",
+    "preview": "audio/neizvestnyy-ispolnitel-morgenshtern-daleko-muzati-net.m4a",
+    "duration": 148
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-kizaru-dezhavyu-muzter-net",
+    "title": "Дежавю",
+    "artist": "Kizaru",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/neizvestnyy-ispolnitel-kizaru-dezhavyu-muzter-net.jpg",
+    "preview": "audio/neizvestnyy-ispolnitel-kizaru-dezhavyu-muzter-net.m4a",
+    "duration": 174
+  },
+  {
+    "id": "mp3lav-com-kizaru-derzhu-rayon-mp3lav-com",
+    "title": "Держу район",
+    "artist": "Kizaru",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/mp3lav-com-kizaru-derzhu-rayon-mp3lav-com.jpg",
+    "preview": "audio/mp3lav-com-kizaru-derzhu-rayon-mp3lav-com.m4a",
+    "duration": 225
+  },
+  {
+    "id": "morgenshtern-slava-marlow-frame-tamer-domofon-chicha-acapella-po-studiyam",
+    "title": "Домофон / Чича (Acapella)",
+    "artist": "MORGENSHTERN, Slava Marlow, Frame Tamer",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/morgenshtern-slava-marlow-frame-tamer-domofon-chicha-acapella-po-studiyam.m4a",
+    "duration": 92
+  },
+  {
+    "id": "ivan-dorn-zharyu-ultramalvin-i-tantsuyu-odin-muztune-net",
+    "title": "Жарю ультрамальвин и танцую один",
+    "artist": "Иван Дорн",
+    "album": "",
+    "genre": "Pop",
+    "artwork": "audio/covers/ivan-dorn-zharyu-ultramalvin-i-tantsuyu-odin-muztune-net.jpg",
+    "preview": "audio/ivan-dorn-zharyu-ultramalvin-i-tantsuyu-odin-muztune-net.m4a",
+    "duration": 251
+  },
+  {
+    "id": "the-chemodan-zovi-menya-muzr-net",
+    "title": "Зови меня",
+    "artist": "The Chemodan",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/the-chemodan-zovi-menya-muzr-net.jpg",
+    "preview": "audio/the-chemodan-zovi-menya-muzr-net.m4a",
+    "duration": 183
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-slava-marlow-kabluki-muzati-net",
+    "title": "Каблуки",
+    "artist": "SLAVA MARLOW",
+    "album": "",
+    "genre": "Pop",
+    "artwork": "audio/covers/neizvestnyy-ispolnitel-slava-marlow-kabluki-muzati-net.jpg",
+    "preview": "audio/neizvestnyy-ispolnitel-slava-marlow-kabluki-muzati-net.m4a",
+    "duration": 101
+  },
+  {
+    "id": "markul-platina-konfety-muzfresh-net",
+    "title": "Конфеты",
+    "artist": "Markul, Платина",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/markul-platina-konfety-muzfresh-net.jpg",
+    "preview": "audio/markul-platina-konfety-muzfresh-net.m4a",
+    "duration": 161
+  },
+  {
+    "id": "oxxxymiron-kto-ubil-marka-mp3uk-net",
+    "title": "Кто убил Марка?",
+    "artist": "Oxxxymiron",
+    "album": "Красота и Уродство",
+    "genre": "Rap",
+    "artwork": "audio/covers/oxxxymiron-kto-ubil-marka-mp3uk-net.jpg",
+    "preview": "audio/oxxxymiron-kto-ubil-marka-mp3uk-net.m4a",
+    "duration": 567
+  },
+  {
+    "id": "t-fest-feat-skriptonit-lambada-bump3-net",
+    "title": "Ламбада",
+    "artist": "T-Fest feat. Скриптонит",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/t-fest-feat-skriptonit-lambada-bump3-net.jpg",
+    "preview": "audio/t-fest-feat-skriptonit-lambada-bump3-net.m4a",
+    "duration": 198
+  },
+  {
+    "id": "oxxxymiron-liga-opasnogo-interneta-mp3uk-net",
+    "title": "Лига Опасного Интернета",
+    "artist": "Oxxxymiron",
+    "album": "Горгород",
+    "genre": "Rap",
+    "artwork": "audio/covers/oxxxymiron-liga-opasnogo-interneta-mp3uk-net.jpg",
+    "preview": "audio/oxxxymiron-liga-opasnogo-interneta-mp3uk-net.m4a",
+    "duration": 140
+  },
+  {
+    "id": "morgenshtern-novyy-merin-muzuk-net",
+    "title": "Новый Мерин",
+    "artist": "MORGENSHTERN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/morgenshtern-novyy-merin-muzuk-net.jpg",
+    "preview": "audio/morgenshtern-novyy-merin-muzuk-net.m4a",
+    "duration": 152
+  },
+  {
+    "id": "lorax-nu-razve-ya-plohoy",
+    "title": "Ну разве я плохой",
+    "artist": "Lorax",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/lorax-nu-razve-ya-plohoy.m4a",
+    "duration": 168
+  },
+  {
+    "id": "morgenstern-ona-ono-muzko-net",
+    "title": "Она оно",
+    "artist": "MORGENSHTERN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/morgenstern-ona-ono-muzko-net.jpg",
+    "preview": "audio/morgenstern-ona-ono-muzko-net.m4a",
+    "duration": 95
+  },
+  {
+    "id": "slava-marlow-po-glazam-muztune-net",
+    "title": "По глазам",
+    "artist": "SLAVA MARLOW",
+    "album": "",
+    "genre": "Pop",
+    "artwork": "audio/covers/slava-marlow-po-glazam-muztune-net.jpg",
+    "preview": "audio/slava-marlow-po-glazam-muztune-net.m4a",
+    "duration": 121
+  },
+  {
+    "id": "morgenshtern-pososi-mp3uk-net",
+    "title": "Пососи",
+    "artist": "MORGENSHTERN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/morgenshtern-pososi-mp3uk-net.jpg",
+    "preview": "audio/morgenshtern-pososi-mp3uk-net.m4a",
+    "duration": 131
+  },
+  {
+    "id": "jxhnyhell-prizrak",
+    "title": "Призрак",
+    "artist": "JxhnyHell",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/jxhnyhell-prizrak.jpg",
+    "preview": "audio/jxhnyhell-prizrak.m4a",
+    "duration": 226
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-obladaet-proklyatie",
+    "title": "Проклятие",
+    "artist": "OBLADAET",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-obladaet-proklyatie.m4a",
+    "duration": 150
+  },
+  {
+    "id": "gone-fludd-prosnulsya-v-temnote-zvukon-net",
+    "title": "Проснулся в темноте",
+    "artist": "GONE.Fludd",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/gone-fludd-prosnulsya-v-temnote-zvukon-net.png",
+    "preview": "audio/gone-fludd-prosnulsya-v-temnote-zvukon-net.m4a",
+    "duration": 164
+  },
+  {
+    "id": "gone-fludd-pustota-mp3cc-club",
+    "title": "Пустота",
+    "artist": "GONE.Fludd",
+    "album": "Суперчуитс",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/gone-fludd-pustota-mp3cc-club.m4a",
+    "duration": 251
+  },
+  {
+    "id": "astrokai-put-voina-single-2019",
+    "title": "Путь Воина",
+    "artist": "AstroKai",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/astrokai-put-voina-single-2019.m4a",
+    "duration": 160
+  },
+  {
+    "id": "slava-marlow-rover-mp3uk-net",
+    "title": "Ровер",
+    "artist": "SLAVA MARLOW",
+    "album": "",
+    "genre": "Pop",
+    "artwork": "audio/covers/slava-marlow-rover-mp3uk-net.jpg",
+    "preview": "audio/slava-marlow-rover-mp3uk-net.m4a",
+    "duration": 113
+  },
+  {
+    "id": "st1m-roditelyam",
+    "title": "Родителям",
+    "artist": "St1m",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/st1m-roditelyam.m4a",
+    "duration": 139
+  },
+  {
+    "id": "face-reyman-mp3uk-net",
+    "title": "Рэйман",
+    "artist": "FACE",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/face-reyman-mp3uk-net.jpg",
+    "preview": "audio/face-reyman-mp3uk-net.m4a",
+    "duration": 152
+  },
+  {
+    "id": "bluefish-seryy-gorod",
+    "title": "Серый Город",
+    "artist": "Bluefish",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/bluefish-seryy-gorod.png",
+    "preview": "audio/bluefish-seryy-gorod.m4a",
+    "duration": 169
+  },
+  {
+    "id": "midix-quiizzzmeow-slyshu-kak-ty-dyshish-muzke-net",
+    "title": "Слышу как ты дышишь",
+    "artist": "Midix, quiizzzmeow",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/midix-quiizzzmeow-slyshu-kak-ty-dyshish-muzke-net.jpg",
+    "preview": "audio/midix-quiizzzmeow-slyshu-kak-ty-dyshish-muzke-net.m4a",
+    "duration": 123
+  },
+  {
+    "id": "slava-marlow-snova-ya-napivayus-mp3uk-net",
+    "title": "Снова я напиваюсь",
+    "artist": "SLAVA MARLOW",
+    "album": "Артём",
+    "genre": "Pop",
+    "artwork": "audio/covers/slava-marlow-snova-ya-napivayus-mp3uk-net.jpg",
+    "preview": "audio/slava-marlow-snova-ya-napivayus-mp3uk-net.m4a",
+    "duration": 117
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-slava-marlow-snova-ya-napivayus-skazka-music-remix-muzati-ne",
+    "title": "Снова я напиваюсь (Skazka Music Remix)",
+    "artist": "SLAVA MARLOW",
+    "album": "",
+    "genre": "Pop",
+    "artwork": "audio/covers/neizvestnyy-ispolnitel-slava-marlow-snova-ya-napivayus-skazka-music-remix-muzati-ne.jpg",
+    "preview": "audio/neizvestnyy-ispolnitel-slava-marlow-snova-ya-napivayus-skazka-music-remix-muzati-ne.m4a",
+    "duration": 159
+  },
+  {
+    "id": "muzyka-iz-filma-taksi-taksi",
+    "title": "Такси",
+    "artist": "Various Artists",
+    "album": "Такси (OST)",
+    "genre": "Soundtrack",
+    "artwork": "",
+    "preview": "audio/muzyka-iz-filma-taksi-taksi.m4a",
+    "duration": 215
+  },
+  {
+    "id": "aarne-bushido-zho-anikv-tesno-mp3uk-net",
+    "title": "Тесно",
+    "artist": "Aarne, Bushido Zho, ANIKV",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/aarne-bushido-zho-anikv-tesno-mp3uk-net.jpg",
+    "preview": "audio/aarne-bushido-zho-anikv-tesno-mp3uk-net.m4a",
+    "duration": 133
+  },
+  {
+    "id": "ndmc-x-thorz-tobi-pizda",
+    "title": "Тоби пизда",
+    "artist": "NDMC x Thorz",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/ndmc-x-thorz-tobi-pizda.m4a",
+    "duration": 97
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-tri-poloski-3-poloski",
+    "title": "Три полоски",
+    "artist": "",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-tri-poloski-3-poloski.m4a",
+    "duration": 105
+  },
+  {
+    "id": "gone-fludd-hudrich-mp3uk-net",
+    "title": "ХУДРИЧ",
+    "artist": "GONE.Fludd",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/gone-fludd-hudrich-mp3uk-net.jpg",
+    "preview": "audio/gone-fludd-hudrich-mp3uk-net.m4a",
+    "duration": 139
+  },
+  {
+    "id": "morgenshtern-chernyy-bumer-mp3uk-net",
+    "title": "Чёрный Бумер",
+    "artist": "MORGENSHTERN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/morgenshtern-chernyy-bumer-mp3uk-net.jpg",
+    "preview": "audio/morgenshtern-chernyy-bumer-mp3uk-net.m4a",
+    "duration": 158
+  },
+  {
+    "id": "hard-bass-eto-shkola-kolbasy-ajoyib-net",
+    "title": "Это школа колбасы",
+    "artist": "Хард Басс",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/hard-bass-eto-shkola-kolbasy-ajoyib-net.jpg",
+    "preview": "audio/hard-bass-eto-shkola-kolbasy-ajoyib-net.m4a",
+    "duration": 239
+  },
+  {
+    "id": "chensky-ya-i-ty-mp3uk-net",
+    "title": "Я и ты",
+    "artist": "CHENSKY",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/chensky-ya-i-ty-mp3uk-net.jpg",
+    "preview": "audio/chensky-ya-i-ty-mp3uk-net.m4a",
+    "duration": 194
+  },
+  {
+    "id": "soda-luv-yalrs-mp3uk-net",
+    "title": "ЯЛРС",
+    "artist": "SODA LUV",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/soda-luv-yalrs-mp3uk-net.jpg",
+    "preview": "audio/soda-luv-yalrs-mp3uk-net.m4a",
+    "duration": 130
+  },
+  {
+    "id": "dazzlingbless-abc",
+    "title": "ABC",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-abc.png",
+    "preview": "audio/dazzlingbless-abc.m4a",
+    "duration": 146
+  },
+  {
+    "id": "bluefish-ak-47",
+    "title": "AK-47",
+    "artist": "Bluefish",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/bluefish-ak-47.jpg",
+    "preview": "audio/bluefish-ak-47.m4a",
+    "duration": 90
+  },
+  {
+    "id": "scarlxrd-all-rxckstars-gx-tx-heaven-via-360media-com-ng",
+    "title": "ALL RXCKSTARS GX TX HEAVEN",
+    "artist": "Scarlxrd",
+    "album": "Dxxm",
+    "genre": "Trap Metal",
+    "artwork": "audio/covers/scarlxrd-all-rxckstars-gx-tx-heaven-via-360media-com-ng.jpg",
+    "preview": "audio/scarlxrd-all-rxckstars-gx-tx-heaven-via-360media-com-ng.m4a",
+    "duration": 122
+  },
+  {
+    "id": "scarlxrd-atxmic-bxmb-mp3uk-net",
+    "title": "ATXMIC BXMB",
+    "artist": "Scarlxrd",
+    "album": "",
+    "genre": "Trap Metal",
+    "artwork": "audio/covers/scarlxrd-atxmic-bxmb-mp3uk-net.jpg",
+    "preview": "audio/scarlxrd-atxmic-bxmb-mp3uk-net.m4a",
+    "duration": 158
+  },
+  {
+    "id": "you-produce-crazy-frog-axel-f",
+    "title": "Axel F",
+    "artist": "Crazy Frog",
+    "album": "Crazy Frog Presents More Crazy Hits",
+    "genre": "Dance",
+    "artwork": "audio/covers/you-produce-crazy-frog-axel-f.jpg",
+    "preview": "audio/you-produce-crazy-frog-axel-f.m4a",
+    "duration": 174
+  },
+  {
+    "id": "a-ap-rocky-babushka-boi-muzonov-net",
+    "title": "Babushka Boi",
+    "artist": "A$AP Rocky",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/a-ap-rocky-babushka-boi-muzonov-net.png",
+    "preview": "audio/a-ap-rocky-babushka-boi-muzonov-net.m4a",
+    "duration": 187
+  },
+  {
+    "id": "blueface-baby",
+    "title": "Baby",
+    "artist": "Blueface",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/blueface-baby.m4a",
+    "duration": 139
+  },
+  {
+    "id": "xxxtentacion-bad-talkglitz-tv",
+    "title": "Bad",
+    "artist": "XXXTentacion",
+    "album": "Skins",
+    "genre": "Rap",
+    "artwork": "audio/covers/xxxtentacion-bad-talkglitz-tv.jpg",
+    "preview": "audio/xxxtentacion-bad-talkglitz-tv.m4a",
+    "duration": 95
+  },
+  {
+    "id": "dazzlingbless-bebe",
+    "title": "BEBE",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-bebe.jpg",
+    "preview": "audio/dazzlingbless-bebe.m4a",
+    "duration": 169
+  },
+  {
+    "id": "dazzlingbless-bluefish-body-on-replay-ver-2",
+    "title": "Body on replay (ver 2)",
+    "artist": "dazzlingbless & Bluefish",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/dazzlingbless-bluefish-body-on-replay-ver-2.m4a",
+    "duration": 150
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-bunny-girl-senpai-drill-remix-prod-baba-tiktok-version-21996",
+    "title": "Bunny Girl Senpai Drill Remix (TikTok Version)",
+    "artist": "prod. baba",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-bunny-girl-senpai-drill-remix-prod-baba-tiktok-version-21996.m4a",
+    "duration": 91
+  },
+  {
+    "id": "morgenshtern-eldzhey-kadillak-mp3uk-net",
+    "title": "Cadillac",
+    "artist": "MORGENSHTERN, Элджей",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/morgenshtern-eldzhey-kadillak-mp3uk-net.jpg",
+    "preview": "audio/morgenshtern-eldzhey-kadillak-mp3uk-net.m4a",
+    "duration": 178
+  },
+  {
+    "id": "dazzlingbless-censorship-mastering",
+    "title": "Censorship (mastering)",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/dazzlingbless-censorship-mastering.m4a",
+    "duration": 116
+  },
+  {
+    "id": "dazzlingbless-chainsaw-man-mastering",
+    "title": "Chainsaw Man (mastering)",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/dazzlingbless-chainsaw-man-mastering.m4a",
+    "duration": 128
+  },
+  {
+    "id": "lil-morty-choppa-on-me-muzfak-net",
+    "title": "Choppa On Me",
+    "artist": "Lil Morty",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/lil-morty-choppa-on-me-muzfak-net.png",
+    "preview": "audio/lil-morty-choppa-on-me-muzfak-net.m4a",
+    "duration": 120
+  },
+  {
+    "id": "dazzlingbless-city-smxke",
+    "title": "City Smxke",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-city-smxke.jpg",
+    "preview": "audio/dazzlingbless-city-smxke.m4a",
+    "duration": 174
+  },
+  {
+    "id": "ot-genasis-coco-instrumental",
+    "title": "CoCo (Instrumental)",
+    "artist": "OT Genasis",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/ot-genasis-coco-instrumental.m4a",
+    "duration": 242
+  },
+  {
+    "id": "sxmpra-cowbell-warrior-muzke-net",
+    "title": "COWBELL WARRIOR!",
+    "artist": "SXMPRA",
+    "album": "",
+    "genre": "Phonk",
+    "artwork": "audio/covers/sxmpra-cowbell-warrior-muzke-net.jpg",
+    "preview": "audio/sxmpra-cowbell-warrior-muzke-net.m4a",
+    "duration": 150
+  },
+  {
+    "id": "morgenshtern-cristal-moet-muztune-net",
+    "title": "Cristal & Моёт",
+    "artist": "MORGENSHTERN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/morgenshtern-cristal-moet-muztune-net.jpg",
+    "preview": "audio/morgenshtern-cristal-moet-muztune-net.m4a",
+    "duration": 137
+  },
+  {
+    "id": "morgenshtern-soda-luv-blago-belyy-og-buda-mayot-cristal-moet-remix-muzkaef-com",
+    "title": "Cristal & Моёт (Remix)",
+    "artist": "MORGENSHTERN, SODA LUV, blago белый, OG Buda, Mayot",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/morgenshtern-soda-luv-blago-belyy-og-buda-mayot-cristal-moet-remix-muzkaef-com.jpg",
+    "preview": "audio/morgenshtern-soda-luv-blago-belyy-og-buda-mayot-cristal-moet-remix-muzkaef-com.m4a",
+    "duration": 219
+  },
+  {
+    "id": "whokilledxix-cum-zamp3-net",
+    "title": "CUM",
+    "artist": "WHOKILLEDXIX",
+    "album": "",
+    "genre": "Hyperpop",
+    "artwork": "audio/covers/whokilledxix-cum-zamp3-net.png",
+    "preview": "audio/whokilledxix-cum-zamp3-net.m4a",
+    "duration": 192
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-darling-is-already-dead-mastering",
+    "title": "Darling is Already Dead MASTERING",
+    "artist": "Неизвестный исполнитель",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-darling-is-already-dead-mastering.m4a",
+    "duration": 159
+  },
+  {
+    "id": "tia-deal-with-the-devil",
+    "title": "Deal with the Devil",
+    "artist": "Tia",
+    "album": "Deal with the Devil",
+    "genre": "Anime",
+    "artwork": "",
+    "preview": "audio/tia-deal-with-the-devil.m4a",
+    "duration": 283
+  },
+  {
+    "id": "scxr-soul-sx1nxwy-demons-in-my-soul-mp3uk-net",
+    "title": "DEMONS IN MY SOUL",
+    "artist": "SCXR SOUL, Sx1nxwy",
+    "album": "",
+    "genre": "Phonk",
+    "artwork": "audio/covers/scxr-soul-sx1nxwy-demons-in-my-soul-mp3uk-net.jpg",
+    "preview": "audio/scxr-soul-sx1nxwy-demons-in-my-soul-mp3uk-net.m4a",
+    "duration": 121
+  },
+  {
+    "id": "gone-fludd-dream-garden-mp3uk-net",
+    "title": "Dream Garden",
+    "artist": "GONE.Fludd",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/gone-fludd-dream-garden-mp3uk-net.jpg",
+    "preview": "audio/gone-fludd-dream-garden-mp3uk-net.m4a",
+    "duration": 124
+  },
+  {
+    "id": "dazzlingbless-dream-to-kill-mastering",
+    "title": "Dream to Kill (mastering)",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/dazzlingbless-dream-to-kill-mastering.m4a",
+    "duration": 85
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-dxrk-rave-muzati-net",
+    "title": "Dxrk Rave",
+    "artist": "",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/neizvestnyy-ispolnitel-dxrk-rave-muzati-net.jpg",
+    "preview": "audio/neizvestnyy-ispolnitel-dxrk-rave-muzati-net.m4a",
+    "duration": 172
+  },
+  {
+    "id": "dazzlingbless-eblxa-zestkaxa-mastering",
+    "title": "EBLXA ZESTKAXA (mastering)",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/dazzlingbless-eblxa-zestkaxa-mastering.m4a",
+    "duration": 108
+  },
+  {
+    "id": "morgenshtern-timati-el-problema-mp3uk-net",
+    "title": "El Problema",
+    "artist": "MORGENSHTERN, Тимати",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/morgenshtern-timati-el-problema-mp3uk-net.jpg",
+    "preview": "audio/morgenshtern-timati-el-problema-mp3uk-net.m4a",
+    "duration": 137
+  },
+  {
+    "id": "dazzlingbless-era-of-death",
+    "title": "Era of Death",
+    "artist": "dazzlingbless",
+    "album": "Era of Death - Single",
+    "genre": "Electronic",
+    "artwork": "",
+    "preview": "audio/dazzlingbless-era-of-death.m4a",
+    "duration": 161
+  },
+  {
+    "id": "muztrack-net-errday",
+    "title": "ERRDAY",
+    "artist": "Big Baby Tape",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/muztrack-net-errday.png",
+    "preview": "audio/muztrack-net-errday.m4a",
+    "duration": 158
+  },
+  {
+    "id": "sonic-factory",
+    "title": "Factory",
+    "artist": "SONIC",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/sonic-factory.m4a",
+    "duration": 150
+  },
+  {
+    "id": "lil-glock-420-fashion-muzqa-net",
+    "title": "Fashion",
+    "artist": "LIL GLOCK 420",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/lil-glock-420-fashion-muzqa-net.jpg",
+    "preview": "audio/lil-glock-420-fashion-muzqa-net.m4a",
+    "duration": 89
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-markul-fata-morgana-mp3-tut-click",
+    "title": "Fata Morgana",
+    "artist": "Markul",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-markul-fata-morgana-mp3-tut-click.m4a",
+    "duration": 183
+  },
+  {
+    "id": "blueface-finesse-the-beat",
+    "title": "Finesse the Beat",
+    "artist": "Blueface",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/blueface-finesse-the-beat.jpg",
+    "preview": "audio/blueface-finesse-the-beat.m4a",
+    "duration": 152
+  },
+  {
+    "id": "bluefish-finish-story",
+    "title": "Finish Story",
+    "artist": "Bluefish",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/bluefish-finish-story.jpg",
+    "preview": "audio/bluefish-finish-story.m4a",
+    "duration": 172
+  },
+  {
+    "id": "obladaet-for-mula-mp3uk-net",
+    "title": "For Mula",
+    "artist": "OBLADAET",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/obladaet-for-mula-mp3uk-net.jpg",
+    "preview": "audio/obladaet-for-mula-mp3uk-net.m4a",
+    "duration": 166
+  },
+  {
+    "id": "sati-akura-fukashigi-no-carte-www-hotplayer-ru",
+    "title": "Fukashigi no Carte",
+    "artist": "Sati Akura",
+    "album": "",
+    "genre": "Anime",
+    "artwork": "",
+    "preview": "audio/sati-akura-fukashigi-no-carte-www-hotplayer-ru.m4a",
+    "duration": 234
+  },
+  {
+    "id": "coolio-gansta-s-paradise",
+    "title": "Gangsta's Paradise",
+    "artist": "Coolio",
+    "album": "Gangsta's Paradise",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/coolio-gansta-s-paradise.m4a",
+    "duration": 238
+  },
+  {
+    "id": "dazzlingbless-goddess-of-sex",
+    "title": "Goddess of Sex",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-goddess-of-sex.jpg",
+    "preview": "audio/dazzlingbless-goddess-of-sex.m4a",
+    "duration": 92
+  },
+  {
+    "id": "jaden-goku",
+    "title": "GOKU",
+    "artist": "Jaden",
+    "album": "GOKU - Single",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/jaden-goku.m4a",
+    "duration": 193
+  },
+  {
+    "id": "tokyo-s-revenge-goodmorningtokyo-muzoff-net",
+    "title": "GOODMORNINGTOKYO!",
+    "artist": "TOKYO'S REVENGE",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/tokyo-s-revenge-goodmorningtokyo-muzoff-net.png",
+    "preview": "audio/tokyo-s-revenge-goodmorningtokyo-muzoff-net.m4a",
+    "duration": 150
+  },
+  {
+    "id": "theme-song-gta-san-andreas-muztok-net",
+    "title": "GTA San Andreas Theme",
+    "artist": "Michael Hunter",
+    "album": "Grand Theft Auto: San Andreas (OST)",
+    "genre": "Soundtrack",
+    "artwork": "audio/covers/theme-song-gta-san-andreas-muztok-net.jpg",
+    "preview": "audio/theme-song-gta-san-andreas-muztok-net.m4a",
+    "duration": 87
+  },
+  {
+    "id": "morgenshtern-guerra-dropmp3-ru",
+    "title": "Guerra",
+    "artist": "MORGENSHTERN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/morgenshtern-guerra-dropmp3-ru.m4a",
+    "duration": 162
+  },
+  {
+    "id": "blueface-ft-nle-choppa-holy-moly-official-video",
+    "title": "Holy Moly",
+    "artist": "Blueface ft. NLE Choppa",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/blueface-ft-nle-choppa-holy-moly-official-video.m4a",
+    "duration": 228
+  },
+  {
+    "id": "dazzlingbless-i-m-bored-with-life",
+    "title": "I'm bored with life",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-i-m-bored-with-life.jpg",
+    "preview": "audio/dazzlingbless-i-m-bored-with-life.m4a",
+    "duration": 203
+  },
+  {
+    "id": "t2",
+    "title": "Instant Crush",
+    "artist": "Daft Punk",
+    "album": "Random Access Memories",
+    "genre": "Electronic",
+    "artwork": "audio/covers/t2.jpg",
+    "preview": "audio/t2.m4a",
+    "duration": 0
+  },
+  {
+    "id": "dazzlingbless-intercom",
+    "title": "Intercom",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-intercom.jpg",
+    "preview": "audio/dazzlingbless-intercom.m4a",
+    "duration": 111
+  },
+  {
+    "id": "bobby-helms-jingle-bell-rock-ost-odin-doma-2",
+    "title": "Jingle Bell Rock",
+    "artist": "Bobby Helms",
+    "album": "Jingle Bell Rock / Captain Santa Claus - Single",
+    "genre": "Christmas",
+    "artwork": "",
+    "preview": "audio/bobby-helms-jingle-bell-rock-ost-odin-doma-2.m4a",
+    "duration": 130
+  },
+  {
+    "id": "kenshi-yonezu-kick-back-muzma-net",
+    "title": "KICK BACK",
+    "artist": "Kenshi Yonezu",
+    "album": "CHAINSAW MAN Opening",
+    "genre": "Anime",
+    "artwork": "audio/covers/kenshi-yonezu-kick-back-muzma-net.jpg",
+    "preview": "audio/kenshi-yonezu-kick-back-muzma-net.m4a",
+    "duration": 194
+  },
+  {
+    "id": "made-instrumental-chainsaw-man-opening-kenshi-yonezu-b-kick-back-instrumental",
+    "title": "KICK BACK (Instrumental)",
+    "artist": "Kenshi Yonezu",
+    "album": "CHAINSAW MAN Opening",
+    "genre": "Anime",
+    "artwork": "",
+    "preview": "audio/made-instrumental-chainsaw-man-opening-kenshi-yonezu-b-kick-back-instrumental.m4a",
+    "duration": 204
+  },
+  {
+    "id": "death-note-ls-theme",
+    "title": "L's Theme",
+    "artist": "Yoshihisa Hirano",
+    "album": "Death Note (OST)",
+    "genre": "Anime",
+    "artwork": "",
+    "preview": "audio/death-note-ls-theme.m4a",
+    "duration": 184
+  },
+  {
+    "id": "scarlxrd-lies-yxu-tell-prod-muppy",
+    "title": "LIES YXU TELL",
+    "artist": "Scarlxrd",
+    "album": "",
+    "genre": "Trap Metal",
+    "artwork": "",
+    "preview": "audio/scarlxrd-lies-yxu-tell-prod-muppy.m4a",
+    "duration": 142
+  },
+  {
+    "id": "freddie-dredd-limbo-mp3uk-net",
+    "title": "Limbo",
+    "artist": "Freddie Dredd",
+    "album": "",
+    "genre": "Phonk",
+    "artwork": "audio/covers/freddie-dredd-limbo-mp3uk-net.jpg",
+    "preview": "audio/freddie-dredd-limbo-mp3uk-net.m4a",
+    "duration": 170
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-gospozha-kaguya-v-lyubvi-kak-na-vojne-opening-ipleer-com",
+    "title": "Love Dramatic (Opening)",
+    "artist": "Masayuki Suzuki feat. Ihara Rikka",
+    "album": "Kaguya-sama: Love Is War",
+    "genre": "Anime",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-gospozha-kaguya-v-lyubvi-kak-na-vojne-opening-ipleer-com.m4a",
+    "duration": 94
+  },
+  {
+    "id": "muzclub-net-mamacita",
+    "title": "Mamacita",
+    "artist": "",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/muzclub-net-mamacita.png",
+    "preview": "audio/muzclub-net-mamacita.m4a",
+    "duration": 153
+  },
+  {
+    "id": "dazzlingbless-merry-christmas",
+    "title": "Merry Christmas",
+    "artist": "dazzlingbless",
+    "album": "Merry Christmas - Single",
+    "genre": "Hip-Hop/Rap",
+    "artwork": "audio/covers/dazzlingbless-merry-christmas.jpg",
+    "preview": "audio/dazzlingbless-merry-christmas.m4a",
+    "duration": 77
+  },
+  {
+    "id": "t1",
+    "title": "Midnight City",
+    "artist": "M83",
+    "album": "Hurry Up, We're Dreaming",
+    "genre": "Electronic",
+    "artwork": "audio/covers/t1.jpg",
+    "preview": "audio/t1.m4a",
+    "duration": 0
+  },
+  {
+    "id": "trippie-redd-playboi-carti-miss-the-rage-mp3uk-net",
+    "title": "Miss The Rage",
+    "artist": "Trippie Redd, Playboi Carti",
+    "album": "Trip At Knight",
+    "genre": "Rap",
+    "artwork": "audio/covers/trippie-redd-playboi-carti-miss-the-rage-mp3uk-net.jpg",
+    "preview": "audio/trippie-redd-playboi-carti-miss-the-rage-mp3uk-net.m4a",
+    "duration": 237
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-the-starlighters-night-train",
+    "title": "Night Train",
+    "artist": "The Starlighters",
+    "album": "",
+    "genre": "Jazz",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-the-starlighters-night-train.m4a",
+    "duration": 134
+  },
+  {
+    "id": "t3",
+    "title": "Nightcall",
+    "artist": "Kavinsky",
+    "album": "OutRun",
+    "genre": "Electronic",
+    "artwork": "audio/covers/t3.jpg",
+    "preview": "audio/t3.m4a",
+    "duration": 0
+  },
+  {
+    "id": "big-baby-tape-no-diddy-mp3uk-net",
+    "title": "No DiDdy",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-no-diddy-mp3uk-net.jpg",
+    "preview": "audio/big-baby-tape-no-diddy-mp3uk-net.m4a",
+    "duration": 111
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-slava-marlow-o2-muzati-net",
+    "title": "O2",
+    "artist": "SLAVA MARLOW",
+    "album": "",
+    "genre": "Pop",
+    "artwork": "audio/covers/neizvestnyy-ispolnitel-slava-marlow-o2-muzati-net.jpg",
+    "preview": "audio/neizvestnyy-ispolnitel-slava-marlow-o2-muzati-net.m4a",
+    "duration": 116
+  },
+  {
+    "id": "nikitata-obrigado-boi-muztok-net",
+    "title": "OBRIGADO BOi",
+    "artist": "Nikitata",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/nikitata-obrigado-boi-muztok-net.jpg",
+    "preview": "audio/nikitata-obrigado-boi-muztok-net.m4a",
+    "duration": 129
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-kizaru-obuza",
+    "title": "Obuza",
+    "artist": "Kizaru",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-kizaru-obuza.m4a",
+    "duration": 126
+  },
+  {
+    "id": "morgenshtern-olala-mp3uk-net",
+    "title": "Olala",
+    "artist": "MORGENSHTERN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/morgenshtern-olala-mp3uk-net.jpg",
+    "preview": "audio/morgenshtern-olala-mp3uk-net.m4a",
+    "duration": 142
+  },
+  {
+    "id": "lil-nas-x-old-town-road",
+    "title": "Old Town Road",
+    "artist": "Lil Nas X",
+    "album": "7",
+    "genre": "Country Rap",
+    "artwork": "audio/covers/lil-nas-x-old-town-road.jpg",
+    "preview": "audio/lil-nas-x-old-town-road.m4a",
+    "duration": 113
+  },
+  {
+    "id": "koroleva-old-town-road-cover",
+    "title": "Old Town Road (Cover)",
+    "artist": "Королева",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/koroleva-old-town-road-cover.m4a",
+    "duration": 157
+  },
+  {
+    "id": "dazzlingbless-oppenheimer",
+    "title": "Oppenheimer",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-oppenheimer.jpg",
+    "preview": "audio/dazzlingbless-oppenheimer.m4a",
+    "duration": 198
+  },
+  {
+    "id": "morgenshtern-pablo-mp3uk-net",
+    "title": "Pablo",
+    "artist": "MORGENSHTERN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/morgenshtern-pablo-mp3uk-net.jpg",
+    "preview": "audio/morgenshtern-pablo-mp3uk-net.m4a",
+    "duration": 113
+  },
+  {
+    "id": "squid-game-ost-pink-soldiers-mp3zen-net",
+    "title": "Pink Soldiers",
+    "artist": "Jung Jae-il",
+    "album": "Squid Game (OST)",
+    "genre": "Soundtrack",
+    "artwork": "audio/covers/squid-game-ost-pink-soldiers-mp3zen-net.jpg",
+    "preview": "audio/squid-game-ost-pink-soldiers-mp3zen-net.m4a",
+    "duration": 108
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-lil-pump-racks-to-the-ceiling-mp3",
+    "title": "Racks to the Ceiling",
+    "artist": "Lil Pump",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-lil-pump-racks-to-the-ceiling-mp3.m4a",
+    "duration": 169
+  },
+  {
+    "id": "x2download-app-official-audio-320-kbps",
+    "title": "RENEGADE",
+    "artist": "VALORANT, 99 GOD, C103",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/x2download-app-official-audio-320-kbps.m4a",
+    "duration": 181
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-daft-punk-robot-rock",
+    "title": "Robot Rock",
+    "artist": "Daft Punk",
+    "album": "Human After All",
+    "genre": "Electronic",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-daft-punk-robot-rock.m4a",
+    "duration": 288
+  },
+  {
+    "id": "party-tyme-karaoke-saint-jhn-roses-imanbek-remix",
+    "title": "Roses (Imanbek Remix)",
+    "artist": "SAINt JHN",
+    "album": "",
+    "genre": "Dance",
+    "artwork": "audio/covers/party-tyme-karaoke-saint-jhn-roses-imanbek-remix.jpg",
+    "preview": "audio/party-tyme-karaoke-saint-jhn-roses-imanbek-remix.m4a",
+    "duration": 176
+  },
+  {
+    "id": "scarlxrd-shadxws-muzux-net",
+    "title": "SHADXWS",
+    "artist": "Scarlxrd",
+    "album": "",
+    "genre": "Trap Metal",
+    "artwork": "audio/covers/scarlxrd-shadxws-muzux-net.jpg",
+    "preview": "audio/scarlxrd-shadxws-muzux-net.m4a",
+    "duration": 195
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-snow-sxmpra",
+    "title": "Snow",
+    "artist": "SXMPRA",
+    "album": "",
+    "genre": "Phonk",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-snow-sxmpra.m4a",
+    "duration": 145
+  },
+  {
+    "id": "blueface-stop-cappin-zamp3-net",
+    "title": "Stop Cappin'",
+    "artist": "Blueface",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/blueface-stop-cappin-zamp3-net.jpg",
+    "preview": "audio/blueface-stop-cappin-zamp3-net.m4a",
+    "duration": 163
+  },
+  {
+    "id": "michael-giacchino-the-ellie-badge",
+    "title": "The Ellie Badge",
+    "artist": "Michael Giacchino",
+    "album": "Up (OST)",
+    "genre": "Soundtrack",
+    "artwork": "",
+    "preview": "audio/michael-giacchino-the-ellie-badge.m4a",
+    "duration": 90
+  },
+  {
+    "id": "the-weeknd-the-hills-mp3push-com",
+    "title": "The Hills",
+    "artist": "The Weeknd",
+    "album": "Beauty Behind the Madness",
+    "genre": "R&B",
+    "artwork": "audio/covers/the-weeknd-the-hills-mp3push-com.jpg",
+    "preview": "audio/the-weeknd-the-hills-mp3push-com.m4a",
+    "duration": 242
+  },
+  {
+    "id": "sim-the-rumbling-tv-size-shamuz-net",
+    "title": "The Rumbling (TV Size)",
+    "artist": "SiM",
+    "album": "Attack on Titan: The Final Season",
+    "genre": "Anime",
+    "artwork": "audio/covers/sim-the-rumbling-tv-size-shamuz-net.jpg",
+    "preview": "audio/sim-the-rumbling-tv-size-shamuz-net.m4a",
+    "duration": 90
+  },
+  {
+    "id": "nf-the-search-talkglitz-tv",
+    "title": "The Search",
+    "artist": "NF",
+    "album": "The Search",
+    "genre": "Rap",
+    "artwork": "audio/covers/nf-the-search-talkglitz-tv.jpg",
+    "preview": "audio/nf-the-search-talkglitz-tv.m4a",
+    "duration": 195
+  },
+  {
+    "id": "blueface-tiktok-zamp3-net",
+    "title": "TikTok",
+    "artist": "Blueface",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/blueface-tiktok-zamp3-net.jpg",
+    "preview": "audio/blueface-tiktok-zamp3-net.m4a",
+    "duration": 135
+  },
+  {
+    "id": "sqwoz-bab-titty-milk-mp3uk-net",
+    "title": "Titty Milk",
+    "artist": "SQWOZ BAB",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/sqwoz-bab-titty-milk-mp3uk-net.jpg",
+    "preview": "audio/sqwoz-bab-titty-milk-mp3uk-net.m4a",
+    "duration": 128
+  },
+  {
+    "id": "teriyaki-boyz-tokyo-drift-fast-furious-muzbom-ru",
+    "title": "Tokyo Drift (Fast & Furious)",
+    "artist": "Teriyaki Boyz",
+    "album": "The Fast and the Furious: Tokyo Drift (OST)",
+    "genre": "Hip-Hop",
+    "artwork": "audio/covers/teriyaki-boyz-tokyo-drift-fast-furious-muzbom-ru.png",
+    "preview": "audio/teriyaki-boyz-tokyo-drift-fast-furious-muzbom-ru.m4a",
+    "duration": 253
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-jx0p6cgjuvgk-128",
+    "title": "Unknown",
+    "artist": "",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-jx0p6cgjuvgk-128.m4a",
+    "duration": 119
+  },
+  {
+    "id": "arseny-morozov-videoplayback",
+    "title": "Videoplayback",
+    "artist": "Arseny Morozov",
+    "album": "3",
+    "genre": "Ambient",
+    "artwork": "",
+    "preview": "audio/arseny-morozov-videoplayback.m4a",
+    "duration": 88
+  },
+  {
+    "id": "cheese-people-wake-up-mp3uk-net",
+    "title": "Wake Up",
+    "artist": "Cheese People",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/cheese-people-wake-up-mp3uk-net.jpg",
+    "preview": "audio/cheese-people-wake-up-mp3uk-net.m4a",
+    "duration": 80
+  },
+  {
+    "id": "muzclub-net-morgenshtern-ft-lil-pump-watafuk",
+    "title": "Watafuk?!",
+    "artist": "MORGENSHTERN, Lil Pump",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/muzclub-net-morgenshtern-ft-lil-pump-watafuk.png",
+    "preview": "audio/muzclub-net-morgenshtern-ft-lil-pump-watafuk.m4a",
+    "duration": 150
+  },
+  {
+    "id": "nf-when-i-grow-up-talkglitz-tv",
+    "title": "When I Grow Up",
+    "artist": "NF",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/nf-when-i-grow-up-talkglitz-tv.jpg",
+    "preview": "audio/nf-when-i-grow-up-talkglitz-tv.m4a",
+    "duration": 212
+  },
+  {
+    "id": "freddie-dredd-wrath-justvibes-co-za",
+    "title": "Wrath",
+    "artist": "Freddie Dredd",
+    "album": "",
+    "genre": "Phonk",
+    "artwork": "audio/covers/freddie-dredd-wrath-justvibes-co-za.jpg",
+    "preview": "audio/freddie-dredd-wrath-justvibes-co-za.m4a",
+    "duration": 112
+  },
+  {
+    "id": "jxhnyhell-wyw-mastering",
+    "title": "WYW (mastering)",
+    "artist": "Jxhnyhell",
+    "album": "",
+    "genre": "",
+    "artwork": "",
+    "preview": "audio/jxhnyhell-wyw-mastering.m4a",
+    "duration": 131
+  },
+  {
+    "id": "og-buda-telly-grave-yadigg-muzonov-net",
+    "title": "YADIGG",
+    "artist": "OG Buda, TELLY GRAVE",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/og-buda-telly-grave-yadigg-muzonov-net.png",
+    "preview": "audio/og-buda-telly-grave-yadigg-muzonov-net.m4a",
+    "duration": 244
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-6ix9ine-yaya",
+    "title": "YAYA",
+    "artist": "6ix9ine",
+    "album": "TattleTales",
+    "genre": "Rap",
+    "artwork": "",
+    "preview": "audio/neizvestnyy-ispolnitel-6ix9ine-yaya.m4a",
+    "duration": 150
+  },
+  {
+    "id": "smoki-mo-captown-ysl-muzgen-net",
+    "title": "YSL",
+    "artist": "Смоки Мо, CAPTOWN",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/smoki-mo-captown-ysl-muzgen-net.jpg",
+    "preview": "audio/smoki-mo-captown-ysl-muzgen-net.m4a",
+    "duration": 165
+  },
+  {
+    "id": "creepy-nuts-yofukashi-no-uta-ed-pesn-nochnyh-sov-ending",
+    "title": "よふかしのうた",
+    "artist": "Creepy Nuts",
+    "album": "Yofukashi no Uta (ED)",
+    "genre": "Anime",
+    "artwork": "",
+    "preview": "audio/creepy-nuts-yofukashi-no-uta-ed-pesn-nochnyh-sov-ending.m4a",
+    "duration": 238
+  }
+]

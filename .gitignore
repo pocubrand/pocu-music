@@ -1,0 +1,10 @@
+node_modules/
+scripts/
+.DS_Store
+*.log
+.vscode/
+.idea/
+Thumbs.db
+*.bak
+.git.bak/
+audio.bak/

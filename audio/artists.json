@@ -1,0 +1,34 @@
+{
+  "bluefish": {
+    "id": "bluefish",
+    "name": "Bluefish",
+    "bio": "Создает новый звук для современной рэп индустрии.",
+    "photo": "audio/artists/bluefish.jpg",
+    "links": {},
+    "featured": true
+  },
+  "dazzlingbless": {
+    "id": "dazzlingbless",
+    "name": "dazzlingbless",
+    "bio": "Создатель уникального звука в жанрах поп, фонк и электронной музыки.",
+    "photo": "audio/artists/dazzlingbless.jpg",
+    "links": {},
+    "featured": true
+  },
+  "jxhnyhell": {
+    "id": "jxhnyhell",
+    "name": "Jxhnyhell",
+    "bio": "Экспериментальный агрессивный звук.",
+    "photo": "audio/artists/jxhnyhell.jpg",
+    "links": {},
+    "featured": true
+  },
+  "merzkii": {
+    "id": "merzkii",
+    "name": "MERZKII",
+    "bio": "Альтер-эго Bluefish.",
+    "photo": "audio/artists/merzkii.jpg",
+    "links": {},
+    "featured": true
+  }
+}

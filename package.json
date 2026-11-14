@@ -1,0 +1,19 @@
+{
+  "name": "pocu-music",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "music:add":            "node scripts/library.js add",
+    "music:scan":           "node scripts/library.js scan",
+    "music:clean":          "node scripts/library.js clean",
+    "music:enrich":         "node scripts/enrich.js && npm run music:fix-covers && npm run music:covers",
+    "music:covers":         "node scripts/covers.js",
+    "music:fix-covers":     "node scripts/clean-covers.js --fix-paths-only",
+    "music:clean-covers":   "node scripts/clean-covers.js",
+    "music:cover-finder":   "node scripts/cover-finder.js",
+    "music:assign-artists": "node scripts/assign-artist-ids.js"
+  },
+  "dependencies": {
+    "music-metadata": "^10.0.0"
+  }
+}

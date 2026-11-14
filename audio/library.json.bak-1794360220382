@@ -1,0 +1,452 @@
+[
+  {
+    "id": "bluefish-23",
+    "title": "23",
+    "artist": "Bluefish",
+    "album": "",
+    "genre": "Hip-hop/Rap",
+    "artwork": "audio/covers/bluefish-23.jpg",
+    "preview": "audio/bluefish-23.m4a",
+    "duration": 202
+  },
+  {
+    "id": "jubilee-na-odin-smysl-menshe",
+    "title": "На один смысл меньше",
+    "artist": "Jubilee",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/jubilee-na-odin-smysl-menshe.jpg",
+    "preview": "audio/jubilee-na-odin-smysl-menshe.m4a",
+    "duration": 256
+  },
+  {
+    "id": "mc-gustta-abusadamente",
+    "title": "Abusadamente",
+    "artist": "MC Gustta",
+    "album": "Zumba 2020: Rumba Fitness",
+    "genre": "Latin",
+    "artwork": "audio/covers/mc-gustta-abusadamente.jpg",
+    "preview": "audio/mc-gustta-abusadamente.m4a",
+    "duration": 216
+  },
+  {
+    "id": "lil-pump-all-the-sudden",
+    "title": "All The Sudden",
+    "artist": "Lil Pump",
+    "album": "All The Sudden",
+    "genre": "Rap",
+    "artwork": "audio/covers/lil-pump-all-the-sudden.jpg",
+    "preview": "audio/lil-pump-all-the-sudden.m4a",
+    "duration": 126
+  },
+  {
+    "id": "blueface-baby-momma-drama-bazenation-com",
+    "title": "Baby Momma Drama",
+    "artist": "Blueface",
+    "album": "Baby Momma Drama - Single",
+    "genre": "Rap",
+    "artwork": "audio/covers/blueface-baby-momma-drama-bazenation-com.jpg",
+    "preview": "audio/blueface-baby-momma-drama-bazenation-com.m4a",
+    "duration": 148
+  },
+  {
+    "id": "big-baby-tape-broke-day-www-muzoff-net",
+    "title": "Broke Day",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-broke-day-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-broke-day-www-muzoff-net.m4a",
+    "duration": 246
+  },
+  {
+    "id": "russ-civil-war-muzonov-net",
+    "title": "Civil War",
+    "artist": "Russ",
+    "album": "",
+    "genre": "Rap",
+    "artwork": "audio/covers/russ-civil-war-muzonov-net.jpg",
+    "preview": "audio/russ-civil-war-muzonov-net.m4a",
+    "duration": 144
+  },
+  {
+    "id": "big-baby-tape-come-and-go-feat-tape-laflare-www-muzoff-net",
+    "title": "Come and Go (feat. Tape LaFlare)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-come-and-go-feat-tape-laflare-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-come-and-go-feat-tape-laflare-www-muzoff-net.m4a",
+    "duration": 146
+  },
+  {
+    "id": "big-baby-tape-dead-heat-feat-boulevard-depo-www-muzoff-net",
+    "title": "Dead Heat (feat. Boulevard Depo)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-dead-heat-feat-boulevard-depo-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-dead-heat-feat-boulevard-depo-www-muzoff-net.m4a",
+    "duration": 191
+  },
+  {
+    "id": "headhunterz-kshmr-dharma-extended-mix",
+    "title": "Dharma (Extended Mix)",
+    "artist": "Headhunterz & KSHMR",
+    "album": "",
+    "genre": "Dance",
+    "artwork": "audio/covers/headhunterz-kshmr-dharma-extended-mix.jpg",
+    "preview": "audio/headhunterz-kshmr-dharma-extended-mix.m4a",
+    "duration": 237
+  },
+  {
+    "id": "not-a-ap-rocky-doja",
+    "title": "Doja",
+    "artist": "$NOT & A$AP Rocky",
+    "album": "Doja",
+    "genre": "Rap",
+    "artwork": "audio/covers/not-a-ap-rocky-doja.jpg",
+    "preview": "audio/not-a-ap-rocky-doja.m4a",
+    "duration": 171
+  },
+  {
+    "id": "cd1-dj-khalil-elevate",
+    "title": "Elevate",
+    "artist": "DJ Khalil",
+    "album": "Spider-Man: Into the Spider-Verse (OST)",
+    "genre": "Soundtrack",
+    "artwork": "audio/covers/cd1-dj-khalil-elevate.jpg",
+    "preview": "audio/cd1-dj-khalil-elevate.m4a",
+    "duration": 219
+  },
+  {
+    "id": "big-baby-tape-gas-face-feat-polyana-www-muzoff-net",
+    "title": "Gas Face (feat. Polyana)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-gas-face-feat-polyana-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-gas-face-feat-polyana-www-muzoff-net.m4a",
+    "duration": 194
+  },
+  {
+    "id": "big-baby-tape-go-go-tape-remastered-www-muzoff-net",
+    "title": "Go Go Tape (Remastered)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-go-go-tape-remastered-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-go-go-tape-remastered-www-muzoff-net.m4a",
+    "duration": 227
+  },
+  {
+    "id": "big-baby-tape-hustle-tales-feat-feduk-www-muzoff-net",
+    "title": "Hustle Tales (feat. Feduk)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-hustle-tales-feat-feduk-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-hustle-tales-feat-feduk-www-muzoff-net.m4a",
+    "duration": 192
+  },
+  {
+    "id": "radio-remix-house-of-pain-jump-around",
+    "title": "Jump Around",
+    "artist": "House of Pain",
+    "album": "House of Pain",
+    "genre": "Rap",
+    "artwork": "audio/covers/radio-remix-house-of-pain-jump-around.jpg",
+    "preview": "audio/radio-remix-house-of-pain-jump-around.m4a",
+    "duration": 220
+  },
+  {
+    "id": "drake-future-jumpman",
+    "title": "Jumpman",
+    "artist": "Drake, Future",
+    "album": "What a Time to Be Alive",
+    "genre": "Rap",
+    "artwork": "audio/covers/drake-future-jumpman.jpg",
+    "preview": "audio/drake-future-jumpman.m4a",
+    "duration": 206
+  },
+  {
+    "id": "oxxxymiron-konstrukt-muzfan-net",
+    "title": "Konstrukt",
+    "artist": "Oxxxymiron",
+    "album": "Вечный жид",
+    "genre": "Rap",
+    "artwork": "audio/covers/oxxxymiron-konstrukt-muzfan-net.png",
+    "preview": "audio/oxxxymiron-konstrukt-muzfan-net.m4a",
+    "duration": 482
+  },
+  {
+    "id": "big-baby-tape-rich-day-www-muzoff-net",
+    "title": "Rich Day",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-rich-day-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-rich-day-www-muzoff-net.m4a",
+    "duration": 137
+  },
+  {
+    "id": "jeff-danna-akira-yamaoka-silent-hill-revelation",
+    "title": "Silent Hill Revelation",
+    "artist": "Jeff Danna & Akira Yamaoka",
+    "album": "Silent Hill: Revelation 3D (OST)",
+    "genre": "Soundtrack",
+    "artwork": "audio/covers/jeff-danna-akira-yamaoka-silent-hill-revelation.jpg",
+    "preview": "audio/jeff-danna-akira-yamaoka-silent-hill-revelation.m4a",
+    "duration": 150
+  },
+  {
+    "id": "cd1-duckwrth-start-a-riot",
+    "title": "Start a Riot",
+    "artist": "Duckwrth",
+    "album": "Spider-Man: Into the Spider-Verse (OST)",
+    "genre": "Soundtrack",
+    "artwork": "audio/covers/cd1-duckwrth-start-a-riot.jpg",
+    "preview": "audio/cd1-duckwrth-start-a-riot.m4a",
+    "duration": 171
+  },
+  {
+    "id": "oxxxymiron-the-story-of-alisher",
+    "title": "The Story Of Alisher",
+    "artist": "Oxxxymiron",
+    "album": "Красота и Уродство",
+    "genre": "Rap",
+    "artwork": "audio/covers/oxxxymiron-the-story-of-alisher.jpg",
+    "preview": "audio/oxxxymiron-the-story-of-alisher.m4a",
+    "duration": 437
+  },
+  {
+    "id": "big-baby-tape-trap-medals-feat-tape-laflare-alizade-www-muzoff-net",
+    "title": "Trap Medals (feat. Tape LaFlare & Alizade)",
+    "artist": "Big Baby Tape",
+    "album": "Hoodrich Tales",
+    "genre": "Rap",
+    "artwork": "audio/covers/big-baby-tape-trap-medals-feat-tape-laflare-alizade-www-muzoff-net.jpg",
+    "preview": "audio/big-baby-tape-trap-medals-feat-tape-laflare-alizade-www-muzoff-net.m4a",
+    "duration": 191
+  },
+  {
+    "id": "og-maco-u-guessed-it-cdq-vk-com-xclusives-zone",
+    "title": "U Guessed It",
+    "artist": "OG Maco",
+    "album": "U Guessed It - Single",
+    "genre": "Rap",
+    "artwork": "audio/covers/og-maco-u-guessed-it-cdq-vk-com-xclusives-zone.jpg",
+    "preview": "audio/og-maco-u-guessed-it-cdq-vk-com-xclusives-zone.m4a",
+    "duration": 146
+  },
+  {
+    "id": "billie-eilish-when-the-partys-over",
+    "title": "when the party's over",
+    "artist": "Billie Eilish",
+    "album": "WHEN WE ALL FALL ASLEEP, WHERE DO WE GO?",
+    "genre": "Pop",
+    "artwork": "audio/covers/billie-eilish-when-the-partys-over.jpg",
+    "preview": "audio/billie-eilish-when-the-partys-over.m4a",
+    "duration": 194
+  },
+  {
+    "id": "jxhnyhell-prizrak",
+    "title": "Призрак",
+    "artist": "JxhnyHell",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/jxhnyhell-prizrak.jpg",
+    "preview": "audio/jxhnyhell-prizrak.m4a",
+    "duration": 226
+  },
+  {
+    "id": "bluefish-seryy-gorod",
+    "title": "Серый Город",
+    "artist": "Bluefish",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/bluefish-seryy-gorod.png",
+    "preview": "audio/bluefish-seryy-gorod.m4a",
+    "duration": 169
+  },
+  {
+    "id": "dazzlingbless-abc",
+    "title": "ABC",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-abc.png",
+    "preview": "audio/dazzlingbless-abc.m4a",
+    "duration": 146
+  },
+  {
+    "id": "bluefish-ak-47",
+    "title": "AK-47",
+    "artist": "Bluefish",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/bluefish-ak-47.jpg",
+    "preview": "audio/bluefish-ak-47.m4a",
+    "duration": 90
+  },
+  {
+    "id": "dazzlingbless-bebe",
+    "title": "BEBE",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-bebe.jpg",
+    "preview": "audio/dazzlingbless-bebe.m4a",
+    "duration": 169
+  },
+  {
+    "id": "dazzlingbless-bluefish-body-on-replay-ver-2",
+    "title": "Body on replay",
+    "artist": "dazzlingbless & Bluefish",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-bluefish-body-on-replay-ver-2.jpg",
+    "preview": "audio/dazzlingbless-bluefish-body-on-replay-ver-2.m4a",
+    "duration": 150
+  },
+  {
+    "id": "dazzlingbless-censorship-mastering",
+    "title": "Censorship",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-censorship-mastering.jpg",
+    "preview": "audio/dazzlingbless-censorship-mastering.m4a",
+    "duration": 116
+  },
+  {
+    "id": "dazzlingbless-chainsaw-man-mastering",
+    "title": "Chainsaw Man",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-chainsaw-man-mastering.jpg",
+    "preview": "audio/dazzlingbless-chainsaw-man-mastering.m4a",
+    "duration": 128
+  },
+  {
+    "id": "dazzlingbless-city-smxke",
+    "title": "City Smxke",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-city-smxke.jpg",
+    "preview": "audio/dazzlingbless-city-smxke.m4a",
+    "duration": 174
+  },
+  {
+    "id": "neizvestnyy-ispolnitel-darling-is-already-dead-mastering",
+    "title": "Darling is Already Dead",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/neizvestnyy-ispolnitel-darling-is-already-dead-mastering.jpg",
+    "preview": "audio/neizvestnyy-ispolnitel-darling-is-already-dead-mastering.m4a",
+    "duration": 159
+  },
+  {
+    "id": "dazzlingbless-dream-to-kill-mastering",
+    "title": "Dream to Kill",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-dream-to-kill-mastering.jpg",
+    "preview": "audio/dazzlingbless-dream-to-kill-mastering.m4a",
+    "duration": 85
+  },
+  {
+    "id": "dazzlingbless-eblxa-zestkaxa-mastering",
+    "title": "EBLXA ZESTKAXA",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-eblxa-zestkaxa-mastering.jpg",
+    "preview": "audio/dazzlingbless-eblxa-zestkaxa-mastering.m4a",
+    "duration": 108
+  },
+  {
+    "id": "dazzlingbless-era-of-death",
+    "title": "Era of Death",
+    "artist": "dazzlingbless",
+    "album": "Era of Death - Single",
+    "genre": "Electronic",
+    "artwork": "audio/covers/dazzlingbless-era-of-death.jpg",
+    "preview": "audio/dazzlingbless-era-of-death.m4a",
+    "duration": 161
+  },
+  {
+    "id": "bluefish-finish-story",
+    "title": "Finish Story",
+    "artist": "Bluefish",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/bluefish-finish-story.jpg",
+    "preview": "audio/bluefish-finish-story.m4a",
+    "duration": 172
+  },
+  {
+    "id": "dazzlingbless-goddess-of-sex",
+    "title": "Goddess of Sex",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-goddess-of-sex.jpg",
+    "preview": "audio/dazzlingbless-goddess-of-sex.m4a",
+    "duration": 92
+  },
+  {
+    "id": "dazzlingbless-i-m-bored-with-life",
+    "title": "I'm bored with life",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-i-m-bored-with-life.jpg",
+    "preview": "audio/dazzlingbless-i-m-bored-with-life.m4a",
+    "duration": 203
+  },
+  {
+    "id": "dazzlingbless-intercom",
+    "title": "Intercom",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-intercom.jpg",
+    "preview": "audio/dazzlingbless-intercom.m4a",
+    "duration": 111
+  },
+  {
+    "id": "dazzlingbless-merry-christmas",
+    "title": "Merry Christmas",
+    "artist": "dazzlingbless",
+    "album": "Merry Christmas - Single",
+    "genre": "Hip-Hop/Rap",
+    "artwork": "audio/covers/dazzlingbless-merry-christmas.jpg",
+    "preview": "audio/dazzlingbless-merry-christmas.m4a",
+    "duration": 77
+  },
+  {
+    "id": "dazzlingbless-oppenheimer",
+    "title": "Oppenheimer",
+    "artist": "dazzlingbless",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/dazzlingbless-oppenheimer.jpg",
+    "preview": "audio/dazzlingbless-oppenheimer.m4a",
+    "duration": 198
+  },
+  {
+    "id": "jxhnyhell-wyw-mastering",
+    "title": "WYW",
+    "artist": "Jxhnyhell",
+    "album": "",
+    "genre": "",
+    "artwork": "audio/covers/jxhnyhell-wyw-mastering.jpg",
+    "preview": "audio/jxhnyhell-wyw-mastering.m4a",
+    "duration": 131
+  }
+]

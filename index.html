@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#08080c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Pocu Music">
+<meta name="description" content="Pocu Music — музыка всегда с тобой.">
+<title>Pocu Music</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="bg"></div>
+
+<header class="topbar">
+  <img class="logo-img" src="icons/logo-full.png" alt="Pocu Music">
+  <button class="icon-btn" id="settingsBtn" aria-label="Настройки">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="1.7"
+         stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  </button>
+</header>
+
+<main id="main">
+
+  <!-- ГЛАВНАЯ -->
+  <section class="screen active" data-screen="home">
+    <div class="greeting">Добрый вечер</div>
+    <h1 class="title">Что послушаем?</h1>
+
+    <div class="pulse-hero" id="pulseCard">
+      <div class="pulse-hero-visual">
+        <div class="pulse-hero-bg" id="pulseArt"></div>
+        <div class="aurora-blob aurora-blob-1"></div>
+        <div class="aurora-blob aurora-blob-2"></div>
+        <div class="aurora-blob aurora-blob-3"></div>
+        <div class="pulse-hero-noise"></div>
+        <div class="pulse-hero-vignette"></div>
+
+        <div class="pulse-hero-art-card" id="pulseArtCard">
+          <div class="pulse-hero-art-placeholder">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+          </div>
+          <img src="" alt="" id="pulseArtImg">
+        </div>
+
+        <div class="pulse-hero-overlay"></div>
+      </div>
+
+      <div class="pulse-hero-content">
+        <div class="pulse-hero-meta">
+          <div class="pulse-title" id="pulseTitle">Pocu Pulse</div>
+          <div class="pulse-sub">
+            <span class="pulse-artist" id="pulseArtist">Твой личный поток — на основе вкусов</span>
+            <span class="pulse-brand" id="pulseBrand" hidden> · Pocu Pulse</span>
+          </div>
+          <div class="pulse-queue" id="pulseQueue"></div>
+        </div>
+
+        <div class="pulse-actions">
+          <button class="pulse-btn pulse-btn-refresh" id="pulseRefresh" aria-label="Обновить поток">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+              <path d="M21 3v6h-6"/>
+            </svg>
+          </button>
+          <button class="pulse-btn pulse-btn-play" id="pulsePlay" aria-label="Запустить Pulse">
+            <svg class="pulse-icon-play" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="pulse-icon-pause" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="homePicks">
+      <div class="section-head"><h2>Собрано для тебя</h2></div>
+      <div class="home-row" id="homePicksRow"></div>
+    </div>
+
+    <div id="homeRecent" hidden>
+      <div class="section-head"><h2>Недавно</h2></div>
+      <div class="home-row" id="homeRecentRow"></div>
+    </div>
+
+    <div id="homePlaylists" hidden>
+      <div class="section-head"><h2>Твои плейлисты</h2></div>
+      <div class="home-row" id="homePlaylistsRow"></div>
+    </div>
+
+    <div id="homeArtists" hidden>
+      <div class="section-head"><h2>Любимые исполнители</h2></div>
+      <div class="home-row" id="homeArtistsRow"></div>
+    </div>
+
+    <div id="homeSimilar" hidden>
+      <div class="section-head"><h2 id="homeSimilarTitle">Похожее</h2></div>
+      <div class="home-row" id="homeSimilarRow"></div>
+    </div>
+
+    <div id="homePocuArtists" hidden>
+      <div class="section-head"><h2>Артисты Pocu</h2></div>
+      <div class="home-row" id="homePocuArtistsRow"></div>
+    </div>
+  </section>
+
+  <!-- ПОИСК -->
+  <section class="screen" data-screen="search">
+    <h1 class="title">Поиск</h1>
+    <form class="search-bar" id="searchForm" onsubmit="return false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--text-dim);flex:none">
+        <circle cx="10.8" cy="10.8" r="6.8"/><path d="m20.2 20.2-4.4-4.4"/>
+      </svg>
+      <input type="search" id="searchInput" placeholder="Треки, исполнители, альбомы..."
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search">
+      <button type="button" class="clear-btn" id="clearBtn" aria-label="Очистить" hidden>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </form>
+
+    <div id="searchInitial"><p class="hint">Начни вводить название трека, исполнителя или альбома.</p></div>
+
+    <!-- АРТИСТЫ -->
+    <div id="searchArtists" style="margin-bottom:20px" hidden>
+      <div class="section-head"><h2>Артисты</h2></div>
+      <div class="home-row" id="searchArtistsList"></div>
+    </div>
+
+    <div id="results" class="results"></div>
+  </section>
+
+  <!-- ЧАРТЫ -->
+  <section class="screen" data-screen="charts">
+    <h1 class="title">Чарты</h1>
+
+    <div class="section-head"><h2>Подборки</h2></div>
+    <div class="home-row" id="chartsGenres"></div>
+
+    <div class="section-head"><h2>Чарт недели</h2></div>
+    <div id="chartsTopList" class="charts-top-list"></div>
+    <div id="chartsTopEmpty" class="state-block" hidden>
+      <div class="state-title">Пока пусто</div>
+      <div class="state-sub">Топ появится, когда накопятся прослушивания</div>
+    </div>
+
+    <div class="section-head"><h2>Новинки</h2></div>
+    <div class="home-row" id="chartsNewList"></div>
+    <div id="chartsNewEmpty" class="state-block" hidden>
+      <div class="state-title">Пока пусто</div>
+    </div>
+  </section>
+
+  <!-- ИЗБРАННОЕ (объединено с медиатекой) -->
+  <section class="screen" data-screen="favorites">
+    <h1 class="title">Избранное</h1>
+
+    <div id="favEmpty" class="state-block" hidden>
+      <div class="state-title">Пока пусто</div>
+      <div class="state-sub">Лайкай треки, альбомы и артистов — они появятся здесь</div>
+    </div>
+
+    <!-- Плейлисты (рендерит playlists-ui.js в #libPlaylists) -->
+    <div class="lib-section">
+      <div class="section-head">
+        <h2>Плейлисты</h2>
+        <button class="btn-text" id="createPlaylistBtn">+ Создать</button>
+      </div>
+      <div id="libPlaylists" class="home-row"></div>
+    </div>
+
+    <!-- Недавно -->
+    <div class="lib-section" id="favRecent" hidden>
+      <div class="section-head"><h2>Недавно прослушано</h2></div>
+      <div class="recent-row" id="favRecentRow"></div>
+    </div>
+
+    <!-- Избранные альбомы -->
+    <div class="lib-section" id="favAlbums" hidden>
+      <div class="section-head"><h2>Альбомы</h2></div>
+      <div class="home-row" id="favAlbumsRow"></div>
+    </div>
+
+    <!-- Избранные артисты -->
+    <div class="lib-section" id="favArtists" hidden>
+      <div class="section-head"><h2>Артисты</h2></div>
+      <div class="home-row" id="favArtistsRow"></div>
+    </div>
+
+    <!-- Избранные треки -->
+    <div class="lib-section" id="favTracks" hidden>
+      <div class="section-head"><h2>Треки</h2></div>
+      <div id="favTracksList" class="results"></div>
+    </div>
+
+    <!-- Артисты Pocu -->
+    <div class="lib-section" id="favPocuArtists" hidden>
+      <div class="section-head"><h2>Артисты Pocu</h2></div>
+      <div class="home-row" id="favPocuArtistsRow"></div>
+    </div>
+
+    <!-- Legacy anchor (для поиска "favoritesList" в модулях, если где остался) -->
+    <div id="favoritesList" style="display:none"></div>
+    <!-- Legacy history button (на всякий случай, скрыта) -->
+    <button id="favHistoryBtn" style="display:none"></button>
+  </section>
+
+  <!-- ПРОФИЛЬ -->
+  <section class="screen" data-screen="profile">
+    <h1 class="title">Профиль</h1>
+
+    <div id="profileGuest" class="profile-guest">
+      <div class="state-block">
+        <div class="state-title">Локальный режим</div>
+        <div class="state-sub">Войди, чтобы сохранять музыку в облаке</div>
+      </div>
+      <button class="btn btn-primary" id="profileLoginBtn" style="width:100%;max-width:320px;margin:0 auto;display:block;">Войти</button>
+    </div>
+
+    <div id="profileContent" hidden>
+      <div class="profile-hero">
+        <div class="profile-avatar" id="profileAvatar">?</div>
+        <h2 class="profile-display-name" id="profileDisplayName">—</h2>
+        <div class="profile-email" id="profileEmail"></div>
+      </div>
+
+      <div class="section-head"><h2>Статистика</h2></div>
+      <div class="settings-info" id="profileStats"></div>
+
+      <div class="section-head"><h2>Вкусы</h2></div>
+      <div class="settings-info">
+        <div class="settings-info-row"><span>Любимый артист</span><span class="settings-dim" id="profileFavArtist">—</span></div>
+        <div class="settings-info-row"><span>Любимый жанр</span><span class="settings-dim" id="profileFavGenre">—</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- НАСТРОЙКИ -->
+  <section class="screen" data-screen="settings" id="settingsScreen">
+    <button class="back-btn" id="settingsBackBtn" aria-label="Назад">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Назад</span>
+    </button>
+    <h1 class="title">Настройки</h1>
+
+    <div class="section-head"><h2>Аккаунт</h2></div>
+
+    <!-- Гость -->
+    <div id="settingsGuestBlock" class="settings-account">
+      <div class="account-state">
+        <div class="account-text">
+          <div class="account-title">Локальный режим</div>
+          <div class="account-sub">Войди, чтобы сохранять музыку в облаке</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="settingsLoginBtn" style="width:100%;margin-top:16px;">Войти</button>
+    </div>
+
+    <!-- Авторизован -->
+    <div id="settingsUserBlock" hidden>
+      <div class="settings-account">
+        <div class="profile-hero-small">
+          <div class="profile-avatar profile-avatar--sm" id="settingsAvatar">?</div>
+          <button class="btn-text" id="settingsAvatarBtn" type="button">Сменить фото</button>
+          <input type="file" id="settingsAvatarInput" accept="image/*" style="display:none">
+        </div>
+        <div class="profile-name-row">
+          <input type="text" id="settingsNameInput" placeholder="Имя" class="profile-name-input" autocomplete="off">
+          <button class="btn btn-primary" id="settingsSaveName" type="button">Сохранить</button>
+        </div>
+        <div class="settings-info" style="margin-top:16px">
+          <div class="settings-info-row"><span>Email</span><span class="settings-dim" id="settingsUserEmail">—</span></div>
+        </div>
+      </div>
+      <div class="settings-actions" style="margin-top:8px">
+        <button class="settings-btn" id="settingsChangePassBtn">Сменить пароль</button>
+      </div>
+    </div>
+
+    <div class="section-head"><h2>Приложение</h2></div>
+    <div class="settings-actions">
+      <label class="settings-btn settings-toggle-row">
+        <span>Плавная анимация</span>
+        <input type="checkbox" id="settingsToggleSmooth" class="settings-toggle">
+      </label>
+      <button class="settings-btn" id="settingsEqBtn">Эквалайзер</button>
+      <button class="settings-btn" id="settingsPrefsBtn">Уточнить предпочтения</button>
+    </div>
+
+    <div class="section-head"><h2>Инфо</h2></div>
+    <div class="settings-info">
+      <div class="settings-info-row"><span>Pocu Music</span><span class="settings-dim">v2.5.0 Beta</span></div>
+      <div class="settings-info-row"><span>Треков в библиотеке</span><span class="settings-dim" id="settingsTracksCount">—</span></div>
+      <div class="settings-info-row"><span>Избранных треков</span><span class="settings-dim" id="settingsFavCount">—</span></div>
+      <div class="settings-info-row"><span>Избранных альбомов</span><span class="settings-dim" id="settingsAlbumsCount">—</span></div>
+      <div class="settings-info-row"><span>Избранных артистов</span><span class="settings-dim" id="settingsArtistsCount">—</span></div>
+      <div class="settings-info-row"><span>Плейлистов</span><span class="settings-dim" id="settingsPlCount">—</span></div>
+    </div>
+
+    <div class="section-head"><h2>Очистка</h2></div>
+    <div class="settings-actions">
+      <button class="settings-btn" id="settingsClearRecent">Очистить недавние</button>
+      <button class="settings-btn" id="settingsClearPulse">Сбросить статистику Pulse</button>
+      <button class="settings-btn settings-btn-danger" id="settingsClearAll">Очистить всё</button>
+    </div>
+
+    <!-- Выйти — в самом низу, только для авторизованных -->
+    <div id="settingsLogoutWrap" hidden style="margin-top:40px">
+      <button class="settings-btn settings-btn-danger" id="settingsLogoutBtn">Выйти из аккаунта</button>
+    </div>
+  </section>
+
+  <!-- ОВЕРЛЕИ -->
+  <section class="playlist-overlay" id="playlistScreen" aria-hidden="true">
+    <div class="playlist-overlay-inner">
+      <button class="back-btn" id="playlistBackBtn" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Назад</span>
+      </button>
+      <h1 class="title" id="playlistTitle">Плейлист</h1>
+      <div id="playlistActions" class="playlist-actions"></div>
+      <div id="playlistTracks" class="results"></div>
+    </div>
+  </section>
+
+  <section class="playlist-overlay" id="historyScreen" aria-hidden="true">
+    <div class="playlist-overlay-inner">
+      <button class="back-btn" id="historyBackBtn" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Назад</span>
+      </button>
+      <h1 class="title">История прослушиваний</h1>
+      <div id="historyTracks" class="results"></div>
+    </div>
+  </section>
+
+  <section class="artist-overlay" id="artistScreen" aria-hidden="true">
+    <div class="artist-overlay-inner">
+      <button class="back-btn" id="artistBackBtn" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Назад</span>
+      </button>
+      <div class="artist-hero">
+        <div class="artist-photo" id="artistPhoto"></div>
+        <h1 class="artist-name" id="artistName">—</h1>
+        <p class="artist-bio" id="artistBio" hidden></p>
+      </div>
+      <div id="artistActions" class="playlist-actions"></div>
+      <div id="artistTracks" class="results"></div>
+    </div>
+  </section>
+
+  <section class="track-overlay" id="trackScreen" aria-hidden="true">
+    <div class="track-overlay-inner">
+      <button class="back-btn" id="trackBackBtn" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Назад</span>
+      </button>
+      <div class="track-page-art-wrap"><img class="track-page-art" id="trackPageArt" alt=""></div>
+      <div class="track-page-meta">
+        <h1 class="track-page-title" id="trackPageTitle">—</h1>
+        <div class="track-page-artist" id="trackPageArtist">—</div>
+        <div class="track-page-info" id="trackPageInfo"></div>
+      </div>
+      <div class="track-page-actions" id="trackPageActions"></div>
+      <div id="trackSimilar" hidden>
+        <div class="section-head"><h2>Похожие треки</h2></div>
+        <div id="trackSimilarList" class="results"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Мини-плеер + Now Playing (без изменений) -->
+<div class="miniplayer" id="miniplayer" hidden>
+  <img class="mp-art" id="mpArt" alt="">
+  <div class="mp-meta">
+    <div class="mp-title" id="mpTitle">—</div>
+    <div class="mp-artist" id="mpArtist">—</div>
+  </div>
+  <button class="mp-heart" id="mpHeart" aria-label="В избранное">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/></svg>
+  </button>
+  <button class="mp-btn mp-eq" id="mpEq" aria-label="Эквалайзер">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>
+      <line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/>
+      <line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>
+      <line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>
+    </svg>
+  </button>
+  <div class="mp-volume">
+    <button class="mp-volume-icon" id="mpVolumeIcon" aria-label="Без звука">
+      <svg class="vol-on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
+      <svg class="vol-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="m22 9-6 6M16 9l6 6"/></svg>
+    </button>
+    <input type="range" class="mp-volume-slider" id="mpVolume" min="0" max="1" step="0.01" value="1">
+  </div>
+  <button class="mp-btn" id="mpToggle" aria-label="Играть / пауза">
+    <svg class="mp-icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    <svg class="mp-icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+  </button>
+  <div class="mp-progress"><div class="mp-progress-fill" id="mpFill"></div></div>
+</div>
+
+<div class="now-playing" id="nowPlaying" aria-hidden="true">
+  <div class="np-bg" id="npBg"></div>
+  <div class="np-header">
+    <button class="np-eq-btn" id="npEq" aria-label="Эквалайзер">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.8"
+           stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4"  y1="21" x2="4"  y2="14"/><line x1="4"  y1="10" x2="4"  y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8"  x2="12" y2="3"/>
+        <line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>
+        <line x1="1"  y1="14" x2="7"  y2="14"/>
+        <line x1="9"  y1="8"  x2="15" y2="8"/>
+        <line x1="17" y1="16" x2="23" y2="16"/>
+      </svg>
+    </button>
+
+    <div class="np-grabber"></div>
+
+    <button class="np-close" id="npClose" aria-label="Закрыть">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="m6 9 6 6 6-6"/>
+      </svg>
+    </button>
+  </div>
+  <div class="np-body">
+    <div class="np-art-wrap"><img class="np-art" id="npArt" alt=""></div>
+    <div class="np-meta">
+      <div class="np-info">
+        <div class="np-title" id="npTitle">—</div>
+        <div class="np-artist" id="npArtist">—</div>
+      </div>
+    </div>
+    <div class="np-scrubber-row">
+      <div class="np-scrubber">
+        <div class="np-progress" id="npProgress">
+          <div class="np-progress-fill" id="npFill"></div>
+          <div class="np-progress-thumb" id="npThumb"></div>
+        </div>
+        <div class="np-times"><span id="npTime">0:00</span><span id="npDuration">0:00</span></div>
+      </div>
+      <div class="np-volume">
+        <button class="np-volume-icon" id="npVolumeIcon" aria-label="Без звука">
+          <svg class="vol-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+          <svg class="vol-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="m22 9-6 6M16 9l6 6"/></svg>
+        </button>
+        <div class="np-volume-track">
+          <input type="range" class="np-volume-slider" id="npVolume" min="0" max="1" step="0.01" value="1">
+        </div>
+      </div>
+    </div>
+    <div class="np-controls">
+      <button class="np-ctrl" id="npShuffle" aria-label="Перемешать"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg></button>
+      <button class="np-ctrl np-ctrl-dislike" id="npDislike" aria-label="Не нравится"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/><line x1="4" y1="4" x2="20" y2="20"/></svg></button>
+      <button class="np-ctrl np-ctrl-lg" id="npPrev" aria-label="Назад"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2.5v14H6zM20 5v14L9 12z"/></svg></button>
+      <button class="np-ctrl np-ctrl-play" id="npPlay" aria-label="Играть / пауза">
+        <svg class="np-icon-play" width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="np-icon-pause" width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+      </button>
+      <button class="np-ctrl np-ctrl-lg" id="npNext" aria-label="Вперёд"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 5H18v14h-2.5zM4 5v14l11-7z"/></svg></button>
+      <button class="np-ctrl np-ctrl-heart" id="npHeart" aria-label="В избранное"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/></svg></button>
+      <button class="np-ctrl" id="npRepeat" aria-label="Повтор" data-mode="off">
+        <svg class="rep-all" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+        <svg class="rep-one" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/><text x="12" y="15.6" text-anchor="middle" font-size="8" font-weight="800" fill="currentColor" stroke="none">1</text></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ТАБ-БАР -->
+<nav class="tabbar" id="tabbar" aria-label="Основная навигация">
+  <div class="bubble" id="bubble"></div>
+
+  <div class="sidebar-brand" aria-hidden="true">
+    <img class="sidebar-brand-full" src="icons/logo-full.png" alt="Pocu Music">
+    <img class="sidebar-brand-short" src="icons/logo-short.png" alt="Pocu">
+  </div>
+
+  <button class="tab-item" data-tab="search" aria-label="Поиск">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="10.8" cy="10.8" r="6.8"/><path d="m20.2 20.2-4.4-4.4"/>
+    </svg>
+  </button>
+
+  <button class="tab-item" data-tab="home" aria-label="Главная">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.2 10.6 12 3.4l8.8 7.2V20a.9.9 0 0 1-.9.9h-5.1v-6.2H9.2v6.2H4.1a.9.9 0 0 1-.9-.9z"/>
+    </svg>
+  </button>
+
+  <button class="tab-item" data-tab="charts" aria-label="Чарты">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>
+    </svg>
+  </button>
+
+  <button class="tab-item" data-tab="favorites" aria-label="Избранное">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/>
+    </svg>
+  </button>
+
+  <button class="tab-item tab-item-profile" data-tab="profile" aria-label="Профиль">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 21a8 8 0 0 1 16 0"/>
+    </svg>
+  </button>
+
+  <button class="tab-item tab-item-settings" id="sidebarSettingsBtn" aria-label="Настройки">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  </button>
+
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Свернуть панель">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+  </button>
+</nav>
+
+<!-- Sheets (кроме settings — теперь страница) -->
+<div class="sheet-overlay" id="sheet-create-playlist">
+  <div class="sheet-panel">
+    <div class="sheet-header"><h2>Новый плейлист</h2></div>
+    <div class="sheet-body"><input type="text" id="sheetPlaylistName" placeholder="Название плейлиста" autocomplete="off"></div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary" id="sheetCancelBtn">Отмена</button>
+      <button class="btn btn-primary" id="sheetCreateBtn">Создать</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet-overlay" id="sheet-recovery">
+  <div class="sheet-panel">
+    <div class="sheet-header"><h2>Новый пароль</h2></div>
+    <div class="sheet-body">
+      <div id="recoveryError" class="auth-error" hidden></div>
+      <div id="recoverySuccess" class="auth-success" hidden></div>
+      <input type="password" id="recoveryPassword" placeholder="Новый пароль (мин. 6 символов)" autocomplete="new-password" style="margin-bottom: 10px;">
+      <input type="password" id="recoveryPasswordConfirm" placeholder="Повтори пароль" autocomplete="new-password">
+    </div>
+    <div class="sheet-actions"><button class="btn btn-primary" id="recoverySubmitBtn">Сохранить</button></div>
+  </div>
+</div>
+
+<div class="sheet-overlay" id="sheet-auth">
+  <div class="sheet-panel">
+    <div class="sheet-header"><h2 id="authTitle">Вход в аккаунт</h2></div>
+    <div class="sheet-body">
+      <div id="authError" class="auth-error" hidden></div>
+      <input type="email" id="authEmail" placeholder="Email" autocomplete="email" style="margin-bottom: 10px;">
+      <input type="password" id="authPassword" placeholder="Пароль (мин. 6 символов)" autocomplete="current-password">
+      <button type="button" class="auth-forgot-btn" id="authForgotBtn">Забыли пароль?</button>
+      <div class="auth-switch">
+        <span id="authSwitchText">Нет аккаунта?</span>
+        <button type="button" id="authSwitchBtn">Зарегистрироваться</button>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary" id="authCancelBtn">Отмена</button>
+      <button class="btn btn-primary" id="authSubmitBtn">Войти</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/store.js"></script>
+<script src="js/library.js"></script>
+<script src="js/artists.js"></script>
+<script src="js/player.js"></script>
+<script src="js/track-card.js"></script>
+<script src="js/ui-player.js"></script>
+<script src="js/search.js"></script>
+<script src="js/favorites-ui.js"></script>
+<script src="js/playlists-ui.js"></script>
+<script src="js/artist-ui.js"></script>
+<script src="js/context-menu.js"></script>
+<script src="js/pulse.js"></script>
+<script src="js/home-ui.js"></script>
+<script src="js/charts-ui.js"></script>
+<script src="js/profile-ui.js"></script>
+<script src="js/settings-ui.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/auth-ui.js"></script>
+<script src="js/album-ui.js"></script>
+<script src="js/track-ui.js"></script>
+<script src="js/genre-ui.js"></script>
+<script src="js/eq-ui.js"></script>
+<script src="js/preferences-ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
