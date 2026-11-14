@@ -2,6 +2,7 @@
 window.PocuSettingsUI = (() => {
   let els = {};
   let initialized = false;
+  let systemMql = null;
 
   function init() {
     if (initialized) return;
@@ -25,6 +26,7 @@ window.PocuSettingsUI = (() => {
       toggleSmooth:   document.getElementById('settingsToggleSmooth'),
       eqBtn:          document.getElementById('settingsEqBtn'),
       prefsBtn:       document.getElementById('settingsPrefsBtn'),
+      themePicker:    document.getElementById('settingsThemePicker'),
       tracksCount:    document.getElementById('settingsTracksCount'),
       favCount:       document.getElementById('settingsFavCount'),
       plCount:        document.getElementById('settingsPlCount'),
@@ -76,12 +78,73 @@ window.PocuSettingsUI = (() => {
       location.reload();
     });
 
+    /* ======== ТЕМА ======== */
+    els.themePicker?.addEventListener('click', e => {
+      const btn = e.target.closest('[data-theme-choice]');
+      if (!btn) return;
+      const choice = btn.dataset.themeChoice;
+      if (!['dark', 'light', 'auto'].includes(choice)) return;
+      window.PocuStore.settings.set('theme', choice);
+      applyTheme(choice);
+      watchSystemTheme(choice);
+    });
+
+    // Применяем тему при инициализации (inline-скрипт в <head> уже поставил
+    // data-theme для анти-FOUC, здесь просто синхронизируем UI-состояние)
+    const initialChoice = window.PocuStore.settings.get('theme', 'dark');
+    applyTheme(initialChoice);
+    watchSystemTheme(initialChoice);
+
     document.addEventListener('pocu:auth', () => { refreshAccount(); pullProfile(); });
     window.PocuStore.subscribe(() => { if (els.screen?.classList.contains('active')) refreshCounters(); });
 
     refreshAccount();
     refreshCounters();
   }
+
+  /* ============ ТЕМА: применение / слушатель системы ============ */
+
+  function applyTheme(choice) {
+    let resolved = choice;
+    if (choice === 'auto') {
+      resolved = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    if (resolved !== 'light') resolved = 'dark';
+
+    document.documentElement.dataset.theme = resolved;
+
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = resolved === 'light' ? '#f2f2f5' : '#08080c';
+
+    updateThemePicker(choice);
+  }
+
+  function updateThemePicker(choice) {
+    if (!els.themePicker) return;
+    els.themePicker.querySelectorAll('[data-theme-choice]').forEach(btn => {
+      const isActive = btn.dataset.themeChoice === choice;
+      btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
+    });
+  }
+
+  function onSystemThemeChange() {
+    const choice = window.PocuStore.settings.get('theme', 'dark');
+    if (choice === 'auto') applyTheme('auto');
+  }
+
+  function watchSystemTheme(choice) {
+    if (systemMql) {
+      try { systemMql.removeEventListener('change', onSystemThemeChange); } catch {}
+      systemMql = null;
+    }
+    if (choice === 'auto' && window.matchMedia) {
+      systemMql = window.matchMedia('(prefers-color-scheme: light)');
+      if (systemMql.addEventListener) systemMql.addEventListener('change', onSystemThemeChange);
+      else if (systemMql.addListener) systemMql.addListener(onSystemThemeChange); // Safari < 14
+    }
+  }
+
+  /* ============ ЭКРАН ============ */
 
   function openScreen() {
     if (!els.screen) return;
@@ -92,10 +155,11 @@ window.PocuSettingsUI = (() => {
     refreshAccount();
     refreshCounters();
     pullProfile();
+    // синхронизируем выбранную тему с UI
+    updateThemePicker(window.PocuStore.settings.get('theme', 'dark'));
     document.getElementById('main')?.scrollTo({ top: 0, behavior: 'auto' });
   }
 
-  /* Принудительный pull профиля (если поменяли на другом устройстве) */
   async function pullProfile() {
     const user = window.PocuSupabase?.getUser?.();
     if (!user) return;
@@ -142,7 +206,6 @@ window.PocuSettingsUI = (() => {
     document.body.classList.toggle('no-smooth', !smooth);
   }
 
-  /* Сжатие аватара (canvas 200×200 JPEG q=0.8 → ~20 КБ) */
   function compressImage(file) {
     return new Promise((resolve, reject) => {
       const img = new Image();

@@ -10,11 +10,34 @@
 <meta name="apple-mobile-web-app-title" content="Pocu Music">
 <meta name="description" content="Pocu Music — музыка всегда с тобой.">
 <title>Pocu Music</title>
+<!--
+  FOUC-guard: ставим data-theme до рендера, чтобы не мигала тема.
+  Читает pocu.music.v1.settings.theme ('dark'|'light'|'auto') и, если 'auto',
+  смотрит на prefers-color-scheme. По умолчанию 'dark'.
+-->
+<script>
+(() => {
+  try {
+    const raw = localStorage.getItem('pocu.music.v1');
+    const st = raw ? JSON.parse(raw) : {};
+    const choice = (st.settings && st.settings.theme) || 'dark';
+    let resolved = choice;
+    if (choice === 'auto') {
+      resolved = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    if (resolved !== 'light') resolved = 'dark';
+    document.documentElement.dataset.theme = resolved;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = resolved === 'light' ? '#f2f2f5' : '#08080c';
+  } catch (_) {}
+})();
+</script>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/theme.css">
 </head>
 <body>
 
@@ -132,7 +155,6 @@
 
     <div id="searchInitial"><p class="hint">Начни вводить название трека, исполнителя или альбома.</p></div>
 
-    <!-- АРТИСТЫ -->
     <div id="searchArtists" style="margin-bottom:20px" hidden>
       <div class="section-head"><h2>Артисты</h2></div>
       <div class="home-row" id="searchArtistsList"></div>
@@ -162,7 +184,7 @@
     </div>
   </section>
 
-  <!-- ИЗБРАННОЕ (объединено с медиатекой) -->
+  <!-- ИЗБРАННОЕ -->
   <section class="screen" data-screen="favorites">
     <h1 class="title">Избранное</h1>
 
@@ -171,7 +193,6 @@
       <div class="state-sub">Лайкай треки, альбомы и артистов — они появятся здесь</div>
     </div>
 
-    <!-- Плейлисты (рендерит playlists-ui.js в #libPlaylists) -->
     <div class="lib-section">
       <div class="section-head">
         <h2>Плейлисты</h2>
@@ -180,39 +201,32 @@
       <div id="libPlaylists" class="home-row"></div>
     </div>
 
-    <!-- Недавно -->
     <div class="lib-section" id="favRecent" hidden>
       <div class="section-head"><h2>Недавно прослушано</h2></div>
       <div class="recent-row" id="favRecentRow"></div>
     </div>
 
-    <!-- Избранные альбомы -->
     <div class="lib-section" id="favAlbums" hidden>
       <div class="section-head"><h2>Альбомы</h2></div>
       <div class="home-row" id="favAlbumsRow"></div>
     </div>
 
-    <!-- Избранные артисты -->
     <div class="lib-section" id="favArtists" hidden>
       <div class="section-head"><h2>Артисты</h2></div>
       <div class="home-row" id="favArtistsRow"></div>
     </div>
 
-    <!-- Избранные треки -->
     <div class="lib-section" id="favTracks" hidden>
       <div class="section-head"><h2>Треки</h2></div>
       <div id="favTracksList" class="results"></div>
     </div>
 
-    <!-- Артисты Pocu -->
     <div class="lib-section" id="favPocuArtists" hidden>
       <div class="section-head"><h2>Артисты Pocu</h2></div>
       <div class="home-row" id="favPocuArtistsRow"></div>
     </div>
 
-    <!-- Legacy anchor (для поиска "favoritesList" в модулях, если где остался) -->
     <div id="favoritesList" style="display:none"></div>
-    <!-- Legacy history button (на всякий случай, скрыта) -->
     <button id="favHistoryBtn" style="display:none"></button>
   </section>
 
@@ -256,7 +270,6 @@
 
     <div class="section-head"><h2>Аккаунт</h2></div>
 
-    <!-- Гость -->
     <div id="settingsGuestBlock" class="settings-account">
       <div class="account-state">
         <div class="account-text">
@@ -267,7 +280,6 @@
       <button class="btn btn-primary" id="settingsLoginBtn" style="width:100%;margin-top:16px;">Войти</button>
     </div>
 
-    <!-- Авторизован -->
     <div id="settingsUserBlock" hidden>
       <div class="settings-account">
         <div class="profile-hero-small">
@@ -298,6 +310,13 @@
       <button class="settings-btn" id="settingsPrefsBtn">Уточнить предпочтения</button>
     </div>
 
+    <div class="section-head"><h2>Тема</h2></div>
+    <div class="settings-theme-picker" id="settingsThemePicker" role="radiogroup" aria-label="Тема интерфейса">
+      <button type="button" class="settings-theme-option" data-theme-choice="dark"  role="radio" aria-checked="false">Тёмная</button>
+      <button type="button" class="settings-theme-option" data-theme-choice="light" role="radio" aria-checked="false">Светлая</button>
+      <button type="button" class="settings-theme-option" data-theme-choice="auto"  role="radio" aria-checked="false">Системная</button>
+    </div>
+
     <div class="section-head"><h2>Инфо</h2></div>
     <div class="settings-info">
       <div class="settings-info-row"><span>Pocu Music</span><span class="settings-dim">v2.5.0 Beta</span></div>
@@ -315,7 +334,6 @@
       <button class="settings-btn settings-btn-danger" id="settingsClearAll">Очистить всё</button>
     </div>
 
-    <!-- Выйти — в самом низу, только для авторизованных -->
     <div id="settingsLogoutWrap" hidden style="margin-top:40px">
       <button class="settings-btn settings-btn-danger" id="settingsLogoutBtn">Выйти из аккаунта</button>
     </div>
@@ -383,7 +401,6 @@
 
 </main>
 
-<!-- Мини-плеер + Now Playing (без изменений) -->
 <div class="miniplayer" id="miniplayer" hidden>
   <img class="mp-art" id="mpArt" alt="">
   <div class="mp-meta">
@@ -485,7 +502,6 @@
   </div>
 </div>
 
-<!-- ТАБ-БАР -->
 <nav class="tabbar" id="tabbar" aria-label="Основная навигация">
   <div class="bubble" id="bubble"></div>
 
@@ -537,7 +553,6 @@
   </button>
 </nav>
 
-<!-- Sheets (кроме settings — теперь страница) -->
 <div class="sheet-overlay" id="sheet-create-playlist">
   <div class="sheet-panel">
     <div class="sheet-header"><h2>Новый плейлист</h2></div>
