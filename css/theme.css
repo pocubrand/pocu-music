@@ -485,3 +485,56 @@ html { transition: background-color .3s ease; }
   background: var(--ui-hi-2);
   color: var(--text);
 }
+
+/* ============ ЭКВАЛАЙЗЕР (СВЕТЛАЯ ТЕМА) ============ */
+
+/* 1. Затемнение фона (на мобилке) — делаем мягче */
+[data-theme="light"] .sheet-overlay {
+  background: rgba(0,0,0,.25);
+}
+
+/* 2. Поповер эквалайзера на ПК */
+[data-theme="light"] .sheet-overlay.as-popover .sheet-panel {
+  background: var(--surface);
+  border-color: var(--glass-brd);
+  box-shadow: 0 12px 32px rgba(0,0,0,.15);
+}
+
+/* 3. Кнопки пресетов (Плоский, Рок, Поп и т.д.) */
+[data-theme="light"] .eq-presets .chip {
+  background: var(--glass);
+  border-color: var(--glass-brd);
+  color: var(--text);
+}
+[data-theme="light"] .eq-presets .chip:active {
+  background: var(--ui-hi-2);
+}
+[data-theme="light"] .eq-presets .chip-active {
+  background: linear-gradient(135deg, rgba(167,139,250,.2), rgba(106,168,255,.2)) !important;
+  border-color: rgba(167,139,250,.4) !important;
+  color: var(--accent) !important;
+}
+
+/* 4. Текстовые подписи (Гц, +0 дБ) */
+[data-theme="light"] .eq-label,
+[data-theme="light"] .eq-val {
+  color: var(--text-dim);
+}
+
+/* 5. Сами ползунки (дорожки и бегунки) */
+/* Дорожки (track) */
+[data-theme="light"] .eq-slider::-webkit-slider-runnable-track {
+  background: rgba(0,0,0,.12);
+}
+[data-theme="light"] .eq-slider::-moz-range-track {
+  background: rgba(0,0,0,.12);
+}
+/* Бегунки (thumb) — делаем их черными, чтобы было видно на светлом */
+[data-theme="light"] .eq-slider::-webkit-slider-thumb {
+  background: var(--text);
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
+[data-theme="light"] .eq-slider::-moz-range-thumb {
+  background: var(--text);
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
