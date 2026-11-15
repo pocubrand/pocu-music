@@ -151,12 +151,19 @@ html { transition: background-color .3s ease; }
   background-color: var(--placeholder-bg);
 }
 
+/* ============ АВАТАРКА С КАРТИНКОЙ ============ */
+/* Убираем фон и рамку, если установлена обложка (чтобы не было "квадрата в круге") */
+.profile-avatar[style*="background-image"] {
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+
 /* ============ МИНИ-ПЛЕЕР ============ */
 [data-theme="light"] .miniplayer {
-  background: var(--glass);
+  background: rgba(255,255,255,.75);
   border-color: var(--glass-brd);
   box-shadow:
-    0 8px 24px rgba(0,0,0,.10),
+    0 8px 24px rgba(0,0,0,.08),
     inset 0 0 0 1px rgba(0,0,0,.04);
 }
 [data-theme="light"] .mp-btn      { color: var(--text); }
@@ -189,27 +196,35 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .np-ctrl-dislike  { color: var(--text-dim); }
 [data-theme="light"] .np-ctrl-heart    { color: var(--text-dim); }
 
+/* ============ ГРОМКОСТЬ (ПОЛЗУНКИ) ============ */
 [data-theme="light"] .np-volume-icon {
   background: var(--ui-hi);
   border-color: var(--glass-brd);
   color: var(--text-dim);
 }
 [data-theme="light"] .mp-volume-icon { color: var(--text-dim); }
+
+/* Горизонтальные слайдеры (трек делаем через background самого input) */
 [data-theme="light"] .np-volume-slider,
 [data-theme="light"] .mp-volume-slider {
   background: var(--ui-hi-2);
 }
+
+/* Вертикальный слайдер (в Now Playing) */
 [data-theme="light"] .np-volume-track {
   background: var(--surface-3);
 }
-[data-theme="light"] .np-volume-track .np-volume-slider::-webkit-slider-runnable-track,
-[data-theme="light"] .mp-volume-slider::-webkit-slider-runnable-track {
+[data-theme="light"] .np-volume-track .np-volume-slider {
+  background: transparent;
+}
+[data-theme="light"] .np-volume-track .np-volume-slider::-webkit-slider-runnable-track {
   background: rgba(0,0,0,.14);
 }
-[data-theme="light"] .np-volume-track .np-volume-slider::-moz-range-track,
-[data-theme="light"] .mp-volume-slider::-moz-range-track {
+[data-theme="light"] .np-volume-track .np-volume-slider::-moz-range-track {
   background: rgba(0,0,0,.14);
 }
+
+/* Ползунки (thumb) — для всех */
 [data-theme="light"] .np-volume-track .np-volume-slider::-webkit-slider-thumb,
 [data-theme="light"] .np-volume-slider::-webkit-slider-thumb,
 [data-theme="light"] .mp-volume-slider::-webkit-slider-thumb {
@@ -234,27 +249,45 @@ html { transition: background-color .3s ease; }
     var(--bg);
 }
 
-/* ================================================================
-   PULSE HERO — СВЕТЛАЯ ТЕМА
-   Светлая «витрина» с мягким цветным свечением от обложки,
-   тёмным текстом и светлым overlay снизу.
-   ================================================================ */
-
-/* Фон + мягкая внешняя тень */
+/* ============ ТЕНИ (СВЕТЛАЯ ТЕМА) ============ */
+/* На светлой теме делаем тени компактнее, чтобы они не обрезались контейнерами */
 [data-theme="light"] .pulse-hero {
   background: var(--hero-bg-light);
-  box-shadow:
-    0 16px 40px rgba(0,0,0,.10),
-    inset 0 1px 0 rgba(255,255,255,.55);
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+[data-theme="light"] .home-tile-art,
+[data-theme="light"] .recent-art {
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+[data-theme="light"] .artist-photo,
+[data-theme="light"] .album-art,
+[data-theme="light"] .profile-avatar {
+  box-shadow: 0 6px 16px rgba(0,0,0,.10);
+}
+[data-theme="light"] .np-art {
+  box-shadow: 0 10px 24px rgba(0,0,0,.12);
+}
+[data-theme="light"] .context-menu {
+  box-shadow: 0 10px 24px rgba(0,0,0,.12);
 }
 
-/* Размытая обложка — цветное свечение, светлее и прозрачнее */
+/* Фикс обрезки теней в горизонтальных рядах на мобилке */
+@media (max-width: 899px) {
+  .home-row, .recent-row {
+    padding-bottom: 20px !important;
+    margin-bottom: -10px !important;
+  }
+}
+
+/* ================================================================
+   PULSE HERO — СВЕТЛАЯ ТЕМА
+   ================================================================ */
+
 [data-theme="light"] .pulse-hero-bg {
   filter: blur(70px) saturate(160%) brightness(1.6) !important;
   opacity: 0.45 !important;
 }
 
-/* Aurora — normal blend, полупрозрачные цветные пятна */
 [data-theme="light"] .aurora-blob {
   mix-blend-mode: normal;
   opacity: 0.42;
@@ -267,13 +300,11 @@ html { transition: background-color .3s ease; }
   filter: blur(55px) saturate(1.1) brightness(1.05);
 }
 
-/* Шум — multiply, чтобы фактура читалась на светлом */
 [data-theme="light"] .pulse-hero-noise {
   mix-blend-mode: multiply;
   opacity: 0.06;
 }
 
-/* Виньетка — еле заметная, не «тёмное пятно» */
 [data-theme="light"] .pulse-hero-vignette {
   background: radial-gradient(
     ellipse at center,
@@ -282,7 +313,6 @@ html { transition: background-color .3s ease; }
   );
 }
 
-/* Overlay — теперь светлый: тёмный текст снизу читается */
 [data-theme="light"] .pulse-hero-overlay {
   background: linear-gradient(
     to bottom,
@@ -294,7 +324,6 @@ html { transition: background-color .3s ease; }
   );
 }
 
-/* Текст — тёмный */
 [data-theme="light"] .pulse-title {
   color: var(--text);
   text-shadow: none;
@@ -313,7 +342,6 @@ html { transition: background-color .3s ease; }
   color: #000;
 }
 
-/* Кнопки */
 [data-theme="light"] .pulse-btn-refresh,
 [data-theme="light"] .pulse-btn-shuffle {
   background: rgba(0,0,0,.07);
@@ -330,7 +358,6 @@ html { transition: background-color .3s ease; }
     inset 0 1px 0 rgba(255,255,255,.10);
 }
 
-/* Обложка-плейсхолдер — насыщенный градиент, чтобы «витрина» не была пустой */
 [data-theme="light"] .pulse-hero-art-placeholder {
   background: linear-gradient(135deg,
     rgba(124,92,255,.85),
@@ -339,7 +366,6 @@ html { transition: background-color .3s ease; }
   color: rgba(255,255,255,.85);
 }
 
-/* Карточка обложки — смягчаем тень и внутреннюю рамку */
 [data-theme="light"] .pulse-hero-art-card,
 [data-theme="light"] .pulse-hero:hover .pulse-hero-art-card {
   box-shadow:
@@ -347,7 +373,6 @@ html { transition: background-color .3s ease; }
     0 0 0 1px rgba(0,0,0,.06) inset;
 }
 
-/* Очередь (на ПК) */
 [data-theme="light"] .pulse-queue-item {
   background: rgba(0,0,0,.05);
   border-color: rgba(0,0,0,.08);
@@ -355,7 +380,6 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .pulse-queue-item-title  { color: var(--text); }
 [data-theme="light"] .pulse-queue-item-artist { color: var(--text-dim); }
 
-/* Статус «LIVE» — инвертируем */
 [data-theme="light"] .pulse-hero-status {
   background: rgba(0,0,0,.06);
   border-color: rgba(0,0,0,.10);
