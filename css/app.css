@@ -3718,8 +3718,8 @@ body.album-open .topbar {
   height: 120px;
   border-radius: 50%;
   background: rgba(255,255,255,.06);
-  background-size: cover;
-  background-position: center;
+  background-size: 130% !important;
+  background-position: center !important;
   display: grid;
   place-items: center;
   font-size: 46px;

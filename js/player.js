@@ -1,346 +1,358 @@
-/* Pocu Music — аудио-плеер + 30-сек + эквалайзер */
-window.PocuPlayer = (() => {
-  const audio = new Audio();
-  audio.preload = 'metadata';
+/* Pocu Music — страница «Настройки» */
+window.PocuSettingsUI = (() => {
+  let els = {};
+  let initialized = false;
+  let systemMql = null;
 
-  let current       = null;
-  let queue         = [];
-  let queueIndex    = -1;
-  let shuffle       = false;
-  let repeat        = 'off';
-  let shuffledOrder = null;
-  let volume        = 1;
-  let muted         = false;
-  const listeners   = new Set();
+  const CROSSFADE_OPTIONS = [
+    { v: 0,  label: 'Выкл' },
+    { v: 3,  label: '3 сек' },
+    { v: 5,  label: '5 сек' },
+    { v: 10, label: '10 сек' }
+  ];
 
-  /* 30-сек tracking */
-  const played30 = new Set();
-  let prevTrackId = null;
-  let prevMaxTime = 0;
+  function init() {
+    if (initialized) return;
+    initialized = true;
 
-  /* Web Audio EQ */
-  const EQ_FREQS = [60, 230, 910, 3600, 14000];
-  let audioCtx = null;
-  let sourceNode = null;
-  let eqFilters = [];
-
-  function ensureAudioContext() {
-    if (audioCtx) return;
-    try {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) { console.warn('[eq] no AudioContext'); return; }
-      audioCtx = new AC();
-      sourceNode = audioCtx.createMediaElementSource(audio);
-      eqFilters = EQ_FREQS.map(freq => {
-        const f = audioCtx.createBiquadFilter();
-        f.type = 'peaking';
-        f.frequency.value = freq;
-        f.Q.value = 1;
-        f.gain.value = 0;
-        return f;
-      });
-      sourceNode.connect(eqFilters[0]);
-      for (let i = 0; i < eqFilters.length - 1; i++) eqFilters[i].connect(eqFilters[i + 1]);
-      eqFilters[eqFilters.length - 1].connect(audioCtx.destination);
-      console.log('[eq] audio context ready');
-    } catch (e) { console.warn('[eq] init failed:', e); }
-  }
-
-  function setEQ(bands) {
-    ensureAudioContext();
-    if (!eqFilters.length || !Array.isArray(bands)) return;
-    for (let i = 0; i < eqFilters.length; i++) {
-      const v = Number(bands[i]);
-      eqFilters[i].gain.value = isFinite(v) ? Math.max(-12, Math.min(12, v)) : 0;
-    }
-  }
-
-  function getEQ() {
-    if (!eqFilters.length) return [0, 0, 0, 0, 0];
-    return eqFilters.map(f => f.gain.value);
-  }
-
-  function resumeAudioCtx() {
-    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
-  }
-
-  /* 30-сек зачёт */
-  function markNewTrack(track) {
-    if (prevTrackId && prevMaxTime > 0 && prevMaxTime < 20) {
-      window.PocuStore?.skipStats?.recordSkip(prevTrackId);
-    }
-    prevTrackId = track ? track.id : null;
-    prevMaxTime = 0;
-    if (track) played30.delete(track.id);
-  }
-
-  function getState() {
-    return {
-      track: current,
-      playing: current ? !audio.paused : false,
-      time: current ? audio.currentTime : 0,
-      duration: current ? (audio.duration || current.duration || 0) : 0,
-      queue: queue.slice(),
-      queueIndex,
-      shuffle, repeat, volume, muted
+    els = {
+      screen:         document.getElementById('settingsScreen'),
+      backBtn:        document.getElementById('settingsBackBtn'),
+      guestBlock:     document.getElementById('settingsGuestBlock'),
+      userBlock:      document.getElementById('settingsUserBlock'),
+      logoutWrap:     document.getElementById('settingsLogoutWrap'),
+      userEmail:      document.getElementById('settingsUserEmail'),
+      avatar:         document.getElementById('settingsAvatar'),
+      avatarInput:    document.getElementById('settingsAvatarInput'),
+      avatarBtn:      document.getElementById('settingsAvatarBtn'),
+      nameInput:      document.getElementById('settingsNameInput'),
+      saveName:       document.getElementById('settingsSaveName'),
+      loginBtn:       document.getElementById('settingsLoginBtn'),
+      logoutBtn:      document.getElementById('settingsLogoutBtn'),
+      changePassBtn:  document.getElementById('settingsChangePassBtn'),
+      toggleSmooth:   document.getElementById('settingsToggleSmooth'),
+      eqBtn:          document.getElementById('settingsEqBtn'),
+      prefsBtn:       document.getElementById('settingsPrefsBtn'),
+      themePicker:    document.getElementById('settingsThemePicker'),
+      tracksCount:    document.getElementById('settingsTracksCount'),
+      favCount:       document.getElementById('settingsFavCount'),
+      plCount:        document.getElementById('settingsPlCount'),
+      albumsCount:    document.getElementById('settingsAlbumsCount'),
+      artistsCount:   document.getElementById('settingsArtistsCount'),
+      clearRecent:    document.getElementById('settingsClearRecent'),
+      clearPulse:     document.getElementById('settingsClearPulse'),
+      clearAll:       document.getElementById('settingsClearAll'),
+      openTopbar:     document.getElementById('settingsBtn'),
+      openSidebar:    document.getElementById('sidebarSettingsBtn'),
+      crossfadePicker: null
     };
+
+    // Вставляем UI Crossfade рядом с темой
+    injectCrossfadeUI();
+
+    els.openTopbar?.addEventListener('click', openScreen);
+    els.openSidebar?.addEventListener('click', openScreen);
+    els.backBtn?.addEventListener('click', closeScreen);
+
+    els.loginBtn?.addEventListener('click', () => window.PocuAuthUI?.openAuthSheet?.());
+    els.logoutBtn?.addEventListener('click', () => window.PocuAuthUI?.logout?.());
+    els.changePassBtn?.addEventListener('click', handleChangePassword);
+
+    els.avatarBtn?.addEventListener('click', () => els.avatarInput?.click());
+    els.avatarInput?.addEventListener('change', handleAvatarChange);
+    els.saveName?.addEventListener('click', handleSaveName);
+
+    els.toggleSmooth?.addEventListener('change', () => {
+      const v = els.toggleSmooth.checked;
+      window.PocuStore.settings.set('smoothTransitions', v);
+      document.body.classList.toggle('no-smooth', !v);
+    });
+
+    els.eqBtn?.addEventListener('click', () => window.PocuEquilizerUI?.open?.());
+    els.prefsBtn?.addEventListener('click', () => window.PocuPreferencesUI?.open?.());
+
+    els.clearRecent?.addEventListener('click', () => {
+      if (!confirm('Очистить историю прослушиваний?')) return;
+      window.PocuStore.recent.clear();
+      refreshCounters();
+    });
+    els.clearPulse?.addEventListener('click', () => {
+      if (!confirm('Сбросить статистику Pulse?')) return;
+      const all = window.PocuStore.skipStats.all();
+      Object.keys(all).forEach(k => delete all[k]);
+      window.PocuStore.persist();
+      refreshCounters();
+    });
+    els.clearAll?.addEventListener('click', () => {
+      if (!confirm('Удалить ВСЁ? Необратимо.')) return;
+      try { localStorage.removeItem('pocu.music.v1'); } catch {}
+      location.reload();
+    });
+
+    /* ======== ТЕМА ======== */
+    els.themePicker?.addEventListener('click', e => {
+      const btn = e.target.closest('[data-theme-choice]');
+      if (!btn) return;
+      const choice = btn.dataset.themeChoice;
+      if (!['dark', 'light', 'auto'].includes(choice)) return;
+      window.PocuStore.settings.set('theme', choice);
+      applyTheme(choice);
+      watchSystemTheme(choice);
+    });
+
+    const initialChoice = window.PocuStore.settings.get('theme', 'dark');
+    applyTheme(initialChoice);
+    watchSystemTheme(initialChoice);
+
+    /* ======== CROSSFADE ======== */
+    els.crossfadePicker?.addEventListener('click', e => {
+      const btn = e.target.closest('[data-crossfade-choice]');
+      if (!btn) return;
+      const val = Number(btn.dataset.crossfadeChoice);
+      if (![0, 3, 5, 10].includes(val)) return;
+      window.PocuStore.settings.set('crossfade', val);
+      updateCrossfadePicker(val);
+    });
+    updateCrossfadePicker(window.PocuStore.settings.get('crossfade', 0));
+
+    document.addEventListener('pocu:auth', () => { refreshAccount(); pullProfile(); });
+    window.PocuStore.subscribe(() => { if (els.screen?.classList.contains('active')) refreshCounters(); });
+
+    refreshAccount();
+    refreshCounters();
   }
 
-  function notify() {
-    const s = getState();
-    listeners.forEach(fn => { try { fn(s); } catch (e) { console.warn(e); } });
-  }
+  /* ============ CROSSFADE UI (динамическая вставка) ============ */
 
-  function buildShuffledOrder(fromIndex) {
-    const indices = [...Array(queue.length).keys()].filter(i => i !== fromIndex);
-    for (let i = indices.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [indices[i], indices[j]] = [indices[j], indices[i]];
-    }
-    indices.unshift(fromIndex);
-    return indices;
-  }
-
-  function playQueue(tracks, startIndex = 0) {
-    if (!tracks || !tracks.length) return;
-    const startTrack = tracks[startIndex];
-    if (!startTrack) return;
-    if (current && current.id === startTrack.id) {
-      if (audio.paused) audio.play().catch(() => {});
-      else audio.pause();
+  function injectCrossfadeUI() {
+    if (document.getElementById('settingsCrossfadePicker')) {
+      els.crossfadePicker = document.getElementById('settingsCrossfadePicker');
       return;
     }
-    queue = tracks.slice();
-    queueIndex = Math.max(0, Math.min(startIndex, queue.length - 1));
-    shuffledOrder = shuffle ? buildShuffledOrder(queueIndex) : null;
-    playCurrentInQueue();
-  }
+    const themePicker = els.themePicker;
+    if (!themePicker) { console.warn('[settings] theme picker not found — crossfade UI skipped'); return; }
 
-  async function playCurrentInQueue() {
-    if (queueIndex < 0 || queueIndex >= queue.length) return;
-    const track = queue[queueIndex];
-    if (!track || !track.preview) return;
-    current = track;
-    markNewTrack(track);
-    audio.src = track.preview;
-    updateMediaSession(track);
-    if (window.PocuStore) window.PocuStore.recent.add(track.id);
-    resumeAudioCtx();
-    try { await audio.play(); }
-    catch (e) { if (e.name === 'AbortError') return; console.warn('[player] play failed', e); }
-  }
+    const row = themePicker.closest('.settings-row, .settings-section, .settings-block, .settings-item, .settings-group')
+             || themePicker.parentElement;
+    if (!row || !row.parentElement) return;
 
-  async function play(track) {
-    if (!track || !track.preview) return;
-    if (current && current.id === track.id) {
-      if (audio.paused) { resumeAudioCtx(); try { await audio.play(); } catch (e) { if (e.name !== 'AbortError') console.warn(e); } }
-      else audio.pause();
-      return;
-    }
-    queue = [track]; queueIndex = 0; shuffledOrder = null; current = track;
-    markNewTrack(track);
-    audio.src = track.preview;
-    updateMediaSession(track);
-    if (window.PocuStore) window.PocuStore.recent.add(track.id);
-    resumeAudioCtx();
-    try { await audio.play(); }
-    catch (e) { if (e.name === 'AbortError') return; console.warn('[player] play failed', e); }
-  }
+    const clone = row.cloneNode(true);
+    const clonedPicker = clone.querySelector('#settingsThemePicker');
+    if (!clonedPicker) return;
 
-  /* «Играть следующим»: вставляет трек сразу после текущего.
-     - Если ничего не играет — просто запускает.
-     - Если трек уже играет — no-op.
-     - Удаляет существующие копии трека из очереди, корректно сдвигая
-       queueIndex и shuffledOrder.
-     - LIFO: повторный вызов ставит новый трек ещё «ближе». */
-  function insertNext(track) {
-    if (!track || !track.preview) return;
+    clonedPicker.id = 'settingsCrossfadePicker';
+    clonedPicker.innerHTML = '';
+    const sampleBtn = themePicker.querySelector('button');
 
-    // Ничего не играет — просто запускаем
-    if (!current) { play(track); return; }
+    CROSSFADE_OPTIONS.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('role', 'radio');
+      btn.dataset.crossfadeChoice = String(opt.v);
+      btn.setAttribute('aria-checked', 'false');
+      btn.textContent = opt.label;
+      if (sampleBtn && sampleBtn.className) btn.className = sampleBtn.className;
+      clonedPicker.appendChild(btn);
+    });
 
-    // Текущий трек — ничего не делаем
-    if (current.id === track.id) return;
-
-    // Если shuffle включён, но порядок ещё не построен — строим от текущего
-    if (shuffle && !shuffledOrder) {
-      shuffledOrder = buildShuffledOrder(queueIndex);
-    }
-
-    // Убираем все существующие копии этого трека из очереди
-    for (let i = queue.length - 1; i >= 0; i--) {
-      if (queue[i].id === track.id && i !== queueIndex) {
-        queue.splice(i, 1);
-        if (i < queueIndex) queueIndex--;
-        if (shuffledOrder) {
-          const soIdx = shuffledOrder.indexOf(i);
-          if (soIdx >= 0) shuffledOrder.splice(soIdx, 1);
-          for (let k = 0; k < shuffledOrder.length; k++) {
-            if (shuffledOrder[k] > i) shuffledOrder[k]--;
-          }
+    // Меняем текстовые узлы «Тема» → «Crossfade»
+    clone.querySelectorAll('*').forEach(el => {
+      if (el.closest('#settingsCrossfadePicker')) return;
+      el.childNodes.forEach(n => {
+        if (n.nodeType === 3 && /Тема/i.test(n.textContent)) {
+          n.textContent = n.textContent.replace(/Тема/gi, 'Crossfade');
         }
-      }
-    }
-
-    // Вставляем сразу после текущего
-    const insertPos = queueIndex + 1;
-    queue.splice(insertPos, 0, track);
-
-    // Правим shuffle-порядок: сдвигаем все индексы >= insertPos и ставим новый сразу после текущего
-    if (shuffledOrder) {
-      for (let i = 0; i < shuffledOrder.length; i++) {
-        if (shuffledOrder[i] >= insertPos) shuffledOrder[i]++;
-      }
-      const curPos = shuffledOrder.indexOf(queueIndex);
-      if (curPos >= 0) shuffledOrder.splice(curPos + 1, 0, insertPos);
-      else shuffledOrder.push(insertPos);
-    }
-
-    notify();
-  }
-
-  function next(_guard = 0) {
-    if (!queue.length) return;
-    if (_guard > queue.length) return;
-    if (repeat === 'one') { audio.currentTime = 0; audio.play().catch(() => {}); return; }
-    let nextIdx;
-    if (shuffle && shuffledOrder) {
-      const pos = shuffledOrder.indexOf(queueIndex);
-      const npos = pos + 1;
-      if (npos >= shuffledOrder.length) {
-        if (repeat === 'all') nextIdx = shuffledOrder[0];
-        else { audio.pause(); return; }
-      } else nextIdx = shuffledOrder[npos];
-    } else {
-      if (queueIndex + 1 >= queue.length) {
-        if (repeat === 'all') nextIdx = 0;
-        else { audio.pause(); return; }
-      } else nextIdx = queueIndex + 1;
-    }
-    queueIndex = nextIdx;
-    if (window.PocuStore?.disliked?.has(queue[queueIndex]?.id)) return next(_guard + 1);
-    playCurrentInQueue();
-  }
-
-  function prev() {
-    if (audio.currentTime > 3) { audio.currentTime = 0; return; }
-    if (!queue.length) return;
-    let prevIdx;
-    if (shuffle && shuffledOrder) {
-      const pos = shuffledOrder.indexOf(queueIndex);
-      const ppos = pos - 1;
-      if (ppos < 0) {
-        if (repeat === 'all') prevIdx = shuffledOrder[shuffledOrder.length - 1];
-        else { audio.currentTime = 0; return; }
-      } else prevIdx = shuffledOrder[ppos];
-    } else {
-      if (queueIndex - 1 < 0) {
-        if (repeat === 'all') prevIdx = queue.length - 1;
-        else { audio.currentTime = 0; return; }
-      } else prevIdx = queueIndex - 1;
-    }
-    queueIndex = prevIdx;
-    playCurrentInQueue();
-  }
-
-  function togglePlay() {
-    if (!current) return;
-    resumeAudioCtx();
-    if (audio.paused) audio.play().catch(() => {});
-    else audio.pause();
-  }
-
-  function seek(seconds) {
-    if (!current || !isFinite(audio.duration)) return;
-    audio.currentTime = Math.max(0, Math.min(seconds, audio.duration));
-  }
-
-  function setShuffle(v) { shuffle = !!v; shuffledOrder = shuffle ? buildShuffledOrder(queueIndex) : null; notify(); }
-  function setRepeat(mode) { if (!['off','all','one'].includes(mode)) return; repeat = mode; notify(); }
-  function toggleShuffle() { setShuffle(!shuffle); }
-  function cycleRepeat() { const order=['off','all','one']; setRepeat(order[(order.indexOf(repeat)+1)%order.length]); }
-
-  function setVolume(v) {
-    volume = Math.max(0, Math.min(1, Number(v) || 0));
-    audio.volume = volume;
-    if (volume > 0) { muted = false; audio.muted = false; }
-    try { localStorage.setItem('pocu.volume', String(volume)); } catch {}
-    notify();
-  }
-  function toggleMute() { muted = !muted; audio.muted = muted; notify(); }
-
-  function updateMediaSession(track) {
-    if (!('mediaSession' in navigator)) return;
-    try {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: track.title, artist: track.artist, album: track.album || '',
-        artwork: track.artwork ? [{ src: track.artwork, sizes: '512x512', type: 'image/jpeg' }] : []
       });
-    } catch (e) {}
-  }
-  function setPlaybackState() {
-    if (!('mediaSession' in navigator)) return;
-    navigator.mediaSession.playbackState = current ? (audio.paused ? 'paused' : 'playing') : 'none';
-  }
-  function updatePositionState() {
-    if (!('mediaSession' in navigator) || !navigator.mediaSession.setPositionState) return;
-    if (!current || !isFinite(audio.duration) || audio.duration === 0) return;
-    try {
-      navigator.mediaSession.setPositionState({
-        duration: audio.duration, playbackRate: 1,
-        position: Math.min(audio.currentTime, audio.duration)
-      });
-    } catch (e) {}
+    });
+
+    row.parentElement.insertBefore(clone, row.nextSibling);
+    els.crossfadePicker = document.getElementById('settingsCrossfadePicker');
   }
 
-  if ('mediaSession' in navigator) {
-    try {
-      navigator.mediaSession.setActionHandler('play', togglePlay);
-      navigator.mediaSession.setActionHandler('pause', togglePlay);
-      navigator.mediaSession.setActionHandler('previoustrack', prev);
-      navigator.mediaSession.setActionHandler('nexttrack', next);
-      navigator.mediaSession.setActionHandler('seekto', e => { if (e.seekTime != null) seek(e.seekTime); });
-    } catch (e) {}
+  function updateCrossfadePicker(val) {
+    if (!els.crossfadePicker) return;
+    els.crossfadePicker.querySelectorAll('[data-crossfade-choice]').forEach(btn => {
+      const isActive = Number(btn.dataset.crossfadeChoice) === Number(val);
+      btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
+    });
   }
 
-  ['play','pause','timeupdate','loadedmetadata','error','seeked'].forEach(ev =>
-    audio.addEventListener(ev, () => {
-      setPlaybackState();
-      if (ev === 'timeupdate') updatePositionState();
-      notify();
-    }));
+  /* ============ ТЕМА: применение / слушатель системы ============ */
 
-  audio.addEventListener('timeupdate', () => {
-    if (!current) return;
-    const t = audio.currentTime;
-    if (t > prevMaxTime) prevMaxTime = t;
-    if (t >= 30 && !played30.has(current.id)) {
-      played30.add(current.id);
-      window.PocuStore?.skipStats?.recordPlay(current.id);
+  function applyTheme(choice) {
+    let resolved = choice;
+    if (choice === 'auto') {
+      resolved = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
     }
-  });
+    if (resolved !== 'light') resolved = 'dark';
 
-  audio.addEventListener('ended', () => {
-    if (repeat === 'one') { audio.currentTime = 0; audio.play().catch(() => {}); }
-    else next();
-  });
+    document.documentElement.dataset.theme = resolved;
 
-  return {
-    appendQueue(tracks) {
-      if (!tracks || !tracks.length) return;
-      const startIdx = queue.length;
-      queue.push(...tracks);
-      if (shuffle && shuffledOrder) for (let i = 0; i < tracks.length; i++) shuffledOrder.push(startIdx + i);
-      notify();
-    },
-    play, playQueue, insertNext, next, prev, togglePlay, seek,
-    toggleShuffle, cycleRepeat, setShuffle, setRepeat,
-    setVolume, toggleMute,
-    setEQ, getEQ,
-    EQ_FREQS,
-    audio,
-    get current() { return current; },
-    getState,
-    subscribe(fn) { listeners.add(fn); fn(getState()); return () => listeners.delete(fn); }
-  };
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = resolved === 'light' ? '#f2f2f5' : '#08080c';
+
+    updateThemePicker(choice);
+  }
+
+  function updateThemePicker(choice) {
+    if (!els.themePicker) return;
+    els.themePicker.querySelectorAll('[data-theme-choice]').forEach(btn => {
+      const isActive = btn.dataset.themeChoice === choice;
+      btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
+    });
+  }
+
+  function onSystemThemeChange() {
+    const choice = window.PocuStore.settings.get('theme', 'dark');
+    if (choice === 'auto') applyTheme('auto');
+  }
+
+  function watchSystemTheme(choice) {
+    if (systemMql) {
+      try { systemMql.removeEventListener('change', onSystemThemeChange); } catch {}
+      systemMql = null;
+    }
+    if (choice === 'auto' && window.matchMedia) {
+      systemMql = window.matchMedia('(prefers-color-scheme: light)');
+      if (systemMql.addEventListener) systemMql.addEventListener('change', onSystemThemeChange);
+      else if (systemMql.addListener) systemMql.addListener(onSystemThemeChange);
+    }
+  }
+
+  /* ============ ЭКРАН ============ */
+
+  function openScreen() {
+    if (!els.screen) return;
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    els.screen.classList.add('active');
+    document.body.classList.remove('np-open');
+    refreshAccount();
+    refreshCounters();
+    pullProfile();
+    updateThemePicker(window.PocuStore.settings.get('theme', 'dark'));
+    updateCrossfadePicker(window.PocuStore.settings.get('crossfade', 0));
+    document.getElementById('main')?.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  async function pullProfile() {
+    const user = window.PocuSupabase?.getUser?.();
+    if (!user) return;
+    try {
+      const data = await window.PocuSupabase.fetchProfile?.();
+      if (!data) return;
+      const cur = window.PocuStore.profile.get();
+      if (data.displayName !== cur.displayName || data.avatarUrl !== cur.avatarUrl) {
+        window.PocuStore.profile.set(data);
+        refreshAccount();
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  function closeScreen() {
+    document.querySelector('.tab-item[data-tab="home"]')?.click();
+  }
+
+  function refreshAccount() {
+    const user = window.PocuSupabase?.getUser?.();
+    const loggedIn = !!user;
+
+    els.guestBlock.hidden = loggedIn;
+    els.userBlock.hidden  = !loggedIn;
+    els.logoutWrap.hidden = !loggedIn;
+
+    if (loggedIn) {
+      els.userEmail.textContent = user.email || '';
+      const prof = window.PocuStore.profile.get();
+
+      if (prof.avatarUrl) {
+        els.avatar.style.backgroundImage = `url("${prof.avatarUrl}")`;
+        els.avatar.textContent = '';
+      } else {
+        els.avatar.style.backgroundImage = '';
+        els.avatar.textContent = (prof.displayName || user.email || '?').slice(0, 1).toUpperCase();
+      }
+
+      els.nameInput.value = prof.displayName || (user.email ? user.email.split('@')[0] : '');
+    }
+
+    const smooth = window.PocuStore.settings.get('smoothTransitions', true);
+    if (els.toggleSmooth) els.toggleSmooth.checked = smooth;
+    document.body.classList.toggle('no-smooth', !smooth);
+  }
+
+  function compressImage(file) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const size = 200;
+        const canvas = document.createElement('canvas');
+        canvas.width = size; canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        const min = Math.min(img.width, img.height);
+        const sx = (img.width - min) / 2;
+        const sy = (img.height - min) / 2;
+        ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
+        try { resolve(canvas.toDataURL('image/jpeg', 0.8)); }
+        catch (e) { reject(e); }
+      };
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
+
+  async function handleAvatarChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { alert('Файл больше 5 МБ'); return; }
+
+    try {
+      const dataUrl = await compressImage(file);
+      window.PocuStore.profile.set({ avatarUrl: dataUrl });
+      refreshAccount();
+      await window.PocuSupabase?.syncProfile?.({ avatarUrl: dataUrl });
+      showToast('Аватар обновлён');
+    } catch (err) {
+      console.error(err);
+      alert('Не удалось обработать изображение');
+    }
+  }
+
+  async function handleSaveName() {
+    const name = els.nameInput.value.trim();
+    window.PocuStore.profile.set({ displayName: name });
+    refreshAccount();
+    await window.PocuSupabase?.syncProfile?.({ displayName: name });
+    showToast('Имя сохранено');
+  }
+
+  function handleChangePassword() {
+    const email = window.PocuSupabase.getUser()?.email;
+    if (!email) return;
+    if (!confirm('Отправить письмо для смены пароля на ' + email + '?')) return;
+    window.PocuSupabase.resetPassword(email)
+      .then(() => alert('Письмо отправлено'))
+      .catch(e => alert('Ошибка: ' + e.message));
+  }
+
+  function refreshCounters() {
+    if (els.tracksCount)  els.tracksCount.textContent  = String(window.PocuLibrary.all().length);
+    if (els.favCount)     els.favCount.textContent     = String(window.PocuStore.favorites.all().length);
+    if (els.plCount)      els.plCount.textContent      = String(window.PocuStore.playlists.all().length);
+    if (els.albumsCount)  els.albumsCount.textContent  = String(window.PocuStore.favoriteAlbums.all().length);
+    if (els.artistsCount) els.artistsCount.textContent = String(window.PocuStore.favoriteArtists.all().length);
+  }
+
+  function showToast(text) {
+    const el = document.createElement('div');
+    el.className = 'pulse-toast';
+    el.textContent = text;
+    document.body.appendChild(el);
+    requestAnimationFrame(() => el.classList.add('show'));
+    setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 400); }, 1800);
+  }
+
+  return { init };
 })();
