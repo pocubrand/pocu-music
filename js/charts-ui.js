@@ -49,6 +49,27 @@ window.PocuChartsUI = (() => {
         }
       });
     }
+
+    // Синхронизация play/pause иконок (Чарт недели + Новинки)
+    if (window.PocuPlayer?.subscribe) {
+      window.PocuPlayer.subscribe(state => syncPlayingAll(state));
+    }
+  }
+
+  /* ---------- Синхронизация play/pause ---------- */
+  function syncPlayingAll(state) {
+    // Чарт недели — общий трек-карточный sync
+    if (els.chartList) {
+      window.PocuTrackCard?.syncPlaying?.(els.chartList, state);
+    }
+    // Новинки — тайлы home-tile
+    if (els.newList) {
+      const activeId = state.track ? state.track.id : null;
+      els.newList.querySelectorAll('.home-tile[data-id]').forEach(el => {
+        const isCur = activeId && el.dataset.id === activeId;
+        el.classList.toggle('playing', !!(isCur && state.playing));
+      });
+    }
   }
 
   /* ---------- Подборки: тайлы как на Главной ---------- */
@@ -157,8 +178,9 @@ window.PocuChartsUI = (() => {
       els.chartList.appendChild(row);
     });
 
-    // После рендера — синхронизируем сердечки с актуальным избранным
+    // После рендера — синхронизируем сердечки и play/pause
     window.PocuTrackCard?.syncHearts?.(els.chartList, window.PocuStore.favorites.all());
+    if (window.PocuPlayer?.getState) syncPlayingAll(window.PocuPlayer.getState());
   }
 
   /* ---------- Новинки ---------- */
@@ -175,6 +197,9 @@ window.PocuChartsUI = (() => {
     els.newList.hidden = false;
     els.newList.replaceChildren();
     items.forEach(track => els.newList.appendChild(createNoveltyTile(track, items)));
+
+    // После рендера — синхронизируем play/pause
+    if (window.PocuPlayer?.getState) syncPlayingAll(window.PocuPlayer.getState());
   }
 
   function createNoveltyTile(track, list) {
