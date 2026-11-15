@@ -75,6 +75,27 @@ window.PocuHomeUI = (() => {
     els.pulseCard.style.setProperty('--aurora-3', toCss(colors[2]));
   }
 
+  /* ---------- Приветствие по времени суток ---------- */
+  function updateGreeting() {
+    const el = document.getElementById('homeGreeting');
+    if (!el) return;
+    
+    const hour = new Date().getHours();
+    let text = 'Добрый вечер';
+
+    if (hour >= 5 && hour < 12) {
+      text = 'Доброе утро';
+    } else if (hour >= 12 && hour < 18) {
+      text = 'Добрый день';
+    } else if (hour >= 18 && hour < 23) {
+      text = 'Добрый вечер';
+    } else {
+      text = 'Доброй ночи';
+    }
+
+    el.textContent = text;
+  }
+
   function init() {
     if (initialized) return;
     initialized = true;
@@ -107,6 +128,12 @@ window.PocuHomeUI = (() => {
       similarSection: document.getElementById('homeSimilar'),
       similarTitle:   document.getElementById('homeSimilarTitle')
     };
+
+    /* Приветствие */
+    updateGreeting();
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') updateGreeting();
+    });
 
     if (els.pulsePlay) {
       els.pulsePlay.addEventListener('click', e => {
@@ -475,7 +502,6 @@ window.PocuHomeUI = (() => {
 
     const lib = window.PocuLibrary.all();
     
-    // Формируем хеш для предотвращения лишних перерисовок
     const hash = ids.join(',');
     if (hash === lastArtistsHash) return;
     lastArtistsHash = hash;
