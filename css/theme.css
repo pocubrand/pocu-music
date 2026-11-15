@@ -5,6 +5,29 @@
    Светлая — data-theme="light".
    ================================================================ */
 
+/* ============ ГЛОБАЛЬНЫЕ ФИКСЫ (все темы) ============ */
+
+/* Аватарка: убираем пустые края (если в загруженном фото есть отступы) */
+.profile-avatar {
+  background-size: 130% !important;
+  background-position: center !important;
+}
+
+/* Аватарка: убираем фон и рамку, если установлена обложка, чтобы не было "квадрата в круге" */
+.profile-avatar[style*="background-image"] {
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+
+/* Фикс обрезки теней на мобилке в горизонтальных рядах (включая "Подборки") */
+@media (max-width: 899px) {
+  .home-row, .recent-row {
+    padding-top: 6px !important;
+    padding-bottom: 24px !important;
+    /* Убираем отрицательные марджины, чтобы тени не резались родительским контейнером */
+  }
+}
+
 /* ============ РАСШИРЕНИЕ :root ============ */
 :root {
   --surface:         rgba(30,30,38,.92);
@@ -139,7 +162,7 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .chip:active { background: var(--ui-hi-2); }
 [data-theme="light"] .playlist-tile:active { background: var(--row-active); }
 
-/* ============ ОБЛОЖКИ — background-color, не background (важно!) ============ */
+/* ============ ОБЛОЖКИ ============ */
 [data-theme="light"] .track-art,
 [data-theme="light"] .home-tile-art,
 [data-theme="light"] .recent-art,
@@ -149,13 +172,6 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .artist-photo,
 [data-theme="light"] .album-art {
   background-color: var(--placeholder-bg);
-}
-
-/* ============ АВАТАРКА С КАРТИНКОЙ ============ */
-/* Убираем фон и рамку, если установлена обложка (чтобы не было "квадрата в круге") */
-.profile-avatar[style*="background-image"] {
-  background-color: transparent !important;
-  border-color: transparent !important;
 }
 
 /* ============ МИНИ-ПЛЕЕР ============ */
@@ -196,21 +212,17 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .np-ctrl-dislike  { color: var(--text-dim); }
 [data-theme="light"] .np-ctrl-heart    { color: var(--text-dim); }
 
-/* ============ ГРОМКОСТЬ (ПОЛЗУНКИ) ============ */
+/* ============ ГРОМКОСТЬ ============ */
 [data-theme="light"] .np-volume-icon {
   background: var(--ui-hi);
   border-color: var(--glass-brd);
   color: var(--text-dim);
 }
 [data-theme="light"] .mp-volume-icon { color: var(--text-dim); }
-
-/* Горизонтальные слайдеры (трек делаем через background самого input) */
 [data-theme="light"] .np-volume-slider,
 [data-theme="light"] .mp-volume-slider {
   background: var(--ui-hi-2);
 }
-
-/* Вертикальный слайдер (в Now Playing) */
 [data-theme="light"] .np-volume-track {
   background: var(--surface-3);
 }
@@ -223,8 +235,6 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .np-volume-track .np-volume-slider::-moz-range-track {
   background: rgba(0,0,0,.14);
 }
-
-/* Ползунки (thumb) — для всех */
 [data-theme="light"] .np-volume-track .np-volume-slider::-webkit-slider-thumb,
 [data-theme="light"] .np-volume-slider::-webkit-slider-thumb,
 [data-theme="light"] .mp-volume-slider::-webkit-slider-thumb {
@@ -250,13 +260,12 @@ html { transition: background-color .3s ease; }
 }
 
 /* ============ ТЕНИ (СВЕТЛАЯ ТЕМА) ============ */
-/* На светлой теме делаем тени компактнее, чтобы они не обрезались контейнерами */
 [data-theme="light"] .pulse-hero {
   background: var(--hero-bg-light);
   box-shadow: 0 8px 24px rgba(0,0,0,.08);
 }
-[data-theme="light"] .home-tile-art,
-[data-theme="light"] .recent-art {
+[data-theme="light"] .home-tile-art-wrap,
+[data-theme="light"] .recent-art-wrap {
   box-shadow: 0 4px 12px rgba(0,0,0,.08);
 }
 [data-theme="light"] .artist-photo,
@@ -271,23 +280,13 @@ html { transition: background-color .3s ease; }
   box-shadow: 0 10px 24px rgba(0,0,0,.12);
 }
 
-/* Фикс обрезки теней в горизонтальных рядах на мобилке */
-@media (max-width: 899px) {
-  .home-row, .recent-row {
-    padding-bottom: 20px !important;
-    margin-bottom: -10px !important;
-  }
-}
-
 /* ================================================================
    PULSE HERO — СВЕТЛАЯ ТЕМА
    ================================================================ */
-
 [data-theme="light"] .pulse-hero-bg {
   filter: blur(70px) saturate(160%) brightness(1.6) !important;
   opacity: 0.45 !important;
 }
-
 [data-theme="light"] .aurora-blob {
   mix-blend-mode: normal;
   opacity: 0.42;
@@ -299,12 +298,10 @@ html { transition: background-color .3s ease; }
   opacity: 0.60;
   filter: blur(55px) saturate(1.1) brightness(1.05);
 }
-
 [data-theme="light"] .pulse-hero-noise {
   mix-blend-mode: multiply;
   opacity: 0.06;
 }
-
 [data-theme="light"] .pulse-hero-vignette {
   background: radial-gradient(
     ellipse at center,
@@ -312,7 +309,6 @@ html { transition: background-color .3s ease; }
     rgba(0,0,0,.06) 100%
   );
 }
-
 [data-theme="light"] .pulse-hero-overlay {
   background: linear-gradient(
     to bottom,
@@ -323,7 +319,6 @@ html { transition: background-color .3s ease; }
     rgba(234,234,240,.92) 100%
   );
 }
-
 [data-theme="light"] .pulse-title {
   color: var(--text);
   text-shadow: none;
@@ -341,7 +336,6 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .pulse-hero.live .pulse-title:hover {
   color: #000;
 }
-
 [data-theme="light"] .pulse-btn-refresh,
 [data-theme="light"] .pulse-btn-shuffle {
   background: rgba(0,0,0,.07);
@@ -357,7 +351,6 @@ html { transition: background-color .3s ease; }
     0 10px 24px rgba(0,0,0,.18),
     inset 0 1px 0 rgba(255,255,255,.10);
 }
-
 [data-theme="light"] .pulse-hero-art-placeholder {
   background: linear-gradient(135deg,
     rgba(124,92,255,.85),
@@ -365,21 +358,18 @@ html { transition: background-color .3s ease; }
     rgba(56,132,255,.85));
   color: rgba(255,255,255,.85);
 }
-
 [data-theme="light"] .pulse-hero-art-card,
 [data-theme="light"] .pulse-hero:hover .pulse-hero-art-card {
   box-shadow:
     0 16px 36px rgba(0,0,0,.18),
     0 0 0 1px rgba(0,0,0,.06) inset;
 }
-
 [data-theme="light"] .pulse-queue-item {
   background: rgba(0,0,0,.05);
   border-color: rgba(0,0,0,.08);
 }
 [data-theme="light"] .pulse-queue-item-title  { color: var(--text); }
 [data-theme="light"] .pulse-queue-item-artist { color: var(--text-dim); }
-
 [data-theme="light"] .pulse-hero-status {
   background: rgba(0,0,0,.06);
   border-color: rgba(0,0,0,.10);
@@ -402,12 +392,12 @@ html { transition: background-color .3s ease; }
   border-color: var(--glass-brd);
 }
 
-/* ============ КНОПКИ (.btn) ============ */
+/* ============ КНОПКИ ============ */
 [data-theme="light"] .btn:active,
 [data-theme="light"] .settings-btn:active { background: var(--row-active); }
 [data-theme="light"] .btn-secondary       { background: var(--glass); }
 
-/* ============ СТРОКИ НАСТРОЕК / ПРОФИЛЬ ============ */
+/* ============ НАСТРОЙКИ / ПРОФИЛЬ ============ */
 [data-theme="light"] .settings-info,
 [data-theme="light"] .settings-account {
   background: var(--glass);
@@ -459,12 +449,12 @@ html { transition: background-color .3s ease; }
   color: var(--heart);
 }
 
-/* ============ ЧАРТЫ: позиция ============ */
+/* ============ ЧАРТЫ ============ */
 [data-theme="light"] .chart-position {
   color: rgba(11,11,20,.55);
 }
 
-/* ============ ВЫБОР ТЕМЫ В НАСТРОЙКАХ ============ */
+/* ============ ВЫБОР ТЕМЫ ============ */
 .settings-theme-picker {
   display: flex;
   gap: 6px;

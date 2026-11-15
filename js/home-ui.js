@@ -130,7 +130,6 @@ window.PocuHomeUI = (() => {
       });
     }
 
-    /* Клик на обложку → страница трека / альбома */
     if (els.pulseArtCard) {
       els.pulseArtCard.addEventListener('click', e => {
         const track = window.PocuPlayer.current;
@@ -141,7 +140,6 @@ window.PocuHomeUI = (() => {
       });
     }
 
-    /* Клик на название → страница трека / альбома */
     if (els.pulseTitle) {
       els.pulseTitle.addEventListener('click', e => {
         const track = window.PocuPlayer.current;
@@ -152,7 +150,6 @@ window.PocuHomeUI = (() => {
       });
     }
 
-    /* Клик на исполнителя → страница артиста */
     if (els.pulseArtist) {
       els.pulseArtist.addEventListener('click', e => {
         const track = window.PocuPlayer.current;
@@ -465,74 +462,76 @@ window.PocuHomeUI = (() => {
     });
   }
 
-  /* ---------- ARTISTS ---------- */
+  /* ---------- ARTISTS (ЛЮБИМЫЕ АРТИСТЫ) ---------- */
   function renderArtists() {
     if (!els.artistsSection) return;
-    const favorites = window.PocuStore.favorites.all();
-    if (!favorites.length) { els.artistsSection.hidden = true; lastArtistsHash = ''; return; }
-
-    const all = window.PocuLibrary.all();
-    const map = new Map(all.map(t => [t.id, t]));
-
-    const counts = new Map();
-    for (const id of favorites) {
-      const t = map.get(id);
-      if (!t || !t.artist) continue;
-      if (!counts.has(t.artist)) counts.set(t.artist, []);
-      counts.get(t.artist).push(t);
+    
+    const ids = window.PocuStore.favoriteArtists.all();
+    if (!ids.length) { 
+      els.artistsSection.hidden = true; 
+      lastArtistsHash = ''; 
+      return; 
     }
 
-    const top = [...counts.entries()]
-      .sort((a, b) => b[1].length - a[1].length)
-      .slice(0, 8);
-    if (!top.length) { els.artistsSection.hidden = true; lastArtistsHash = ''; return; }
-
-    const hash = top.map(([name, arr]) => `${name}:${arr.length}`).join('|');
+    const lib = window.PocuLibrary.all();
+    
+    // Формируем хеш для предотвращения лишних перерисовок
+    const hash = ids.join(',');
     if (hash === lastArtistsHash) return;
     lastArtistsHash = hash;
 
     els.artistsSection.hidden = false;
     els.artistsRow.replaceChildren();
 
-    top.forEach(([artistName, tracks]) => {
-      const el = document.createElement('div');
-      el.className = 'home-tile';
-      el.setAttribute('role', 'button');
-
-      const artWrap = document.createElement('div');
-      artWrap.className = 'home-tile-art-wrap';
-
-      const art = document.createElement('div');
-      art.className = 'home-tile-art home-tile-art--round';
-      const withArt = tracks.find(t => t.artwork);
-      if (withArt) art.style.backgroundImage = `url("${withArt.artwork}")`;
-      artWrap.appendChild(art);
-
-      const info = document.createElement('div');
-      info.className = 'home-tile-info';
-
-      const text = document.createElement('div');
-      text.className = 'home-tile-text';
-
-      const name = document.createElement('div');
-      name.className = 'home-tile-name';
-      name.textContent = artistName;
-
-      const count = document.createElement('div');
-      count.className = 'home-tile-artist';
-      count.textContent = `${tracks.length} в избранном`;
-
-      text.append(name, count);
-      info.appendChild(text);
-
-      el.append(artWrap, info);
-      el.addEventListener('click', () => {
-        const parts = window.PocuArtists.splitArtists(artistName);
-        const firstName = parts[0] || artistName;
-        window.PocuArtistUI?.openArtist?.(firstName);
-      });
-      els.artistsRow.appendChild(el);
+    ids.forEach(id => {
+      const pocu = window.PocuArtists.get(id);
+      let name, photo;
+      if (pocu) { 
+        name = pocu.name; 
+        photo = pocu.photo; 
+      } else {
+        name = id;
+        const lower = id.toLowerCase();
+        const tracks = lib.filter(t => window.PocuArtists.splitArtists(t.artist).includes(lower));
+        photo = tracks.find(t => t.artwork)?.artwork || '';
+      }
+      els.artistsRow.appendChild(createArtistTile(id, name, photo));
     });
+  }
+
+  function createArtistTile(id, name, photo) {
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'home-tile';
+
+    const artWrap = document.createElement('div');
+    artWrap.className = 'home-tile-art-wrap home-tile-art-wrap--round';
+
+    const art = document.createElement('div');
+    art.className = 'home-tile-art home-tile-art--round';
+    if (photo) {
+      art.style.backgroundImage = `url("${photo}")`;
+    } else {
+      art.classList.add('home-tile-art--placeholder');
+      art.textContent = name.slice(0, 1).toUpperCase();
+    }
+    artWrap.appendChild(art);
+
+    const info = document.createElement('div');
+    info.className = 'home-tile-info';
+    const text = document.createElement('div');
+    text.className = 'home-tile-text';
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'home-tile-name';
+    nameEl.textContent = name;
+
+    text.appendChild(nameEl);
+    info.appendChild(text);
+    tile.append(artWrap, info);
+
+    tile.addEventListener('click', () => window.PocuArtistUI?.openArtist?.(id));
+    return tile;
   }
 
   /* ---------- SIMILAR ---------- */
@@ -560,7 +559,7 @@ window.PocuHomeUI = (() => {
     });
   }
 
-  /* ---------- TILE ---------- */
+  /* ---------- TILE (ТРЕКИ) ---------- */
   function createTile(track, onClick) {
     const el = document.createElement('div');
     el.className = 'home-tile';
