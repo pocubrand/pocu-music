@@ -75,7 +75,25 @@ window.PocuHomeUI = (() => {
     els.pulseCard.style.setProperty('--aurora-3', toCss(colors[2]));
   }
 
-  /* ---------- Приветствие по времени суток ---------- */
+  /* ---------- Приветствие и Заголовок ---------- */
+  const FUNNY_TITLES = [
+    "Погрустим или оторвемся?",
+    "Что включим в уши?",
+    "Кто сегодня в плейлисте?",
+    "Врубаем басы?",
+    "Ищем новый вайб?",
+    "Какие треки спасут этот день?",
+    "Танцы до утра или джаз под кофе?",
+    "Готов к музыкальному путешествию?",
+    "Что сегодня в твоем сердце?",
+    "Ловим настроение?",
+    "Выбираю трек, пока завариваешь чай.",
+    "Музыка — лучший психолог. С чего начнем?",
+    "Окунемся в музыку?",
+    "Настроение: музыка.",
+    "Я твой личный дирижёр на сегодня."
+  ];
+
   function updateGreeting() {
     const el = document.getElementById('homeGreeting');
     if (!el) return;
@@ -83,17 +101,19 @@ window.PocuHomeUI = (() => {
     const hour = new Date().getHours();
     let text = 'Добрый вечер';
 
-    if (hour >= 5 && hour < 12) {
-      text = 'Доброе утро';
-    } else if (hour >= 12 && hour < 18) {
-      text = 'Добрый день';
-    } else if (hour >= 18 && hour < 23) {
-      text = 'Добрый вечер';
-    } else {
-      text = 'Доброй ночи';
-    }
+    if (hour >= 5 && hour < 12) text = 'Доброе утро';
+    else if (hour >= 12 && hour < 18) text = 'Добрый день';
+    else if (hour >= 18 && hour < 23) text = 'Добрый вечер';
+    else text = 'Доброй ночи';
 
     el.textContent = text;
+  }
+
+  function updateTitle() {
+    const el = document.getElementById('homeTitle');
+    if (!el) return;
+    const randomIdx = Math.floor(Math.random() * FUNNY_TITLES.length);
+    el.textContent = FUNNY_TITLES[randomIdx];
   }
 
   function init() {
@@ -129,10 +149,21 @@ window.PocuHomeUI = (() => {
       similarTitle:   document.getElementById('homeSimilarTitle')
     };
 
-    /* Приветствие */
+    /* Приветствие и случайный заголовок */
     updateGreeting();
+    updateTitle();
+
+    // Обновляем приветствие при возвращении в приложение
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') updateGreeting();
+    });
+
+    // Обновляем заголовок при каждом переходе на вкладку Главная
+    document.addEventListener('pocu:tab-change', (e) => {
+      if (e.detail && e.detail.tab === 'home') {
+        updateTitle();
+        updateGreeting();
+      }
     });
 
     if (els.pulsePlay) {
@@ -638,13 +669,11 @@ window.PocuHomeUI = (() => {
 
     info.append(text, menuBtn);
 
-    /* клик на название → альбом (если есть) / страница трека */
     name.addEventListener('click', e => {
       e.stopPropagation();
       window.PocuTrackCard.openTarget(track);
     });
 
-    /* клик на артиста → страница артиста */
     artist.addEventListener('click', e => {
       e.stopPropagation();
       const parts = window.PocuArtists.splitArtists(track.artist);
