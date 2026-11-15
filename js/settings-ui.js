@@ -4,6 +4,13 @@ window.PocuSettingsUI = (() => {
   let initialized = false;
   let systemMql = null;
 
+  const CROSSFADE_OPTIONS = [
+    { v: 0,  label: 'Выкл' },
+    { v: 3,  label: '3 сек' },
+    { v: 5,  label: '5 сек' },
+    { v: 10, label: '10 сек' }
+  ];
+
   function init() {
     if (initialized) return;
     initialized = true;
@@ -36,8 +43,12 @@ window.PocuSettingsUI = (() => {
       clearPulse:     document.getElementById('settingsClearPulse'),
       clearAll:       document.getElementById('settingsClearAll'),
       openTopbar:     document.getElementById('settingsBtn'),
-      openSidebar:    document.getElementById('sidebarSettingsBtn')
+      openSidebar:    document.getElementById('sidebarSettingsBtn'),
+      crossfadePicker: null
     };
+
+    // Вставляем UI Crossfade рядом с темой
+    injectCrossfadeUI();
 
     els.openTopbar?.addEventListener('click', openScreen);
     els.openSidebar?.addEventListener('click', openScreen);
@@ -89,17 +100,81 @@ window.PocuSettingsUI = (() => {
       watchSystemTheme(choice);
     });
 
-    // Применяем тему при инициализации (inline-скрипт в <head> уже поставил
-    // data-theme для анти-FOUC, здесь просто синхронизируем UI-состояние)
     const initialChoice = window.PocuStore.settings.get('theme', 'dark');
     applyTheme(initialChoice);
     watchSystemTheme(initialChoice);
+
+    /* ======== CROSSFADE ======== */
+    els.crossfadePicker?.addEventListener('click', e => {
+      const btn = e.target.closest('[data-crossfade-choice]');
+      if (!btn) return;
+      const val = Number(btn.dataset.crossfadeChoice);
+      if (![0, 3, 5, 10].includes(val)) return;
+      window.PocuStore.settings.set('crossfade', val);
+      updateCrossfadePicker(val);
+    });
+    updateCrossfadePicker(window.PocuStore.settings.get('crossfade', 0));
 
     document.addEventListener('pocu:auth', () => { refreshAccount(); pullProfile(); });
     window.PocuStore.subscribe(() => { if (els.screen?.classList.contains('active')) refreshCounters(); });
 
     refreshAccount();
     refreshCounters();
+  }
+
+  /* ============ CROSSFADE UI (динамическая вставка) ============ */
+
+  function injectCrossfadeUI() {
+    if (document.getElementById('settingsCrossfadePicker')) {
+      els.crossfadePicker = document.getElementById('settingsCrossfadePicker');
+      return;
+    }
+    const themePicker = els.themePicker;
+    if (!themePicker) { console.warn('[settings] theme picker not found — crossfade UI skipped'); return; }
+
+    const row = themePicker.closest('.settings-row, .settings-section, .settings-block, .settings-item, .settings-group')
+             || themePicker.parentElement;
+    if (!row || !row.parentElement) return;
+
+    const clone = row.cloneNode(true);
+    const clonedPicker = clone.querySelector('#settingsThemePicker');
+    if (!clonedPicker) return;
+
+    clonedPicker.id = 'settingsCrossfadePicker';
+    clonedPicker.innerHTML = '';
+    const sampleBtn = themePicker.querySelector('button');
+
+    CROSSFADE_OPTIONS.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('role', 'radio');
+      btn.dataset.crossfadeChoice = String(opt.v);
+      btn.setAttribute('aria-checked', 'false');
+      btn.textContent = opt.label;
+      if (sampleBtn && sampleBtn.className) btn.className = sampleBtn.className;
+      clonedPicker.appendChild(btn);
+    });
+
+    // Меняем текстовые узлы «Тема» → «Crossfade»
+    clone.querySelectorAll('*').forEach(el => {
+      if (el.closest('#settingsCrossfadePicker')) return;
+      el.childNodes.forEach(n => {
+        if (n.nodeType === 3 && /Тема/i.test(n.textContent)) {
+          n.textContent = n.textContent.replace(/Тема/gi, 'Crossfade');
+        }
+      });
+    });
+
+    row.parentElement.insertBefore(clone, row.nextSibling);
+    els.crossfadePicker = document.getElementById('settingsCrossfadePicker');
+  }
+
+  function updateCrossfadePicker(val) {
+    if (!els.crossfadePicker) return;
+    els.crossfadePicker.querySelectorAll('[data-crossfade-choice]').forEach(btn => {
+      const isActive = Number(btn.dataset.crossfadeChoice) === Number(val);
+      btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
+    });
   }
 
   /* ============ ТЕМА: применение / слушатель системы ============ */
@@ -140,7 +215,7 @@ window.PocuSettingsUI = (() => {
     if (choice === 'auto' && window.matchMedia) {
       systemMql = window.matchMedia('(prefers-color-scheme: light)');
       if (systemMql.addEventListener) systemMql.addEventListener('change', onSystemThemeChange);
-      else if (systemMql.addListener) systemMql.addListener(onSystemThemeChange); // Safari < 14
+      else if (systemMql.addListener) systemMql.addListener(onSystemThemeChange);
     }
   }
 
@@ -155,8 +230,8 @@ window.PocuSettingsUI = (() => {
     refreshAccount();
     refreshCounters();
     pullProfile();
-    // синхронизируем выбранную тему с UI
     updateThemePicker(window.PocuStore.settings.get('theme', 'dark'));
+    updateCrossfadePicker(window.PocuStore.settings.get('crossfade', 0));
     document.getElementById('main')?.scrollTo({ top: 0, behavior: 'auto' });
   }
 
@@ -220,9 +295,8 @@ window.PocuSettingsUI = (() => {
         const sx = (img.width - min) / 2;
         const sy = (img.height - min) / 2;
         ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
-        try {
-          resolve(canvas.toDataURL('image/jpeg', 0.8));
-        } catch (e) { reject(e); }
+        try { resolve(canvas.toDataURL('image/jpeg', 0.8)); }
+        catch (e) { reject(e); }
       };
       img.onerror = reject;
       img.src = url;
