@@ -7,24 +7,31 @@
 
 /* ============ ГЛОБАЛЬНЫЕ ФИКСЫ (все темы) ============ */
 
-/* Аватарка: убираем пустые края (если в загруженном фото есть отступы) */
-.profile-avatar {
-  background-size: 130% !important;
-  background-position: center !important;
-}
-
 /* Аватарка: убираем фон и рамку, если установлена обложка, чтобы не было "квадрата в круге" */
 .profile-avatar[style*="background-image"] {
   background-color: transparent !important;
   border-color: transparent !important;
 }
 
-/* Фикс обрезки теней на мобилке в горизонтальных рядах (включая "Подборки") */
+/* Z-index: сайдбар (ПК) и мини-плеер всегда поверх контент-страниц */
+@media (min-width: 900px) {
+  .tabbar {
+    z-index: 95 !important;
+  }
+}
+.miniplayer {
+  z-index: 96 !important;
+}
+
+/* Фикс обрезки теней в горизонтальных рядах (тени выходят за края из-за overflow-x: auto) */
 @media (max-width: 899px) {
   .home-row, .recent-row {
-    padding-top: 6px !important;
-    padding-bottom: 24px !important;
-    /* Убираем отрицательные марджины, чтобы тени не резались родительским контейнером */
+    padding-top: 8px !important;
+    padding-bottom: 28px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin-left: -20px !important;
+    margin-right: -20px !important;
   }
 }
 
@@ -270,6 +277,17 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .recent-art-wrap {
   box-shadow: 0 4px 12px rgba(0,0,0,.08);
 }
+
+/* Тайлы без обертки (Pocu Artists) */
+[data-theme="light"] .home-tile-art {
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+/* Убираем двойную тень у тайлов с оберткой */
+[data-theme="light"] .home-tile-art-wrap .home-tile-art,
+[data-theme="light"] .recent-art-wrap .recent-art {
+  box-shadow: none !important;
+}
+
 [data-theme="light"] .artist-photo,
 [data-theme="light"] .album-art,
 [data-theme="light"] .profile-avatar {
@@ -456,6 +474,47 @@ html { transition: background-color .3s ease; }
   color: rgba(11,11,20,.55);
 }
 
+/* ============ ЭКВАЛАЙЗЕР ============ */
+[data-theme="light"] .sheet-overlay {
+  background: rgba(0,0,0,.25);
+}
+[data-theme="light"] .sheet-overlay.as-popover .sheet-panel {
+  background: var(--surface);
+  border-color: var(--glass-brd);
+  box-shadow: 0 12px 32px rgba(0,0,0,.15);
+}
+[data-theme="light"] .eq-presets .chip {
+  background: var(--glass);
+  border-color: var(--glass-brd);
+  color: var(--text);
+}
+[data-theme="light"] .eq-presets .chip:active {
+  background: var(--ui-hi-2);
+}
+[data-theme="light"] .eq-presets .chip-active {
+  background: linear-gradient(135deg, rgba(167,139,250,.2), rgba(106,168,255,.2)) !important;
+  border-color: rgba(167,139,250,.4) !important;
+  color: var(--accent) !important;
+}
+[data-theme="light"] .eq-label,
+[data-theme="light"] .eq-val {
+  color: var(--text-dim);
+}
+[data-theme="light"] .eq-slider::-webkit-slider-runnable-track {
+  background: rgba(0,0,0,.12);
+}
+[data-theme="light"] .eq-slider::-moz-range-track {
+  background: rgba(0,0,0,.12);
+}
+[data-theme="light"] .eq-slider::-webkit-slider-thumb {
+  background: var(--text);
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
+[data-theme="light"] .eq-slider::-moz-range-thumb {
+  background: var(--text);
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
+
 /* ============ ВЫБОР ТЕМЫ ============ */
 .settings-theme-picker {
   display: flex;
@@ -484,57 +543,4 @@ html { transition: background-color .3s ease; }
 .settings-theme-option[aria-checked="true"] {
   background: var(--ui-hi-2);
   color: var(--text);
-}
-
-/* ============ ЭКВАЛАЙЗЕР (СВЕТЛАЯ ТЕМА) ============ */
-
-/* 1. Затемнение фона (на мобилке) — делаем мягче */
-[data-theme="light"] .sheet-overlay {
-  background: rgba(0,0,0,.25);
-}
-
-/* 2. Поповер эквалайзера на ПК */
-[data-theme="light"] .sheet-overlay.as-popover .sheet-panel {
-  background: var(--surface);
-  border-color: var(--glass-brd);
-  box-shadow: 0 12px 32px rgba(0,0,0,.15);
-}
-
-/* 3. Кнопки пресетов (Плоский, Рок, Поп и т.д.) */
-[data-theme="light"] .eq-presets .chip {
-  background: var(--glass);
-  border-color: var(--glass-brd);
-  color: var(--text);
-}
-[data-theme="light"] .eq-presets .chip:active {
-  background: var(--ui-hi-2);
-}
-[data-theme="light"] .eq-presets .chip-active {
-  background: linear-gradient(135deg, rgba(167,139,250,.2), rgba(106,168,255,.2)) !important;
-  border-color: rgba(167,139,250,.4) !important;
-  color: var(--accent) !important;
-}
-
-/* 4. Текстовые подписи (Гц, +0 дБ) */
-[data-theme="light"] .eq-label,
-[data-theme="light"] .eq-val {
-  color: var(--text-dim);
-}
-
-/* 5. Сами ползунки (дорожки и бегунки) */
-/* Дорожки (track) */
-[data-theme="light"] .eq-slider::-webkit-slider-runnable-track {
-  background: rgba(0,0,0,.12);
-}
-[data-theme="light"] .eq-slider::-moz-range-track {
-  background: rgba(0,0,0,.12);
-}
-/* Бегунки (thumb) — делаем их черными, чтобы было видно на светлом */
-[data-theme="light"] .eq-slider::-webkit-slider-thumb {
-  background: var(--text);
-  box-shadow: 0 2px 6px rgba(0,0,0,.2);
-}
-[data-theme="light"] .eq-slider::-moz-range-thumb {
-  background: var(--text);
-  box-shadow: 0 2px 6px rgba(0,0,0,.2);
 }
