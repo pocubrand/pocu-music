@@ -134,6 +134,7 @@ window.PocuPlaylistsUI = (() => {
     $playlistTitle.textContent = pl.name;
     renderPlaylistScreen(playlistId);
 
+    window.PocuLayers?.front?.($playlistScreen);
     $playlistScreen.classList.add('open');
     $playlistScreen.setAttribute('aria-hidden', 'false');
     document.body.classList.add('playlist-open');

@@ -118,7 +118,7 @@ window.PocuGenreUI = (() => {
       .forEach(el => { if (el !== els.screen) el.style.zIndex = ''; });
     els.screen.style.zIndex = '84';
 
-    els.screen.classList.add('open');
+    window.PocuLayers?.front?.(screen); // или $screen, если переменная называется так
     els.screen.setAttribute('aria-hidden', 'false');
     document.body.classList.add('genre-open');
     requestAnimationFrame(() => { els.screen.scrollTop = 0; });

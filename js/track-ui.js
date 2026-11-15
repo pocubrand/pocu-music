@@ -86,9 +86,7 @@ window.PocuTrackUI = (() => {
     renderActions(track);
     renderSimilar(track);
 
-    document.querySelectorAll('.playlist-overlay, .artist-overlay, .track-overlay, .album-overlay, .genre-overlay')
-      .forEach(el => { if (el !== els.screen) el.style.zIndex = ''; });
-    els.screen.style.zIndex = '86'; // Страница трека — самая верхняя
+    window.PocuLayers?.front?.(els.screen);
 
     els.screen.classList.add('open');
     els.screen.setAttribute('aria-hidden', 'false');

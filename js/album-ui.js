@@ -88,9 +88,7 @@ window.PocuAlbumUI = (() => {
     renderActions(artist, album, tracks);
     renderTracks(tracks);
 
-    document.querySelectorAll('.playlist-overlay, .artist-overlay, .track-overlay, .album-overlay, .genre-overlay')
-      .forEach(el => { if (el !== els.screen) el.style.zIndex = ''; });
-    els.screen.style.zIndex = '85'; // Выше, чем у Подборок (84)
+    window.PocuLayers?.front?.(els.screen);
 
     els.screen.classList.add('open');
     els.screen.setAttribute('aria-hidden', 'false');
