@@ -225,6 +225,7 @@ window.PocuArtistUI = (() => {
   function closeArtist() {
     currentArtistId = null;
     window.PocuRouter?.clearHash?.();
+    window.PocuLayers?.reset?.(els.screen);
     els.screen.classList.remove('open');
     els.screen.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('artist-open');

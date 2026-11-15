@@ -98,6 +98,7 @@ window.PocuTrackUI = (() => {
     if (!els.screen) return;
     currentTrackId = null;
     window.PocuRouter?.clearHash?.();
+    window.PocuLayers?.reset?.(els.screen);
     els.screen.classList.remove('open');
     els.screen.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('track-open');

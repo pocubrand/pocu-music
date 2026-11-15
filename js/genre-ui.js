@@ -129,6 +129,7 @@ window.PocuGenreUI = (() => {
   function close() {
     if (!els.screen) return;
     currentGenre = null;
+    window.PocuLayers?.reset?.(els.screen);
     els.screen.classList.remove('open');
     els.screen.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('genre-open');

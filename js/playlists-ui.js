@@ -145,6 +145,7 @@ window.PocuPlaylistsUI = (() => {
   function closePlaylistScreen() {
     currentPlaylistId = null;
     window.PocuRouter?.clearHash?.();
+    window.PocuLayers?.reset?.($playlistScreen);
     $playlistScreen.classList.remove('open');
     $playlistScreen.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('playlist-open');
