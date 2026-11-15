@@ -14,7 +14,6 @@ window.PocuPlayer = (() => {
   let muted         = false;
   const listeners   = new Set();
 
-  // Активный элемент (тот, что реально играет "сейчас")
   let activeAudio = audioA;
 
   /* 30-сек tracking */
@@ -32,12 +31,35 @@ window.PocuPlayer = (() => {
   let isCrossfading = false;
   let crossfadeToken = 0;
 
+  /* Читаем сохранённые EQ из store — пробуем известные ключи */
+  function readSavedEQ() {
+    try {
+      const store = window.PocuStore?.settings;
+      if (!store?.get) return null;
+      const keys = ['eq', 'eqBands', 'equalizer', 'equalizerBands', 'eqState'];
+      for (const k of keys) {
+        const v = store.get(k, null);
+        if (Array.isArray(v) && v.length === EQ_FREQS.length) return v;
+      }
+    } catch {}
+    return null;
+  }
+
+  function applyEQValues(bands) {
+    if (!eqFilters.length || !Array.isArray(bands)) return;
+    for (let i = 0; i < eqFilters.length; i++) {
+      const v = Number(bands[i]);
+      eqFilters[i].gain.value = isFinite(v) ? Math.max(-12, Math.min(12, v)) : 0;
+    }
+  }
+
   function ensureAudioContext() {
     if (audioCtx) return;
     try {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) { console.warn('[audio] no AudioContext'); return; }
       audioCtx = new AC();
+
       sourceA = audioCtx.createMediaElementSource(audioA);
       sourceB = audioCtx.createMediaElementSource(audioB);
       gainA = audioCtx.createGain(); gainA.gain.value = 1;
@@ -62,31 +84,66 @@ window.PocuPlayer = (() => {
       eqFilters[eqFilters.length - 1].connect(masterGain);
       masterGain.connect(audioCtx.destination);
 
-      // Громкость теперь через masterGain — на элементах ставим 1
+      // Применяем сохранённый EQ сразу, чтобы граф стартовал с правильными gain
+      const saved = readSavedEQ();
+      if (saved) {
+        applyEQValues(saved);
+        console.log('[audio] restored EQ:', saved);
+      }
+
+      audioCtx.addEventListener('statechange', () => {
+        console.log('[audio] ctx state →', audioCtx.state);
+      });
+
+      // Громкость теперь через masterGain
       audioA.volume = 1; audioB.volume = 1;
       audioA.muted = false; audioB.muted = false;
 
-      console.log('[audio] context ready');
-    } catch (e) { console.warn('[audio] init failed:', e); }
+      console.log('[audio] context ready, state:', audioCtx.state);
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+    } catch (e) {
+      console.warn('[audio] init failed:', e);
+      // Полный сброс, чтобы следующая попытка пересоздала
+      try { audioCtx?.close?.(); } catch {}
+      audioCtx = null;
+      sourceA = sourceB = null;
+      gainA = gainB = masterGain = null;
+      eqFilters = [];
+    }
+  }
+
+  function resumeAudioCtx() {
+    ensureAudioContext();
+    if (!audioCtx) return;
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(e => console.warn('[audio] resume failed:', e?.name || e));
+    }
   }
 
   function setEQ(bands) {
     ensureAudioContext();
-    if (!eqFilters.length || !Array.isArray(bands)) return;
-    for (let i = 0; i < eqFilters.length; i++) {
-      const v = Number(bands[i]);
-      eqFilters[i].gain.value = isFinite(v) ? Math.max(-12, Math.min(12, v)) : 0;
+    if (!eqFilters.length) {
+      console.warn('[audio] EQ: no filters — AudioContext not initialized');
+      return;
     }
+    if (!Array.isArray(bands)) return;
+    applyEQValues(bands);
+    // setEQ обычно зовётся из user gesture (ползунок) — можно resume
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+    console.log(
+      '[audio] EQ applied:', eqFilters.map(f => f.gain.value.toFixed(1)),
+      '| ctx:', audioCtx?.state
+    );
   }
 
   function getEQ() {
     if (!eqFilters.length) return [0, 0, 0, 0, 0];
     return eqFilters.map(f => f.gain.value);
-  }
-
-  function resumeAudioCtx() {
-    ensureAudioContext();
-    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
   }
 
   function getCrossfadeTime() {
@@ -124,7 +181,6 @@ window.PocuPlayer = (() => {
     resetGainNode(activeGainNode());
   }
 
-  /* 30-сек зачёт */
   function markNewTrack(track) {
     if (prevTrackId && prevMaxTime > 0 && prevMaxTime < 20) {
       window.PocuStore?.skipStats?.recordSkip(prevTrackId);
@@ -251,7 +307,6 @@ window.PocuPlayer = (() => {
       return;
     }
 
-    // Плавный переход
     const now = audioCtx.currentTime;
     oldGain.gain.cancelScheduledValues(now);
     const oldVal = oldGain.gain.value;
@@ -262,7 +317,6 @@ window.PocuPlayer = (() => {
     newGain.gain.setValueAtTime(0, now);
     newGain.gain.linearRampToValueAtTime(1, now + fadeTime);
 
-    // Логически переключаемся на новый трек
     markNewTrack(nextTrack);
     current = nextTrack;
     queueIndex = nextIdx;
@@ -497,7 +551,6 @@ window.PocuPlayer = (() => {
       played30.add(current.id);
       window.PocuStore?.skipStats?.recordPlay(current.id);
     }
-    // Проверка запуска crossfade
     if (!isCrossfading) {
       const cf = getCrossfadeTime();
       if (cf > 0 && el.duration && isFinite(el.duration)) {
@@ -520,13 +573,28 @@ window.PocuPlayer = (() => {
   }
 
   function bindAudioEvents(el) {
-    ['play', 'pause', 'loadedmetadata', 'error', 'seeked'].forEach(ev => {
+    ['loadedmetadata', 'error', 'seeked'].forEach(ev => {
       el.addEventListener(ev, () => {
         if (el !== activeAudio) return;
         setPlaybackState();
         if (ev === 'loadedmetadata') updatePositionState();
         notify();
       });
+    });
+    // play/pause — важны оба элемента
+    el.addEventListener('play', () => {
+      // Авто-резюм при любом старте — ключ к работе EQ
+      if (audioCtx && audioCtx.state !== 'running') {
+        audioCtx.resume().catch(() => {});
+      }
+      if (el !== activeAudio) return;
+      setPlaybackState();
+      notify();
+    });
+    el.addEventListener('pause', () => {
+      if (el !== activeAudio) return;
+      setPlaybackState();
+      notify();
     });
     el.addEventListener('timeupdate', () => onTimeUpdate(el));
     el.addEventListener('ended', () => onEnded(el));

@@ -4,51 +4,41 @@ window.PocuSettingsUI = (() => {
   let initialized = false;
   let systemMql = null;
 
-  const CROSSFADE_OPTIONS = [
-    { v: 0,  label: 'Выкл' },
-    { v: 3,  label: '3 сек' },
-    { v: 5,  label: '5 сек' },
-    { v: 10, label: '10 сек' }
-  ];
-
   function init() {
     if (initialized) return;
     initialized = true;
 
     els = {
-      screen:         document.getElementById('settingsScreen'),
-      backBtn:        document.getElementById('settingsBackBtn'),
-      guestBlock:     document.getElementById('settingsGuestBlock'),
-      userBlock:      document.getElementById('settingsUserBlock'),
-      logoutWrap:     document.getElementById('settingsLogoutWrap'),
-      userEmail:      document.getElementById('settingsUserEmail'),
-      avatar:         document.getElementById('settingsAvatar'),
-      avatarInput:    document.getElementById('settingsAvatarInput'),
-      avatarBtn:      document.getElementById('settingsAvatarBtn'),
-      nameInput:      document.getElementById('settingsNameInput'),
-      saveName:       document.getElementById('settingsSaveName'),
-      loginBtn:       document.getElementById('settingsLoginBtn'),
-      logoutBtn:      document.getElementById('settingsLogoutBtn'),
-      changePassBtn:  document.getElementById('settingsChangePassBtn'),
-      toggleSmooth:   document.getElementById('settingsToggleSmooth'),
-      eqBtn:          document.getElementById('settingsEqBtn'),
-      prefsBtn:       document.getElementById('settingsPrefsBtn'),
-      themePicker:    document.getElementById('settingsThemePicker'),
-      tracksCount:    document.getElementById('settingsTracksCount'),
-      favCount:       document.getElementById('settingsFavCount'),
-      plCount:        document.getElementById('settingsPlCount'),
-      albumsCount:    document.getElementById('settingsAlbumsCount'),
-      artistsCount:   document.getElementById('settingsArtistsCount'),
-      clearRecent:    document.getElementById('settingsClearRecent'),
-      clearPulse:     document.getElementById('settingsClearPulse'),
-      clearAll:       document.getElementById('settingsClearAll'),
-      openTopbar:     document.getElementById('settingsBtn'),
-      openSidebar:    document.getElementById('sidebarSettingsBtn'),
-      crossfadePicker: null
+      screen:          document.getElementById('settingsScreen'),
+      backBtn:         document.getElementById('settingsBackBtn'),
+      guestBlock:      document.getElementById('settingsGuestBlock'),
+      userBlock:       document.getElementById('settingsUserBlock'),
+      logoutWrap:      document.getElementById('settingsLogoutWrap'),
+      userEmail:       document.getElementById('settingsUserEmail'),
+      avatar:          document.getElementById('settingsAvatar'),
+      avatarInput:     document.getElementById('settingsAvatarInput'),
+      avatarBtn:       document.getElementById('settingsAvatarBtn'),
+      nameInput:       document.getElementById('settingsNameInput'),
+      saveName:        document.getElementById('settingsSaveName'),
+      loginBtn:        document.getElementById('settingsLoginBtn'),
+      logoutBtn:       document.getElementById('settingsLogoutBtn'),
+      changePassBtn:   document.getElementById('settingsChangePassBtn'),
+      toggleSmooth:    document.getElementById('settingsToggleSmooth'),
+      eqBtn:           document.getElementById('settingsEqBtn'),
+      prefsBtn:        document.getElementById('settingsPrefsBtn'),
+      themePicker:     document.getElementById('settingsThemePicker'),
+      crossfadePicker: document.getElementById('settingsCrossfadePicker'),
+      tracksCount:     document.getElementById('settingsTracksCount'),
+      favCount:        document.getElementById('settingsFavCount'),
+      plCount:         document.getElementById('settingsPlCount'),
+      albumsCount:     document.getElementById('settingsAlbumsCount'),
+      artistsCount:    document.getElementById('settingsArtistsCount'),
+      clearRecent:     document.getElementById('settingsClearRecent'),
+      clearPulse:      document.getElementById('settingsClearPulse'),
+      clearAll:        document.getElementById('settingsClearAll'),
+      openTopbar:      document.getElementById('settingsBtn'),
+      openSidebar:     document.getElementById('sidebarSettingsBtn')
     };
-
-    // Вставляем UI Crossfade рядом с темой
-    injectCrossfadeUI();
 
     els.openTopbar?.addEventListener('click', openScreen);
     els.openSidebar?.addEventListener('click', openScreen);
@@ -120,53 +110,6 @@ window.PocuSettingsUI = (() => {
 
     refreshAccount();
     refreshCounters();
-  }
-
-  /* ============ CROSSFADE UI (динамическая вставка) ============ */
-
-  function injectCrossfadeUI() {
-    if (document.getElementById('settingsCrossfadePicker')) {
-      els.crossfadePicker = document.getElementById('settingsCrossfadePicker');
-      return;
-    }
-    const themePicker = els.themePicker;
-    if (!themePicker) { console.warn('[settings] theme picker not found — crossfade UI skipped'); return; }
-
-    const row = themePicker.closest('.settings-row, .settings-section, .settings-block, .settings-item, .settings-group')
-             || themePicker.parentElement;
-    if (!row || !row.parentElement) return;
-
-    const clone = row.cloneNode(true);
-    const clonedPicker = clone.querySelector('#settingsThemePicker');
-    if (!clonedPicker) return;
-
-    clonedPicker.id = 'settingsCrossfadePicker';
-    clonedPicker.innerHTML = '';
-    const sampleBtn = themePicker.querySelector('button');
-
-    CROSSFADE_OPTIONS.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.setAttribute('role', 'radio');
-      btn.dataset.crossfadeChoice = String(opt.v);
-      btn.setAttribute('aria-checked', 'false');
-      btn.textContent = opt.label;
-      if (sampleBtn && sampleBtn.className) btn.className = sampleBtn.className;
-      clonedPicker.appendChild(btn);
-    });
-
-    // Меняем текстовые узлы «Тема» → «Crossfade»
-    clone.querySelectorAll('*').forEach(el => {
-      if (el.closest('#settingsCrossfadePicker')) return;
-      el.childNodes.forEach(n => {
-        if (n.nodeType === 3 && /Тема/i.test(n.textContent)) {
-          n.textContent = n.textContent.replace(/Тема/gi, 'Crossfade');
-        }
-      });
-    });
-
-    row.parentElement.insertBefore(clone, row.nextSibling);
-    els.crossfadePicker = document.getElementById('settingsCrossfadePicker');
   }
 
   function updateCrossfadePicker(val) {
