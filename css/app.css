@@ -4830,3 +4830,13 @@ body.genre-open .topbar {
     gap: 12px;
   }
 }
+
+/* --- Z-index: сайдбар (ПК) и мини-плеер всегда поверх контент-страниц --- */
+@media (min-width: 900px) {
+  .tabbar {
+    z-index: 95 !important;
+  }
+}
+.miniplayer {
+  z-index: 96 !important;
+}

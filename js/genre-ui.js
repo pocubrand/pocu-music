@@ -114,11 +114,10 @@ window.PocuGenreUI = (() => {
     });
     els.tracks.appendChild(frag);
 
-    document.querySelectorAll('.playlist-overlay, .artist-overlay, .track-overlay, .album-overlay, .genre-overlay')
-      .forEach(el => { if (el !== els.screen) el.style.zIndex = ''; });
-    els.screen.style.zIndex = '84';
+    // Поднимаем на верхний слой (PocuLayers сам считает, какой z-index назначить)
+    window.PocuLayers?.front?.(els.screen);
 
-    window.PocuLayers?.front?.(screen); // или $screen, если переменная называется так
+    els.screen.classList.add('open');
     els.screen.setAttribute('aria-hidden', 'false');
     document.body.classList.add('genre-open');
     requestAnimationFrame(() => { els.screen.scrollTop = 0; });
