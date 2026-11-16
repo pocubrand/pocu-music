@@ -3115,6 +3115,215 @@ body.track-open .topbar {
 }
 
 /* ================================================================
+   FIX v11 — Pulse: обложка выше, PC-двухколонка, очередь
+   ================================================================ */
+
+/* --- Мобилка: обложка выше + очередь скрыта --- */
+.pulse-hero-art-card {
+  top: 40% !important;
+}
+.pulse-queue { display: none; }
+
+/* --- ПК: двухколоночный layout --- */
+@media (min-width: 900px) {
+  .pulse-hero {
+    height: auto;
+    min-height: 340px;
+  }
+
+  /* Обложка крупная слева */
+  .pulse-hero-art-card {
+    top: 50% !important;
+    left: 32px !important;
+    transform: translateY(-50%) !important;
+    width: 270px;
+    height: 270px;
+    border-radius: 22px;
+  }
+  .pulse-hero.live .pulse-hero-art-card {
+    transform: translateY(-50%) !important;
+  }
+
+  /* Контент — справа от обложки */
+  .pulse-hero-content {
+    inset: 0 0 0 334px;
+    padding: 28px 32px 28px 0;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .pulse-hero-meta {
+    text-align: left;
+    width: 100%;
+  }
+
+  .pulse-title { font-size: 30px; }
+  .pulse-sub   { font-size: 15px; margin-top: 6px; }
+
+  /* Очередь видна */
+  .pulse-queue {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .pulse-actions {
+    flex-direction: row;
+    gap: 12px;
+  }
+}
+
+/* --- Элемент очереди --- */
+.pulse-queue-item {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 160px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 5px 8px 5px 5px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.pulse-queue-item img {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  flex: none;
+  object-fit: cover;
+  background: rgba(255,255,255,.1);
+}
+
+.pulse-queue-item-meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.pulse-queue-item-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pulse-queue-item-artist {
+  font-size: 10.5px;
+  color: rgba(255,255,255,.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+/* ================================================================
+   FIX v12 — Pulse: placeholder, bigger mobile cover, clickable
+   ================================================================ */
+
+/* Обложка ВСЕГДА видна (даже без трека — placeholder) */
+.pulse-hero-art-card {
+  opacity: 1 !important;
+  transform: translate(-50%, -50%) scale(1) !important;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 180px;
+  height: 180px;
+  border-radius: 22px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.08) inset;
+  overflow: hidden;
+  z-index: 3;
+}
+
+/* Placeholder (нота) */
+.pulse-hero-art-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(124,92,255,.55), rgba(255,64,158,.4) 55%, rgba(56,132,255,.55));
+  color: rgba(255,255,255,.6);
+  transition: opacity .4s ease;
+  pointer-events: none;
+}
+.pulse-hero-art-placeholder svg {
+  width: 56px;
+  height: 56px;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.4));
+}
+
+.pulse-hero-art-card.has-track .pulse-hero-art-placeholder {
+  opacity: 0;
+}
+
+/* Кликабельные элементы в live-состоянии */
+.pulse-hero.live .pulse-title,
+.pulse-hero.live .pulse-artist,
+.pulse-hero.live .pulse-hero-art-card {
+  cursor: pointer;
+}
+
+.pulse-hero.live .pulse-artist {
+  color: rgba(255,255,255,.85);
+  transition: color .2s;
+}
+.pulse-hero.live .pulse-artist:hover {
+  color: #a78bfa;
+}
+
+.pulse-hero.live .pulse-title:hover {
+  color: rgba(255,255,255,.9);
+}
+
+/* Кнопка refresh — стилизуем как shuffle */
+.pulse-btn-refresh {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.22);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  transition: transform .5s var(--spring), background .2s;
+}
+.pulse-btn-refresh:active {
+  transform: scale(.9) rotate(-180deg);
+  background: rgba(255,255,255,.24);
+}
+
+/* ПК: обложка крупнее и слева */
+@media (min-width: 900px) {
+  .pulse-hero-art-card {
+    top: 50%;
+    left: 32px;
+    transform: translateY(-50%) !important;
+    width: 270px;
+    height: 270px;
+  }
+  .pulse-hero-art-placeholder svg {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* Мобилка: чуть больше, чем было (было 140) */
+@media (max-width: 899px) {
+  .pulse-hero-art-card {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+/* ================================================================
    FIX v13 — Aurora hover boost (ПК)
    ================================================================ */
 
@@ -4834,14 +5043,14 @@ body.genre-open .topbar {
 }
 
 /* ================================================================
-   PULSE v9 — absolute cover (фикс. позиция) + работающие blobs
+   PULSE v10 — cover в fixed-слоте (не absolute), сверх-защита
    ================================================================ */
 
 .pulse-hero {
   position: relative;
   width: 100%;
   height: auto !important;
-  min-height: 480px;
+  min-height: 0 !important;
   contain: none !important;
   border-radius: 28px;
   overflow: visible !important;
@@ -4875,43 +5084,64 @@ body.genre-open .topbar {
 .pulse-hero-overlay,
 .pulse-hero-vignette { display: none !important; }
 
-/* Inner — контент снизу, обложка absolute */
-.pulse-hero-inner {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* Inner: flex column, обычный поток, без min-height */
+.pulse-hero-inner,
+.pulse-hero .pulse-hero-inner {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
   justify-content: flex-start !important;
-  width: 100%;
-  min-height: 480px;
-  padding: 300px 20px 30px !important;
-  gap: 0;
-  box-sizing: border-box;
+  width: 100% !important;
+  padding: 24px 20px 28px !important;
+  gap: 0 !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+  min-height: 0 !important;
   height: auto !important;
+  z-index: 2;
 }
 
-/* Обложка — абсолютная позиция, фикс top */
-.pulse-hero-art-card {
-  position: absolute !important;
-  top: 48% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
+/* Слот под обложку: фикс. высота, обложка центрируется внутри */
+.pulse-hero-cover-slot,
+.pulse-hero .pulse-hero-inner .pulse-hero-cover-slot {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 200px !important;
+  min-height: 200px !important;
+  max-height: 200px !important;
+  flex: none !important;
+  margin: 0 0 16px 0 !important;
+  padding: 0 !important;
+  position: relative !important;
+}
+
+/* Обложка: полный сброс position-свойств, чтобы никакие старые !important не пролезли */
+.pulse-hero-art-card,
+.pulse-hero .pulse-hero-inner .pulse-hero-art-card,
+.pulse-hero.live .pulse-hero-inner .pulse-hero-art-card,
+.pulse-hero.paused .pulse-hero-inner .pulse-hero-art-card {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
   margin: 0 !important;
-  width: 180px;
-  height: 180px;
-  border-radius: 18px;
-  overflow: hidden;
+  flex: none !important;
+  width: 180px !important;
+  height: 180px !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
   box-shadow:
     0 20px 44px rgba(0,0,0,0.55),
-    0 0 0 1px rgba(255,255,255,0.08) inset;
+    0 0 0 1px rgba(255,255,255,0.08) inset !important;
   opacity: 1 !important;
   z-index: 5 !important;
-  background: #1a1a22;
-  transition: transform 0.3s var(--spring);
-  flex: none;
+  background: #1a1a22 !important;
+  transition: box-shadow .3s var(--spring) !important;
 }
-.pulse-hero-art-card:active { transform: translate(-50%, -50%) scale(0.97) !important; }
 
 .pulse-hero-art-card img {
   width: 100%;
@@ -4933,7 +5163,7 @@ body.genre-open .topbar {
 .pulse-hero-art-card.has-track .pulse-hero-art-placeholder,
 .pulse-hero.live .pulse-hero-art-placeholder { display: none; }
 
-/* Meta — flex-колонка, центрируется */
+/* Meta */
 .pulse-hero-meta {
   display: flex;
   flex-direction: column;
@@ -5097,7 +5327,7 @@ body.genre-open .topbar {
 }
 
 /* ============================================================
-   AURORA BLOBS v9 — без "негатива": plus-lighter + мягкий scatter
+   AURORA BLOBS (без изменений от v9 — работают отлично)
    ============================================================ */
 
 .aurora-blob {
@@ -5155,13 +5385,11 @@ body.genre-open .topbar {
   animation: auroraDrift3 15s ease-in-out infinite;
 }
 
-/* Ускоряем при live */
 .pulse-hero.live:not(.paused) .aurora-blob-1::before { animation-duration: 9s; }
 .pulse-hero.live:not(.paused) .aurora-blob-2::before { animation-duration: 11s; }
 .pulse-hero.live:not(.paused) .aurora-blob-3::before { animation-duration: 10s; }
 .pulse-hero.live:not(.paused) .aurora-blob { opacity: 1 !important; }
 
-/* Разбегание на hover — мягкое, без scale, без наложения */
 @media (hover: hover) and (pointer: fine) {
   .pulse-hero:hover .aurora-blob-1 { transform: translate(-25%, -20%); }
   .pulse-hero:hover .aurora-blob-2 { transform: translate(25%, -20%); }
@@ -5186,20 +5414,24 @@ body.genre-open .topbar {
   100% { transform: translate(0, 0) scale(0.95); }
 }
 
-/* ---- ПК: тот же absolute, top: 48% ---- */
+/* ---- ПК: слот крупнее, обложка крупнее ---- */
 @media (min-width: 900px) {
-  .pulse-hero {
-    min-height: 540px;
+  .pulse-hero-inner,
+  .pulse-hero .pulse-hero-inner {
+    padding: 32px 28px 36px !important;
   }
-  .pulse-hero-inner {
-    min-height: 540px;
-    padding: 0 28px 32px !important;
-    justify-content: flex-end !important;
+  .pulse-hero-cover-slot,
+  .pulse-hero .pulse-hero-inner .pulse-hero-cover-slot {
+    height: 260px !important;
+    min-height: 260px !important;
+    max-height: 260px !important;
+    margin-bottom: 18px !important;
   }
-  .pulse-hero-art-card {
-    top: 48% !important;
-    width: 220px;
-    height: 220px;
+  .pulse-hero-art-card,
+  .pulse-hero .pulse-hero-inner .pulse-hero-art-card,
+  .pulse-hero.live .pulse-hero-inner .pulse-hero-art-card {
+    width: 220px !important;
+    height: 220px !important;
   }
   .pulse-hero-visual {
     -webkit-mask-image:
@@ -5229,19 +5461,24 @@ body.genre-open .topbar {
   }
 }
 
-/* ---- Мобилка: чуть компактнее ---- */
+/* ---- Узкий мобильный ---- */
 @media (max-width: 480px) {
-  .pulse-hero {
-    min-height: 420px;
+  .pulse-hero-inner,
+  .pulse-hero .pulse-hero-inner {
+    padding: 20px 18px 24px !important;
   }
-  .pulse-hero-inner {
-    min-height: 420px;
-    padding: 0 18px 24px !important;
+  .pulse-hero-cover-slot,
+  .pulse-hero .pulse-hero-inner .pulse-hero-cover-slot {
+    height: 180px !important;
+    min-height: 180px !important;
+    max-height: 180px !important;
+    margin-bottom: 14px !important;
   }
-  .pulse-hero-art-card {
-    top: 42% !important;
-    width: 160px;
-    height: 160px;
+  .pulse-hero-art-card,
+  .pulse-hero .pulse-hero-inner .pulse-hero-art-card,
+  .pulse-hero.live .pulse-hero-inner .pulse-hero-art-card {
+    width: 160px !important;
+    height: 160px !important;
   }
   .pulse-hero-visual {
     -webkit-mask-image:
