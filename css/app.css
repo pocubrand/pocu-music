@@ -5259,14 +5259,7 @@ body.genre-open .topbar {
   text-align: center;
   padding-left: 0.5em;
   margin: 0 0 22px;
-  background: linear-gradient(90deg,
-    var(--violet) 0%,
-    var(--pink) 50%,
-    var(--blue) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: rgba(255, 255, 255, 0,85);
   filter: drop-shadow(0 2px 14px rgba(124,92,255,0.55));
   pointer-events: none;
   user-select: none;

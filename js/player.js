@@ -1,4 +1,4 @@
-/* Pocu Music — аудио-плеер + 30-сек + эквалайзер + crossfade */
+/* Pocu Music — аудио-плеер + 30-сек + эквалайзер + crossfade + авторезюм AudioContext */
 window.PocuPlayer = (() => {
   const audioA = new Audio();
   const audioB = new Audio();
@@ -98,7 +98,7 @@ window.PocuPlayer = (() => {
 
       console.log('[audio] context ready, state:', audioCtx.state);
 
-      if (audioCtx.state === 'suspended') {
+      if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
         audioCtx.resume().catch(() => {});
       }
     } catch (e) {
@@ -111,12 +111,17 @@ window.PocuPlayer = (() => {
     }
   }
 
+  /* === Авторезюм AudioContext (фикс: пропадание звука при блокировке экрана / фоне) === */
+  function ensureContextRunning() {
+    if (!audioCtx) return;
+    if (audioCtx.state === 'running' || audioCtx.state === 'closed') return;
+    // 'suspended' или 'interrupted' (Safari) — пробуем поднять
+    audioCtx.resume().catch(() => {});
+  }
+
   function resumeAudioCtx() {
     ensureAudioContext();
-    if (!audioCtx) return;
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume().catch(e => console.warn('[audio] resume failed:', e?.name || e));
-    }
+    ensureContextRunning();
   }
 
   function setEQ(bands) {
@@ -127,7 +132,7 @@ window.PocuPlayer = (() => {
     }
     if (!Array.isArray(bands)) return;
     applyEQValues(bands);
-    if (audioCtx && audioCtx.state === 'suspended') {
+    if (audioCtx && (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted')) {
       audioCtx.resume().catch(() => {});
     }
     console.log(
@@ -273,7 +278,7 @@ window.PocuPlayer = (() => {
     isCrossfading = true;
     const myToken = ++crossfadeToken;
 
-    if (audioCtx.state === 'suspended') {
+    if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
       try { await audioCtx.resume(); } catch {}
       if (myToken !== crossfadeToken) return;
     }
@@ -534,8 +539,16 @@ window.PocuPlayer = (() => {
 
   if ('mediaSession' in navigator) {
     try {
-      navigator.mediaSession.setActionHandler('play', togglePlay);
-      navigator.mediaSession.setActionHandler('pause', togglePlay);
+      // ВАЖНО: разделили play и pause (togglePlay тут был багом — icon "play" при playing ставил паузу)
+      navigator.mediaSession.setActionHandler('play', () => {
+        ensureContextRunning();
+        if (!current) return;
+        if (activeAudio.paused) activeAudio.play().catch(() => {});
+      });
+      navigator.mediaSession.setActionHandler('pause', () => {
+        if (!current) return;
+        if (!activeAudio.paused) activeAudio.pause();
+      });
       navigator.mediaSession.setActionHandler('previoustrack', prev);
       navigator.mediaSession.setActionHandler('nexttrack', next);
       navigator.mediaSession.setActionHandler('seekto', e => { if (e.seekTime != null) seek(e.seekTime); });
@@ -545,6 +558,12 @@ window.PocuPlayer = (() => {
   function onTimeUpdate(el) {
     if (el !== activeAudio) return;
     if (!current) return;
+
+    // ГЛАВНЫЙ ФИКС: пока играет — держим AudioContext живым.
+    // На мобилке ОС суспендит контекст при блокировке экрана/фоне,
+    // но <audio> продолжает "играть" — без этого звук пропадает.
+    ensureContextRunning();
+
     const t = el.currentTime;
     if (t > prevMaxTime) prevMaxTime = t;
     if (t >= 30 && !played30.has(current.id)) {
@@ -590,9 +609,7 @@ window.PocuPlayer = (() => {
       });
     });
     el.addEventListener('play', () => {
-      if (audioCtx && audioCtx.state !== 'running') {
-        audioCtx.resume().catch(() => {});
-      }
+      ensureContextRunning();
       if (el !== activeAudio) return;
       setPlaybackState();
       notify();
@@ -608,6 +625,28 @@ window.PocuPlayer = (() => {
 
   bindAudioEvents(audioA);
   bindAudioEvents(audioB);
+
+  /* === Глобальные авторезюмы AudioContext === */
+
+  // Возврат из фона / разблокировка экрана / bfcache
+  document.addEventListener('visibilitychange', () => {
+    ensureContextRunning();
+  });
+  window.addEventListener('pageshow', () => {
+    ensureContextRunning();
+  });
+  window.addEventListener('focus', () => {
+    ensureContextRunning();
+  });
+
+  // Watchdog: если ОС суспендит контекст, а аудио "играет" (background)
+  // — раз в 2 сек пробуем поднять. Дёшево, но надёжно.
+  setInterval(() => {
+    if (!audioCtx || !current || activeAudio.paused) return;
+    if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
+      audioCtx.resume().catch(() => {});
+    }
+  }, 2000);
 
   return {
     appendQueue(tracks) {
