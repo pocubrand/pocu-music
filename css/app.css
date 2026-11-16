@@ -5359,3 +5359,60 @@ body.pulse-live .aurora-blob-3::before { animation-duration: 10s; }
   70%  { transform: translate(20%, -35%) scale(1.0); }
   100% { transform: translate(0, 0) scale(0.95); }
 }
+
+/* ================================================================
+   PULSE — финальные штрихи: brand, hover-fix, placeholder-free
+   ================================================================ */
+
+/* ---- Надпись «Pocu Pulse» над обложкой ---- */
+.pulse-brand-top {
+  position: relative;
+  z-index: 3;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  text-align: center;
+  padding-left: 0.42em;
+  margin: 0 0 18px;
+  background: linear-gradient(90deg,
+    var(--violet) 0%,
+    var(--pink) 50%,
+    var(--blue) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 2px 12px rgba(124,92,255,0.5));
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (min-width: 900px) {
+  .pulse-brand-top {
+    font-size: 12px;
+    letter-spacing: 0.5em;
+    padding-left: 0.5em;
+    margin-bottom: 22px;
+  }
+}
+
+[data-theme="light"] .pulse-brand-top {
+  filter: drop-shadow(0 2px 8px rgba(124,92,255,0.25));
+}
+
+/* ---- Fix: hover на «пустой» hero НЕ должен усиливать blobs ---- */
+.pulse-hero:hover .aurora-blob { opacity: 0.75 !important; }
+.pulse-hero:hover .aurora-blob::before {
+  animation-duration: inherit !important;
+}
+
+/* ---- Заглушка «нота» не нужна: вместо неё просвечивают blobs ---- */
+.pulse-hero:not(.live) .pulse-hero-art-card {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.pulse-hero:not(.live) .pulse-hero-art-placeholder {
+  display: none !important;
+}
