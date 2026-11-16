@@ -4846,33 +4846,39 @@ body.genre-open .topbar {
    (append-only, не трогает существующие стили)
    ============================================================ */
 
-/* Плавный переход верхней части Pulse Hero в фон страницы */
-.pulse-hero-visual::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 140px;
-  background: linear-gradient(to bottom,
-    var(--bg) 0%,
-    transparent 100%);
-  pointer-events: none;
-  z-index: 3;
-  border-top-left-radius: inherit;
-  border-top-right-radius: inherit;
+/* Плавное растворение верхней части Pulse Hero в фон */
+.pulse-hero-visual {
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0,
+    rgba(0,0,0,0.15) 40px,
+    rgba(0,0,0,0.5) 100px,
+    black 180px);
+  mask-image: linear-gradient(to bottom,
+    transparent 0,
+    rgba(0,0,0,0.15) 40px,
+    rgba(0,0,0,0.5) 100px,
+    black 180px);
+}
+
+@media (max-width: 720px) {
+  .pulse-hero-visual {
+    -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0,
+      rgba(0,0,0,0.2) 30px,
+      rgba(0,0,0,0.55) 80px,
+      black 150px);
+    mask-image: linear-gradient(to bottom,
+      transparent 0,
+      rgba(0,0,0,0.2) 30px,
+      rgba(0,0,0,0.55) 80px,
+      black 150px);
+  }
 }
 
 /* Обложка текущего трека должна быть выше fade */
 .pulse-hero-art-card {
   z-index: 6;
   position: relative;
-}
-
-@media (max-width: 720px) {
-  .pulse-hero-visual::before {
-    height: 100px;
-  }
 }
 
 /* ---- Insight card ---- */
