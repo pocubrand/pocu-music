@@ -5249,7 +5249,7 @@ body.genre-open .topbar {
 .pulse-hero-rings { display: none !important; }
 
 /* ================================================================
-   PULSE AURORA v6 — компактные blobs вокруг обложки
+   PULSE AURORA v7 — активнее, дальше, без hover-усиления
    ================================================================ */
 
 .pulse-aurora-wrap {
@@ -5257,32 +5257,32 @@ body.genre-open .topbar {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 500px;
-  height: 500px;
+  width: 620px;
+  height: 620px;
   z-index: 0;
   pointer-events: none;
-  /* НЕ объявляем --aurora-* здесь, чтобы унаследовались с .pulse-hero */
 }
 
 @media (max-width: 899px) {
   .pulse-aurora-wrap {
-    width: 380px;
-    height: 380px;
+    width: 460px;
+    height: 460px;
   }
 }
 
-.aurora-blob {
+/* Базовое состояние — жёстко, чтобы никакие старые hover-правила не пролезли */
+.pulse-hero .pulse-aurora-wrap .aurora-blob {
   position: absolute;
   border-radius: 50%;
   filter: blur(55px);
   mix-blend-mode: plus-lighter;
-  opacity: 0.75;
+  opacity: 0.75 !important;
   pointer-events: none;
   will-change: transform;
-  transition: transform 1s cubic-bezier(.22, 1, .36, 1);
+  transition: transform 1.2s cubic-bezier(.22, 1, .36, 1);
 }
 
-.aurora-blob::before {
+.pulse-hero .pulse-aurora-wrap .aurora-blob::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -5290,74 +5290,77 @@ body.genre-open .topbar {
   will-change: transform;
 }
 
-/* Компактные — вокруг обложки 180×180 (мобилка) / 220×220 (ПК) */
-.aurora-blob-1 {
-  width: 260px;
-  height: 260px;
-  top: 8%;
-  left: 4%;
+/* --- Размеры и позиции: дальше от обложки --- */
+.pulse-hero .pulse-aurora-wrap .aurora-blob-1 {
+  width: 300px;
+  height: 300px;
+  top: 0%;
+  left: -2%;
 }
-.aurora-blob-1::before {
+.pulse-hero .pulse-aurora-wrap .aurora-blob-1::before {
   background: radial-gradient(circle, var(--aurora-1) 0%, transparent 70%);
-  animation: auroraDrift1 14s ease-in-out infinite;
+  animation: auroraDrift1 11s ease-in-out infinite;
 }
 
-.aurora-blob-2 {
+.pulse-hero .pulse-aurora-wrap .aurora-blob-2 {
+  width: 320px;
+  height: 320px;
+  top: -4%;
+  right: -2%;
+}
+.pulse-hero .pulse-aurora-wrap .aurora-blob-2::before {
+  background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
+  animation: auroraDrift2 14s ease-in-out infinite;
+}
+
+.pulse-hero .pulse-aurora-wrap .aurora-blob-3 {
   width: 280px;
   height: 280px;
-  top: 4%;
-  right: 4%;
+  top: 32%;
+  left: 24%;
 }
-.aurora-blob-2::before {
-  background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
-  animation: auroraDrift2 17s ease-in-out infinite;
-}
-
-.aurora-blob-3 {
-  width: 240px;
-  height: 240px;
-  top: 30%;
-  left: 26%;
-}
-.aurora-blob-3::before {
+.pulse-hero .pulse-aurora-wrap .aurora-blob-3::before {
   background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
-  animation: auroraDrift3 15s ease-in-out infinite;
+  animation: auroraDrift3 12s ease-in-out infinite;
 }
 
 @media (max-width: 899px) {
-  .aurora-blob-1 { width: 200px; height: 200px; }
-  .aurora-blob-2 { width: 220px; height: 220px; }
-  .aurora-blob-3 { width: 180px; height: 180px; }
-  .aurora-blob { filter: blur(45px); }
+  .pulse-hero .pulse-aurora-wrap .aurora-blob-1 { width: 220px; height: 220px; }
+  .pulse-hero .pulse-aurora-wrap .aurora-blob-2 { width: 240px; height: 240px; }
+  .pulse-hero .pulse-aurora-wrap .aurora-blob-3 { width: 200px; height: 200px; }
+  .pulse-hero .pulse-aurora-wrap .aurora-blob { filter: blur(45px); }
 }
 
-/* Live — ярче и быстрее */
-body.pulse-live .aurora-blob { opacity: 0.95; }
-body.pulse-live .aurora-blob-1::before { animation-duration: 9s; }
-body.pulse-live .aurora-blob-2::before { animation-duration: 11s; }
-body.pulse-live .aurora-blob-3::before { animation-duration: 10s; }
+/* --- Live: ярче и быстрее (перебивает базовое) --- */
+.pulse-hero.live:not(.paused) .pulse-aurora-wrap .aurora-blob {
+  opacity: 0.95 !important;
+}
+.pulse-hero.live:not(.paused) .pulse-aurora-wrap .aurora-blob-1::before { animation-duration: 7s; }
+.pulse-hero.live:not(.paused) .pulse-aurora-wrap .aurora-blob-2::before { animation-duration: 9s; }
+.pulse-hero.live:not(.paused) .pulse-aurora-wrap .aurora-blob-3::before { animation-duration: 8s; }
 
-/* Scatter на hover */
-.pulse-aurora-wrap.scatter .aurora-blob-1 { transform: translate(-18%, -15%); }
-.pulse-aurora-wrap.scatter .aurora-blob-2 { transform: translate(18%, -15%); }
-.pulse-aurora-wrap.scatter .aurora-blob-3 { transform: translate(0, 20%); }
+/* --- Scatter (только когда класс на wrap через JS) --- */
+.pulse-aurora-wrap.scatter .aurora-blob-1 { transform: translate(-25%, -22%) !important; }
+.pulse-aurora-wrap.scatter .aurora-blob-2 { transform: translate(25%, -22%) !important; }
+.pulse-aurora-wrap.scatter .aurora-blob-3 { transform: translate(0, 25%) !important; }
 
+/* --- Анимации: шире и активнее --- */
 @keyframes auroraDrift1 {
   0%   { transform: translate(0, 0) scale(1); }
-  33%  { transform: translate(35%, 25%) scale(1.15); }
-  66%  { transform: translate(10%, -20%) scale(0.9); }
+  33%  { transform: translate(55%, 40%) scale(1.2); }
+  66%  { transform: translate(20%, -30%) scale(0.85); }
   100% { transform: translate(0, 0) scale(1); }
 }
 @keyframes auroraDrift2 {
-  0%   { transform: translate(0, 0) scale(1.05); }
-  50%  { transform: translate(-30%, 35%) scale(0.9); }
-  100% { transform: translate(0, 0) scale(1.05); }
+  0%   { transform: translate(0, 0) scale(1.08); }
+  50%  { transform: translate(-50%, 45%) scale(0.85); }
+  100% { transform: translate(0, 0) scale(1.08); }
 }
 @keyframes auroraDrift3 {
-  0%   { transform: translate(0, 0) scale(0.95); }
-  40%  { transform: translate(-35%, -30%) scale(1.15); }
-  70%  { transform: translate(20%, -35%) scale(1.0); }
-  100% { transform: translate(0, 0) scale(0.95); }
+  0%   { transform: translate(0, 0) scale(0.9); }
+  40%  { transform: translate(-55%, -45%) scale(1.25); }
+  70%  { transform: translate(35%, -55%) scale(1.0); }
+  100% { transform: translate(0, 0) scale(0.9); }
 }
 
 /* ================================================================
@@ -5368,13 +5371,13 @@ body.pulse-live .aurora-blob-3::before { animation-duration: 10s; }
 .pulse-brand-top {
   position: relative;
   z-index: 3;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 800;
-  letter-spacing: 0.42em;
+  letter-spacing: 0.5em;
   text-transform: uppercase;
   text-align: center;
-  padding-left: 0.42em;
-  margin: 0 0 18px;
+  padding-left: 0.5em;
+  margin: 0 0 22px;
   background: linear-gradient(90deg,
     var(--violet) 0%,
     var(--pink) 50%,
@@ -5383,22 +5386,22 @@ body.pulse-live .aurora-blob-3::before { animation-duration: 10s; }
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  filter: drop-shadow(0 2px 12px rgba(124,92,255,0.5));
+  filter: drop-shadow(0 2px 14px rgba(124,92,255,0.55));
   pointer-events: none;
   user-select: none;
 }
 
 @media (min-width: 900px) {
   .pulse-brand-top {
-    font-size: 12px;
-    letter-spacing: 0.5em;
-    padding-left: 0.5em;
-    margin-bottom: 22px;
+    font-size: 18px;
+    letter-spacing: 0.6em;
+    padding-left: 0.6em;
+    margin-bottom: 26px;
   }
 }
 
 [data-theme="light"] .pulse-brand-top {
-  filter: drop-shadow(0 2px 8px rgba(124,92,255,0.25));
+  filter: drop-shadow(0 2px 10px rgba(124,92,255,0.3));
 }
 
 /* ---- Fix: hover на «пустой» hero НЕ должен усиливать blobs ---- */
