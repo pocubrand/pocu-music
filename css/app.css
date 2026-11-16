@@ -4940,28 +4940,6 @@ body.genre-open .topbar {
   cursor: pointer;
 }
 
-/* Visual: fade сверху + бока */
-.pulse-hero-visual {
-  position: absolute;
-  inset: 0;
-  border-radius: 28px;
-  overflow: hidden !important;
-  z-index: 0;
-  transform: none !important;
-  -webkit-mask-image:
-    linear-gradient(to bottom, transparent 0px, black 100px, black 100%),
-    linear-gradient(to right, transparent 0px, black 30px, black calc(100% - 30px), transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to bottom, transparent 0px, black 100px, black 100%),
-    linear-gradient(to right, transparent 0px, black 30px, black calc(100% - 30px), transparent 100%);
-  mask-composite: intersect;
-  pointer-events: none;
-}
-
-.pulse-hero-overlay,
-.pulse-hero-vignette { display: none !important; }
-
 /* Inner: flex column, обычный поток, без min-height */
 .pulse-hero-inner,
 .pulse-hero .pulse-hero-inner {
@@ -5204,94 +5182,6 @@ body.genre-open .topbar {
   border-color: rgba(255,92,92,0.32);
 }
 
-/* ============================================================
-   AURORA BLOBS (без изменений от v9 — работают отлично)
-   ============================================================ */
-
-.aurora-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(50px);
-  mix-blend-mode: plus-lighter;
-  opacity: 0.75 !important;
-  pointer-events: none;
-  will-change: transform;
-  z-index: 1;
-  background: none !important;
-  animation: none !important;
-  transition: transform 1s cubic-bezier(.22, 1, .36, 1);
-}
-
-.aurora-blob::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  will-change: transform;
-}
-
-.aurora-blob-1 {
-  width: 70%;
-  aspect-ratio: 1;
-  top: -20%;
-  left: -20%;
-}
-.aurora-blob-1::before {
-  background: radial-gradient(circle, var(--aurora-1) 0%, transparent 70%);
-  animation: auroraDrift1 14s ease-in-out infinite;
-}
-
-.aurora-blob-2 {
-  width: 75%;
-  aspect-ratio: 1;
-  top: -25%;
-  right: -25%;
-}
-.aurora-blob-2::before {
-  background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
-  animation: auroraDrift2 17s ease-in-out infinite;
-}
-
-.aurora-blob-3 {
-  width: 65%;
-  aspect-ratio: 1;
-  bottom: -25%;
-  left: 15%;
-}
-.aurora-blob-3::before {
-  background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
-  animation: auroraDrift3 15s ease-in-out infinite;
-}
-
-.pulse-hero.live:not(.paused) .aurora-blob-1::before { animation-duration: 9s; }
-.pulse-hero.live:not(.paused) .aurora-blob-2::before { animation-duration: 11s; }
-.pulse-hero.live:not(.paused) .aurora-blob-3::before { animation-duration: 10s; }
-.pulse-hero.live:not(.paused) .aurora-blob { opacity: 1 !important; }
-
-@media (hover: hover) and (pointer: fine) {
-  .pulse-hero:hover .aurora-blob-1 { transform: translate(-25%, -20%); }
-  .pulse-hero:hover .aurora-blob-2 { transform: translate(25%, -20%); }
-  .pulse-hero:hover .aurora-blob-3 { transform: translate(0, 25%); }
-}
-
-@keyframes auroraDrift1 {
-  0%   { transform: translate(0, 0) scale(1); }
-  33%  { transform: translate(35%, 25%) scale(1.15); }
-  66%  { transform: translate(10%, -20%) scale(0.9); }
-  100% { transform: translate(0, 0) scale(1); }
-}
-@keyframes auroraDrift2 {
-  0%   { transform: translate(0, 0) scale(1.05); }
-  50%  { transform: translate(-30%, 35%) scale(0.9); }
-  100% { transform: translate(0, 0) scale(1.05); }
-}
-@keyframes auroraDrift3 {
-  0%   { transform: translate(0, 0) scale(0.95); }
-  40%  { transform: translate(-35%, -30%) scale(1.15); }
-  70%  { transform: translate(20%, -35%) scale(1.0); }
-  100% { transform: translate(0, 0) scale(0.95); }
-}
-
 /* ---- ПК: слот крупнее, обложка крупнее ---- */
 @media (min-width: 900px) {
   .pulse-hero-inner,
@@ -5310,16 +5200,6 @@ body.genre-open .topbar {
   .pulse-hero.live .pulse-hero-inner .pulse-hero-art-card {
     width: 220px !important;
     height: 220px !important;
-  }
-  .pulse-hero-visual {
-    -webkit-mask-image:
-      linear-gradient(to bottom, transparent 0px, black 120px, black 100%),
-      linear-gradient(to right, transparent 0px, black 35px, black calc(100% - 35px), transparent 100%);
-    -webkit-mask-composite: source-in;
-    mask-image:
-      linear-gradient(to bottom, transparent 0px, black 120px, black 100%),
-      linear-gradient(to right, transparent 0px, black 35px, black calc(100% - 35px), transparent 100%);
-    mask-composite: intersect;
   }
   .pulse-title { font-size: 24px; }
   .pulse-sub { font-size: 14px; }
@@ -5358,14 +5238,6 @@ body.genre-open .topbar {
     width: 160px !important;
     height: 160px !important;
   }
-  .pulse-hero-visual {
-    -webkit-mask-image:
-      linear-gradient(to bottom, transparent 0px, black 80px, black 100%),
-      linear-gradient(to right, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
-    mask-image:
-      linear-gradient(to bottom, transparent 0px, black 80px, black 100%),
-      linear-gradient(to right, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
-  }
 }
 
 /* ---- Скрываем устаревшие элементы ---- */
@@ -5375,3 +5247,133 @@ body.genre-open .topbar {
 .pulse-hero-content,
 .pulse-hero-ambient,
 .pulse-hero-rings { display: none !important; }
+
+/* ================================================================
+   PULSE AURORA — глобальный живой фон (Variant B)
+   Aurora живёт вне hero, всегда видна, плавно затухает к середине
+   раздела «Собрано для тебя».
+   ================================================================ */
+
+.pulse-aurora {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  z-index: 1;                /* выше .bg (z:0), ниже main (z:10) */
+  pointer-events: none;
+  overflow: hidden;
+  --aurora-1: rgb(124, 92, 255);
+  --aurora-2: rgb(255, 64, 158);
+  --aurora-3: rgb(56, 132, 255);
+  -webkit-mask-image:
+    linear-gradient(to bottom,
+      black 0,
+      black 50vh,
+      transparent 90vh,
+      transparent 100%),
+    linear-gradient(to right,
+      transparent 0,
+      black 4%,
+      black 96%,
+      transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom,
+      black 0,
+      black 50vh,
+      transparent 90vh,
+      transparent 100%),
+    linear-gradient(to right,
+      transparent 0,
+      black 4%,
+      black 96%,
+      transparent 100%);
+  mask-composite: intersect;
+}
+
+.pulse-aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  mix-blend-mode: plus-lighter;
+  opacity: 0.7;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 1.2s cubic-bezier(.22, 1, .36, 1);
+}
+
+.pulse-aurora-blob::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.pulse-aurora-blob-1 {
+  width: min(700px, 70vw);
+  height: min(700px, 70vw);
+  top: -10%;
+  left: -10%;
+}
+.pulse-aurora-blob-1::before {
+  background: radial-gradient(circle, var(--aurora-1) 0%, transparent 70%);
+  animation: auroraGlobalDrift1 20s ease-in-out infinite;
+}
+
+.pulse-aurora-blob-2 {
+  width: min(800px, 80vw);
+  height: min(800px, 80vw);
+  top: -15%;
+  right: -15%;
+}
+.pulse-aurora-blob-2::before {
+  background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
+  animation: auroraGlobalDrift2 24s ease-in-out infinite;
+}
+
+.pulse-aurora-blob-3 {
+  width: min(600px, 60vw);
+  height: min(600px, 60vw);
+  top: 22%;
+  left: 15%;
+}
+.pulse-aurora-blob-3::before {
+  background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
+  animation: auroraGlobalDrift3 22s ease-in-out infinite;
+}
+
+/* Мобилка: чуть меньше blur и размер, чтобы не «слепить» */
+@media (max-width: 899px) {
+  .pulse-aurora-blob {
+    filter: blur(60px);
+    opacity: 0.65;
+  }
+  .pulse-aurora-blob-1 { width: 90vw; height: 90vw; }
+  .pulse-aurora-blob-2 { width: 100vw; height: 100vw; }
+  .pulse-aurora-blob-3 { width: 80vw; height: 80vw; }
+}
+
+/* Scatter при наведении на обложку / кнопки */
+.pulse-aurora.scatter .pulse-aurora-blob-1 { transform: translate(-15%, -10%); }
+.pulse-aurora.scatter .pulse-aurora-blob-2 { transform: translate(15%, -10%); }
+.pulse-aurora.scatter .pulse-aurora-blob-3 { transform: translate(0, 15%); }
+
+@keyframes auroraGlobalDrift1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(25%, 15%) scale(1.1); }
+  66%  { transform: translate(5%, -10%) scale(0.92); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes auroraGlobalDrift2 {
+  0%   { transform: translate(0, 0) scale(1.05); }
+  50%  { transform: translate(-25%, 25%) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1.05); }
+}
+@keyframes auroraGlobalDrift3 {
+  0%   { transform: translate(0, 0) scale(0.95); }
+  40%  { transform: translate(-30%, -25%) scale(1.1); }
+  70%  { transform: translate(15%, -20%) scale(1.0); }
+  100% { transform: translate(0, 0) scale(0.95); }
+}

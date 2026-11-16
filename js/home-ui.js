@@ -59,11 +59,16 @@ window.PocuHomeUI = (() => {
   }
 
   function applyAuroraColors(colors) {
-    if (!els.pulseCard || !Array.isArray(colors) || colors.length < 3) return;
+    if (!Array.isArray(colors) || colors.length < 3) return;
     const toCss = (c) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
-    els.pulseCard.style.setProperty('--aurora-1', toCss(colors[0]));
-    els.pulseCard.style.setProperty('--aurora-2', toCss(colors[1]));
-    els.pulseCard.style.setProperty('--aurora-3', toCss(colors[2]));
+    const set = (el) => {
+      if (!el) return;
+      el.style.setProperty('--aurora-1', toCss(colors[0]));
+      el.style.setProperty('--aurora-2', toCss(colors[1]));
+      el.style.setProperty('--aurora-3', toCss(colors[2]));
+    };
+    set(els.pulseCard);
+    set(els.pulseAurora);
   }
 
   const FUNNY_TITLES = [
@@ -108,7 +113,7 @@ window.PocuHomeUI = (() => {
 
     els = {
       pulseCard:        document.getElementById('pulseCard'),
-      pulseArt:         document.getElementById('pulseArt'),
+      pulseAurora:      document.getElementById('pulseAurora'),
       pulseArtCard:     document.getElementById('pulseArtCard'),
       pulseArtImg:      document.getElementById('pulseArtImg'),
       pulseTitle:       document.getElementById('pulseTitle'),
@@ -167,6 +172,20 @@ window.PocuHomeUI = (() => {
       els.pulseEq.addEventListener('click', e => {
         e.stopPropagation();
         window.PocuEquilizerUI?.open?.();
+      });
+    }
+
+    /* ---- Aurora scatter on hover (только обложка + кнопки) ---- */
+    if (els.pulseAurora) {
+      const scatterTargets = [
+        els.pulseArtCard,
+        document.querySelector('.pulse-actions')
+      ].filter(Boolean);
+      const onEnter = () => els.pulseAurora.classList.add('scatter');
+      const onLeave = () => els.pulseAurora.classList.remove('scatter');
+      scatterTargets.forEach(el => {
+        el.addEventListener('mouseenter', onEnter);
+        el.addEventListener('mouseleave', onLeave);
       });
     }
 
@@ -407,13 +426,6 @@ window.PocuHomeUI = (() => {
     els.pulsePlay?.classList.toggle('playing', playing);
 
     if (trackInPulse) {
-      const artUrl = playerState.track.artwork
-        ? `url("${playerState.track.artwork}")` : '';
-
-      if (els.pulseArt.style.backgroundImage !== artUrl) {
-        els.pulseArt.style.backgroundImage = artUrl;
-      }
-
       if (els.pulseArtImg && playerState.track.artwork) {
         els.pulseArtImg.src = playerState.track.artwork;
         els.pulseArtCard?.classList.add('has-track');
