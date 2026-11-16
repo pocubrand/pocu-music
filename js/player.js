@@ -521,6 +521,31 @@ window.PocuPlayer = (() => {
     } catch (e) {}
   }
 
+  function setupMediaHandlers() {
+    if (!('mediaSession' in navigator)) return;
+    try {
+      // play / pause
+      navigator.mediaSession.setActionHandler('play', () => {
+        ensureContextRunning();
+        if (!current) return;
+        if (activeAudio.paused) activeAudio.play().catch(() => {});
+      });
+      navigator.mediaSession.setActionHandler('pause', () => {
+        if (!current) return;
+        if (!activeAudio.paused) activeAudio.pause();
+      });
+
+      // next / prev — перерегистрируем при каждом старте
+      navigator.mediaSession.setActionHandler('nexttrack', next);
+      navigator.mediaSession.setActionHandler('previoustrack', prev);
+
+      // seek-обработчики НЕ регистрируем (иначе iOS спрячет next/prev)
+      // navigator.mediaSession.setActionHandler('seekto', ...);  // намеренно отключено
+    } catch (e) {
+      console.warn('[mediaSession] handler setup failed', e);
+    }
+  }
+
   function setPlaybackState() {
     if (!('mediaSession' in navigator)) return;
     if (!current) {
@@ -529,6 +554,10 @@ window.PocuPlayer = (() => {
     } else {
       // Существующий трек: никогда не 'none', только 'paused' или 'playing'
       navigator.mediaSession.playbackState = activeAudio.paused ? 'paused' : 'playing';
+    }
+    // Микро-толчок для некоторых браузеров:
+    if (current && !activeAudio.paused) {
+      navigator.mediaSession.playbackState = 'playing';
     }
   }
 
@@ -540,26 +569,6 @@ window.PocuPlayer = (() => {
         duration: activeAudio.duration, playbackRate: 1,
         position: Math.min(activeAudio.currentTime, activeAudio.duration)
       });
-    } catch (e) {}
-  }
-
-  if ('mediaSession' in navigator) {
-    try {
-      // Разделили play и pause (был баг: оба вызывали togglePlay)
-      navigator.mediaSession.setActionHandler('play', () => {
-        ensureContextRunning();
-        if (!current) return;
-        if (activeAudio.paused) activeAudio.play().catch(() => {});
-      });
-      navigator.mediaSession.setActionHandler('pause', () => {
-        if (!current) return;
-        if (!activeAudio.paused) activeAudio.pause();
-      });
-      navigator.mediaSession.setActionHandler('previoustrack', prev);
-      navigator.mediaSession.setActionHandler('nexttrack', next);
-      // ВАЖНО: seekto / seekbackward / seekforward НЕ регистрируем,
-      // чтобы браузер показал кнопки переключения треков вместо перемотки.
-      // navigator.mediaSession.setActionHandler('seekto', ...);  // <- отключено
     } catch (e) {}
   }
 
@@ -613,6 +622,7 @@ window.PocuPlayer = (() => {
     });
     el.addEventListener('play', () => {
       ensureContextRunning();
+      setupMediaHandlers();
       if (el !== activeAudio) return;
       setPlaybackState();
       notify();
