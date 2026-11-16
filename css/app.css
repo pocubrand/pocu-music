@@ -5409,3 +5409,37 @@ body.genre-open .topbar {
 .pulse-hero:not(.live) .pulse-hero-art-placeholder {
   display: none !important;
 }
+
+/* ================================================================
+   PULSE — пустой слот с обложкой: ничего не видно без трека
+   ================================================================ */
+
+/* Пока ничего не играет — art-card невидим (только слот держит место) */
+.pulse-hero:not(.live) .pulse-hero-art-card {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 18px;
+}
+
+.pulse-hero:not(.live) .pulse-hero-art-card img {
+  opacity: 0 !important;
+}
+
+/* Невидимая карточка не должна ловить hover/scatter */
+.pulse-hero:not(.live) .pulse-hero-art-card {
+  pointer-events: none;
+}
+
+/* Когда трек есть — обложка с тенью и появляется */
+.pulse-hero.live .pulse-hero-art-card {
+  background: #1a1a22;
+  box-shadow:
+    0 20px 44px rgba(0,0,0,0.55),
+    0 0 0 1px rgba(255,255,255,0.08) inset;
+  pointer-events: auto;
+}
+
+.pulse-hero.live .pulse-hero-art-card img {
+  opacity: 1 !important;
+  transition: opacity 0.4s ease;
+}
