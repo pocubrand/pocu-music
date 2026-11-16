@@ -117,13 +117,12 @@ window.PocuHomeUI = (() => {
       pulseQueue:       document.getElementById('pulseQueue'),
       pulsePlay:        document.getElementById('pulsePlay'),
       pulseRefresh:     document.getElementById('pulseRefresh'),
+      pulseEq:          document.getElementById('pulseEq'),
       pulseLike:        document.getElementById('pulseLike'),
       pulseDislike:     document.getElementById('pulseDislike'),
       pulseInsightCard: document.getElementById('pulseInsightCard'),
       pulseInsightIcon: document.getElementById('pulseInsightIcon'),
       pulseInsightText: document.getElementById('pulseInsightText'),
-      pulseProgressMobile: document.getElementById('pulseProgressMobile'),
-      pulseProgressFill:   document.getElementById('pulseProgressFill'),
 
       picksRow:      document.getElementById('homePicksRow'),
       picksSection:  document.getElementById('homePicks'),
@@ -162,6 +161,12 @@ window.PocuHomeUI = (() => {
       els.pulseRefresh.addEventListener('click', e => {
         e.stopPropagation();
         try { window.PocuPulse.refresh(); } catch (err) { console.error(err); }
+      });
+    }
+    if (els.pulseEq) {
+      els.pulseEq.addEventListener('click', e => {
+        e.stopPropagation();
+        window.PocuEquilizerUI?.open?.();
       });
     }
 
@@ -260,7 +265,6 @@ window.PocuHomeUI = (() => {
         safe(renderPulseState);
       }
       safe(syncHomeTilesPlaying);
-      safe(syncProgress);
     });
 
     window.PocuStore.subscribe(() => {
@@ -294,7 +298,6 @@ window.PocuHomeUI = (() => {
     });
   }
 
-  /* ---- Кнопки видны всегда, но disabled когда нет трека ---- */
   function syncPulseActions() {
     const st = window.PocuPlayer.getState();
     const track = st.track;
@@ -316,16 +319,6 @@ window.PocuHomeUI = (() => {
         els.pulseDislike.classList.remove('active');
       }
     }
-  }
-
-  /* ---- Прогресс-бар ---- */
-  function syncProgress() {
-    if (!els.pulseProgressFill) return;
-    const st = window.PocuPlayer.getState();
-    const dur = st.duration || 0;
-    const t   = st.time || 0;
-    const pct = dur > 0 ? Math.min(100, Math.max(0, (t / dur) * 100)) : 0;
-    els.pulseProgressFill.style.width = pct + '%';
   }
 
   function safe(fn) {
@@ -463,7 +456,6 @@ window.PocuHomeUI = (() => {
       lastQueueHash = '';
     }
 
-    // Всегда синхронизируем insight и кнопки
     safe(renderInsightCard);
     safe(syncPulseActions);
   }
