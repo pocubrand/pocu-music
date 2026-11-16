@@ -117,7 +117,6 @@ window.PocuHomeUI = (() => {
       pulseQueue:       document.getElementById('pulseQueue'),
       pulsePlay:        document.getElementById('pulsePlay'),
       pulseRefresh:     document.getElementById('pulseRefresh'),
-      pulseShuffle:     document.getElementById('pulseShuffle'),
       pulseLike:        document.getElementById('pulseLike'),
       pulseDislike:     document.getElementById('pulseDislike'),
       pulseInsightCard: document.getElementById('pulseInsightCard'),
@@ -165,17 +164,12 @@ window.PocuHomeUI = (() => {
         try { window.PocuPulse.refresh(); } catch (err) { console.error(err); }
       });
     }
-    if (els.pulseShuffle) {
-      els.pulseShuffle.addEventListener('click', e => {
-        e.stopPropagation();
-        window.PocuPlayer.toggleShuffle();
-      });
-    }
 
     /* ---- LIKE ---- */
     if (els.pulseLike) {
       els.pulseLike.addEventListener('click', e => {
         e.stopPropagation();
+        if (els.pulseLike.classList.contains('disabled')) return;
         const track = window.PocuPlayer.current;
         if (!track) return;
         const nowFav = window.PocuStore.favorites.toggle(track.id);
@@ -185,7 +179,6 @@ window.PocuHomeUI = (() => {
           els.pulseLike.classList.add('just-activated');
           setTimeout(() => els.pulseLike.classList.remove('just-activated'), 450);
         }
-        // Снимаем дизлайк, если стоял
         els.pulseDislike?.classList.toggle('active', window.PocuStore.disliked.has(track.id));
       });
     }
@@ -194,15 +187,14 @@ window.PocuHomeUI = (() => {
     if (els.pulseDislike) {
       els.pulseDislike.addEventListener('click', e => {
         e.stopPropagation();
+        if (els.pulseDislike.classList.contains('disabled')) return;
         const track = window.PocuPlayer.current;
         if (!track) return;
         const nowDisliked = window.PocuStore.disliked.toggle(track.id);
         window.PocuSupabase?.syncDislike?.(track.id, nowDisliked);
         els.pulseDislike.classList.toggle('active', nowDisliked);
-        // Снимаем лайк, если стоял
         els.pulseLike?.classList.toggle('active', window.PocuStore.favorites.has(track.id));
         if (nowDisliked) {
-          // Авто-скип на следующий
           setTimeout(() => window.PocuPlayer.next(), 80);
         }
       });
@@ -268,7 +260,6 @@ window.PocuHomeUI = (() => {
         safe(renderPulseState);
       }
       safe(syncHomeTilesPlaying);
-      safe(syncPulseActions);
       safe(syncProgress);
     });
 
@@ -303,22 +294,27 @@ window.PocuHomeUI = (() => {
     });
   }
 
-  /* ---- Активные состояния like/dislike + видимость кнопок ---- */
+  /* ---- Кнопки видны всегда, но disabled когда нет трека ---- */
   function syncPulseActions() {
     const st = window.PocuPlayer.getState();
     const track = st.track;
     const hasTrack = !!track && window.PocuPulse?.active;
 
     if (els.pulseLike) {
-      els.pulseLike.hidden = !hasTrack;
-      if (hasTrack) els.pulseLike.classList.toggle('active', window.PocuStore.favorites.has(track.id));
+      els.pulseLike.classList.toggle('disabled', !hasTrack);
+      if (hasTrack) {
+        els.pulseLike.classList.toggle('active', window.PocuStore.favorites.has(track.id));
+      } else {
+        els.pulseLike.classList.remove('active');
+      }
     }
     if (els.pulseDislike) {
-      els.pulseDislike.hidden = !hasTrack;
-      if (hasTrack) els.pulseDislike.classList.toggle('active', window.PocuStore.disliked.has(track.id));
-    }
-    if (els.pulseShuffle) {
-      els.pulseShuffle.hidden = !hasTrack;
+      els.pulseDislike.classList.toggle('disabled', !hasTrack);
+      if (hasTrack) {
+        els.pulseDislike.classList.toggle('active', window.PocuStore.disliked.has(track.id));
+      } else {
+        els.pulseDislike.classList.remove('active');
+      }
     }
   }
 
@@ -466,6 +462,10 @@ window.PocuHomeUI = (() => {
       if (els.pulseQueue) els.pulseQueue.innerHTML = '';
       lastQueueHash = '';
     }
+
+    // Всегда синхронизируем insight и кнопки
+    safe(renderInsightCard);
+    safe(syncPulseActions);
   }
 
   function renderPicks() {

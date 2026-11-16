@@ -567,22 +567,26 @@ html { transition: background-color .3s ease; }
   border-color: rgba(0, 0, 0, 0.06);
 }
 
-/* Pulse v3 — светлая тема */
+/* Pulse v4 — светлая тема */
 [data-theme="light"] .pulse-insight {
-  background: rgba(255,255,255,0.85);
-  border-color: rgba(0,0,0,0.08);
+  background: rgba(124,92,255,0.10);
+  border-color: rgba(124,92,255,0.22);
   color: #1a1a1f;
 }
 [data-theme="light"] .pulse-insight-icon { color: #7c5cff; }
-[data-theme="light"] .pulse-progress-mobile {
-  background: rgba(0,0,0,0.08);
-}
+[data-theme="light"] .pulse-progress-mobile { background: rgba(0,0,0,0.08); }
 
-[data-theme="light"] .pulse-btn-shuffle,
 [data-theme="light"] .pulse-btn-like,
 [data-theme="light"] .pulse-btn-dislike,
 [data-theme="light"] .pulse-btn-refresh {
-  background: rgba(0,0,0,0.04);
-  border-color: rgba(0,0,0,0.08);
+  background: rgba(0,0,0,0.05);
+  border-color: rgba(0,0,0,0.10);
   color: #1a1a1f;
+}
+
+[data-theme="light"] .pulse-hero-art-card {
+  background: #e8e8ee;
+  box-shadow:
+    0 20px 44px rgba(0,0,0,0.15),
+    0 0 0 1px rgba(0,0,0,0.06) inset;
 }
