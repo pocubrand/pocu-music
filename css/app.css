@@ -5049,24 +5049,27 @@ body.genre-open .topbar {
 }
 
 /* ================================================================
-   PULSE v7 — flex-start + auto-height, fade сверху и бока
+   PULSE v8 — cover fix (contain off, margin-top) + live blobs
    ================================================================ */
 
+/* ---- Контейнер: убираем contain + фикс. высоту ---- */
 .pulse-hero {
   position: relative;
   width: 100%;
   height: auto !important;
+  min-height: 0 !important;
+  contain: none !important;            /* ключевой фикс */
   border-radius: 28px;
   overflow: visible !important;
   background: transparent !important;
   box-shadow: none !important;
   isolation: isolate;
-  padding: 0;
+  padding: 0 !important;
   margin-bottom: 20px;
   cursor: pointer;
 }
 
-/* Visual: fade сверху (в пикселях) + по бокам, снизу — чёткий край */
+/* Visual: fade сверху (px) + по бокам, снизу — чёткий край */
 .pulse-hero-visual {
   position: absolute;
   inset: 0;
@@ -5087,23 +5090,23 @@ body.genre-open .topbar {
 .pulse-hero-overlay,
 .pulse-hero-vignette { display: none !important; }
 
-/* Inner: не центрируется — flex-start + фиксированный padding-top.
-   Обложка стабильна в обоих состояниях (пусто / играет). */
+/* Inner — flex-start, без top-padding. Отступ у обложки */
 .pulse-hero-inner {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-start !important;
   width: 100%;
-  padding: 130px 20px 24px;
+  padding: 0 20px 24px !important;
   gap: 0;
   box-sizing: border-box;
-  min-height: 0;
+  min-height: 0 !important;
+  height: auto !important;
 }
 
-/* Обложка */
+/* Обложка — фикс. отступ сверху через margin-top (не padding) */
 .pulse-hero-art-card {
   position: relative !important;
   top: auto !important;
@@ -5118,9 +5121,10 @@ body.genre-open .topbar {
     0 0 0 1px rgba(255,255,255,0.08) inset;
   opacity: 1 !important;
   z-index: 3;
-  margin: 0 0 14px;
+  margin: 130px 0 14px !important;      /* ← ключевой фикс */
   background: #1a1a22;
   transition: transform 0.3s var(--spring);
+  flex: none;
 }
 .pulse-hero-art-card:active { transform: scale(0.98) !important; }
 
@@ -5241,7 +5245,6 @@ body.genre-open .topbar {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding-top: 0;
   flex: none;
   margin-top: 14px;
 }
@@ -5287,7 +5290,7 @@ body.genre-open .topbar {
 .pulse-btn-play.playing .pulse-icon-pause { display: block; }
 
 .pulse-btn-like svg,
-.pulse-btn-dislike svg { width: 20px; height: 20px; }
+.pulse-btn-dislike svg,
 .pulse-btn-eq svg { width: 20px; height: 20px; }
 
 .pulse-btn.disabled {
@@ -5309,30 +5312,118 @@ body.genre-open .topbar {
   border-color: rgba(255,92,92,0.32);
 }
 
-/* ---- ПК: обложка на той же высоте, что у "заглушки" (189px), hero по контенту ---- */
+/* ============================================================
+   AURORA BLOBS v8 — drift непрерывный (::before) + scatter на hover
+   ============================================================ */
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  mix-blend-mode: screen;
+  opacity: 0.7 !important;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 1;
+  background: none !important;         /* убираем фон с обёртки */
+  animation: none !important;          /* убираем анимацию с обёртки */
+  transition: transform 1.2s cubic-bezier(.34, 1.4, .5, 1);
+}
+
+.aurora-blob::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.aurora-blob-1 {
+  width: 60%;
+  aspect-ratio: 1;
+  top: -15%;
+  left: -15%;
+}
+.aurora-blob-1::before {
+  background: radial-gradient(circle, var(--aurora-1) 0%, transparent 70%);
+  animation: auroraDrift1 18s ease-in-out infinite;
+}
+
+.aurora-blob-2 {
+  width: 65%;
+  aspect-ratio: 1;
+  top: -20%;
+  right: -20%;
+}
+.aurora-blob-2::before {
+  background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
+  animation: auroraDrift2 22s ease-in-out infinite;
+}
+
+.aurora-blob-3 {
+  width: 55%;
+  aspect-ratio: 1;
+  bottom: -20%;
+  left: 20%;
+}
+.aurora-blob-3::before {
+  background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
+  animation: auroraDrift3 20s ease-in-out infinite;
+}
+
+/* Ускоряем при live */
+.pulse-hero.live:not(.paused) .aurora-blob-1::before { animation-duration: 12s; }
+.pulse-hero.live:not(.paused) .aurora-blob-2::before { animation-duration: 15s; }
+.pulse-hero.live:not(.paused) .aurora-blob-3::before { animation-duration: 13s; }
+.pulse-hero.live:not(.paused) .aurora-blob { opacity: 1 !important; }
+
+/* Разбегание на hover — обёртка сдвигается от центра */
+.pulse-hero:hover .aurora-blob-1 { transform: translate(-45%, -35%) scale(1.25); }
+.pulse-hero:hover .aurora-blob-2 { transform: translate(45%, -35%)  scale(1.25); }
+.pulse-hero:hover .aurora-blob-3 { transform: translate(0, 55%)     scale(1.25); }
+
+@keyframes auroraDrift1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(45%, 30%) scale(1.25); }
+  66%  { transform: translate(15%, -25%) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes auroraDrift2 {
+  0%   { transform: translate(0, 0) scale(1.1); }
+  50%  { transform: translate(-35%, 45%) scale(0.85); }
+  100% { transform: translate(0, 0) scale(1.1); }
+}
+@keyframes auroraDrift3 {
+  0%   { transform: translate(0, 0) scale(0.9); }
+  40%  { transform: translate(-45%, -35%) scale(1.3); }
+  70%  { transform: translate(25%, -40%) scale(1.05); }
+  100% { transform: translate(0, 0) scale(0.9); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob::before { animation: none !important; }
+  .aurora-blob { transition: none !important; }
+}
+
+/* ---- ПК: обложка заметно ниже (тот же приём — margin-top) ---- */
 @media (min-width: 900px) {
-  .pulse-hero {
-    /* без min-height — растягивается по контенту */
-  }
   .pulse-hero-inner {
-    padding: 189px 28px 32px;
-    justify-content: flex-start;
-    min-height: 0;
-  }
-  .pulse-hero-visual {
-    -webkit-mask-image:
-      linear-gradient(to bottom, transparent 0px, black 150px, black 100%),
-      linear-gradient(to right, transparent 0px, black 35px, black calc(100% - 35px), transparent 100%);
-    -webkit-mask-composite: source-in;
-    mask-image:
-      linear-gradient(to bottom, transparent 0px, black 150px, black 100%),
-      linear-gradient(to right, transparent 0px, black 35px, black calc(100% - 35px), transparent 100%);
-    mask-composite: intersect;
+    padding: 0 28px 32px !important;
   }
   .pulse-hero-art-card {
     width: 220px;
     height: 220px;
-    margin-bottom: 16px;
+    margin: 200px 0 18px !important;   /* ← отступ сверху */
+  }
+  .pulse-hero-visual {
+    -webkit-mask-image:
+      linear-gradient(to bottom, transparent 0px, black 160px, black 100%),
+      linear-gradient(to right, transparent 0px, black 35px, black calc(100% - 35px), transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to bottom, transparent 0px, black 160px, black 100%),
+      linear-gradient(to right, transparent 0px, black 35px, black calc(100% - 35px), transparent 100%);
+    mask-composite: intersect;
   }
   .pulse-title { font-size: 24px; }
   .pulse-sub { font-size: 14px; }
@@ -5352,11 +5443,10 @@ body.genre-open .topbar {
   }
 }
 
-/* ---- Мобилка: на узких экранах чуть компактнее ---- */
+/* ---- Мобилка: узкие экраны — компактнее ---- */
 @media (max-width: 480px) {
-  .pulse-hero-inner {
-    padding: 100px 18px 22px;
-  }
+  .pulse-hero-inner { padding: 0 18px 22px !important; }
+  .pulse-hero-art-card { margin: 110px 0 12px !important; }
   .pulse-hero-visual {
     -webkit-mask-image:
       linear-gradient(to bottom, transparent 0px, black 65px, black 100%),
