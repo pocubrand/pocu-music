@@ -59,13 +59,11 @@ window.PocuHomeUI = (() => {
   }
 
   function applyAuroraColors(colors) {
-    if (!Array.isArray(colors) || colors.length < 3) return;
+    if (!els.pulseCard || !Array.isArray(colors) || colors.length < 3) return;
     const toCss = (c) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
-    const root = document.documentElement;
-    root.style.setProperty('--aurora-1', toCss(colors[0]));
-    root.style.setProperty('--aurora-2', toCss(colors[1]));
-    root.style.setProperty('--aurora-3', toCss(colors[2]));
-    console.log('[aurora] colors applied:', colors);
+    els.pulseCard.style.setProperty('--aurora-1', toCss(colors[0]));
+    els.pulseCard.style.setProperty('--aurora-2', toCss(colors[1]));
+    els.pulseCard.style.setProperty('--aurora-3', toCss(colors[2]));
   }
 
   const FUNNY_TITLES = [
