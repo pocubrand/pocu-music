@@ -59,16 +59,11 @@ window.PocuHomeUI = (() => {
   }
 
   function applyAuroraColors(colors) {
-    if (!Array.isArray(colors) || colors.length < 3) return;
+    if (!els.pulseCard || !Array.isArray(colors) || colors.length < 3) return;
     const toCss = (c) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
-    const set = (el) => {
-      if (!el) return;
-      el.style.setProperty('--aurora-1', toCss(colors[0]));
-      el.style.setProperty('--aurora-2', toCss(colors[1]));
-      el.style.setProperty('--aurora-3', toCss(colors[2]));
-    };
-    set(els.pulseCard);
-    set(els.pulseAurora);
+    els.pulseCard.style.setProperty('--aurora-1', toCss(colors[0]));
+    els.pulseCard.style.setProperty('--aurora-2', toCss(colors[1]));
+    els.pulseCard.style.setProperty('--aurora-3', toCss(colors[2]));
   }
 
   const FUNNY_TITLES = [
@@ -107,28 +102,12 @@ window.PocuHomeUI = (() => {
     el.textContent = FUNNY_TITLES[Math.floor(Math.random() * FUNNY_TITLES.length)];
   }
 
-  function ensureAuroraInBody() {
-    const aurora = document.getElementById('pulseAurora');
-    const fade = document.querySelector('.pulse-aurora-fade');
-    if (aurora && aurora.parentElement !== document.body) {
-      document.body.appendChild(aurora);
-      console.log('[home-ui] aurora moved to body');
-    }
-    if (fade && fade.parentElement !== document.body) {
-      document.body.appendChild(fade);
-      console.log('[home-ui] aurora-fade moved to body');
-    }
-  }
-
   function init() {
     if (initialized) return;
     initialized = true;
 
-    ensureAuroraInBody();
-
     els = {
       pulseCard:        document.getElementById('pulseCard'),
-      pulseAurora:      document.getElementById('pulseAurora'),
       pulseArtCard:     document.getElementById('pulseArtCard'),
       pulseArtImg:      document.getElementById('pulseArtImg'),
       pulseTitle:       document.getElementById('pulseTitle'),
@@ -191,13 +170,13 @@ window.PocuHomeUI = (() => {
     }
 
     /* ---- Aurora scatter on hover (только обложка + кнопки) ---- */
-    if (els.pulseAurora) {
+    if (els.pulseCard) {
       const scatterTargets = [
         els.pulseArtCard,
         document.querySelector('.pulse-actions')
       ].filter(Boolean);
-      const onEnter = () => els.pulseAurora.classList.add('scatter');
-      const onLeave = () => els.pulseAurora.classList.remove('scatter');
+      const onEnter = () => els.pulseCard.classList.add('scatter');
+      const onLeave = () => els.pulseCard.classList.remove('scatter');
       scatterTargets.forEach(el => {
         el.addEventListener('mouseenter', onEnter);
         el.addEventListener('mouseleave', onLeave);
