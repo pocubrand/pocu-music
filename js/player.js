@@ -1,4 +1,4 @@
-/* Pocu Music — аудио-плеер + 30-сек + эквалайзер + crossfade + авторезюм AudioContext */
+/* Pocu Music — аудио-плеер + 30-сек + эквалайзер + crossfade + фиксы MediaSession */
 window.PocuPlayer = (() => {
   const audioA = new Audio();
   const audioB = new Audio();
@@ -115,7 +115,6 @@ window.PocuPlayer = (() => {
   function ensureContextRunning() {
     if (!audioCtx) return;
     if (audioCtx.state === 'running' || audioCtx.state === 'closed') return;
-    // 'suspended' или 'interrupted' (Safari) — пробуем поднять
     audioCtx.resume().catch(() => {});
   }
 
@@ -317,7 +316,6 @@ window.PocuPlayer = (() => {
     newGain.gain.setValueAtTime(0, now);
     newGain.gain.linearRampToValueAtTime(1, now + fadeTime);
 
-    // Засчитываем завершение предыдущего трека (crossfade = услышал почти до конца)
     if (current) {
       try { window.PocuStore?.skipStats?.recordComplete?.(current.id); } catch {}
     }
@@ -522,10 +520,18 @@ window.PocuPlayer = (() => {
       });
     } catch (e) {}
   }
+
   function setPlaybackState() {
     if (!('mediaSession' in navigator)) return;
-    navigator.mediaSession.playbackState = current ? (activeAudio.paused ? 'paused' : 'playing') : 'none';
+    if (!current) {
+      // Нет трека — только тогда 'none'
+      navigator.mediaSession.playbackState = 'none';
+    } else {
+      // Существующий трек: никогда не 'none', только 'paused' или 'playing'
+      navigator.mediaSession.playbackState = activeAudio.paused ? 'paused' : 'playing';
+    }
   }
+
   function updatePositionState() {
     if (!('mediaSession' in navigator) || !navigator.mediaSession.setPositionState) return;
     if (!current || !isFinite(activeAudio.duration) || activeAudio.duration === 0) return;
@@ -539,7 +545,7 @@ window.PocuPlayer = (() => {
 
   if ('mediaSession' in navigator) {
     try {
-      // ВАЖНО: разделили play и pause (togglePlay тут был багом — icon "play" при playing ставил паузу)
+      // Разделили play и pause (был баг: оба вызывали togglePlay)
       navigator.mediaSession.setActionHandler('play', () => {
         ensureContextRunning();
         if (!current) return;
@@ -551,7 +557,9 @@ window.PocuPlayer = (() => {
       });
       navigator.mediaSession.setActionHandler('previoustrack', prev);
       navigator.mediaSession.setActionHandler('nexttrack', next);
-      navigator.mediaSession.setActionHandler('seekto', e => { if (e.seekTime != null) seek(e.seekTime); });
+      // ВАЖНО: seekto / seekbackward / seekforward НЕ регистрируем,
+      // чтобы браузер показал кнопки переключения треков вместо перемотки.
+      // navigator.mediaSession.setActionHandler('seekto', ...);  // <- отключено
     } catch (e) {}
   }
 
@@ -559,9 +567,7 @@ window.PocuPlayer = (() => {
     if (el !== activeAudio) return;
     if (!current) return;
 
-    // ГЛАВНЫЙ ФИКС: пока играет — держим AudioContext живым.
-    // На мобилке ОС суспендит контекст при блокировке экрана/фоне,
-    // но <audio> продолжает "играть" — без этого звук пропадает.
+    // Держим AudioContext живым, пока трек играет
     ensureContextRunning();
 
     const t = el.currentTime;
@@ -572,8 +578,6 @@ window.PocuPlayer = (() => {
     }
     if (!isCrossfading) {
       const cf = getCrossfadeTime();
-      // Фикс: при repeat='one' crossfade не запускаем — иначе перепрыгивает
-      // на следующий трек вместо повтора текущего
       if (cf > 0 && repeat !== 'one' && el.duration && isFinite(el.duration)) {
         const remaining = el.duration - el.currentTime;
         if (remaining > 0.2 && remaining <= cf + 0.5) {
@@ -590,7 +594,6 @@ window.PocuPlayer = (() => {
     if (el !== activeAudio) return;
     if (isCrossfading) return;
 
-    // Засчитываем завершение трека (natural end)
     if (current) {
       try { window.PocuStore?.skipStats?.recordComplete?.(current.id); } catch {}
     }
@@ -627,8 +630,6 @@ window.PocuPlayer = (() => {
   bindAudioEvents(audioB);
 
   /* === Глобальные авторезюмы AudioContext === */
-
-  // Возврат из фона / разблокировка экрана / bfcache
   document.addEventListener('visibilitychange', () => {
     ensureContextRunning();
   });
@@ -639,8 +640,6 @@ window.PocuPlayer = (() => {
     ensureContextRunning();
   });
 
-  // Watchdog: если ОС суспендит контекст, а аудио "играет" (background)
-  // — раз в 2 сек пробуем поднять. Дёшево, но надёжно.
   setInterval(() => {
     if (!audioCtx || !current || activeAudio.paused) return;
     if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
