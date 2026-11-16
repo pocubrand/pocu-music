@@ -3115,77 +3115,33 @@ body.track-open .topbar {
 }
 
 /* ================================================================
-   FIX v11 — Pulse: обложка выше, PC-двухколонка, очередь
+   PULSE: queue + clickable (очищено от старых pulse-art-card правил)
    ================================================================ */
 
-/* --- Мобилка: обложка выше + очередь скрыта --- */
-.pulse-hero-art-card {
-  top: 40% !important;
-}
+/* Очередь: скрыта на мобилке, видна на ПК */
 .pulse-queue { display: none; }
 
-/* --- ПК: двухколоночный layout --- */
 @media (min-width: 900px) {
-  .pulse-hero {
-    height: auto;
-    min-height: 340px;
-  }
-
-  /* Обложка крупная слева */
-  .pulse-hero-art-card {
-    top: 50% !important;
-    left: 32px !important;
-    transform: translateY(-50%) !important;
-    width: 270px;
-    height: 270px;
-    border-radius: 22px;
-  }
-  .pulse-hero.live .pulse-hero-art-card {
-    transform: translateY(-50%) !important;
-  }
-
-  /* Контент — справа от обложки */
-  .pulse-hero-content {
-    inset: 0 0 0 334px;
-    padding: 28px 32px 28px 0;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  .pulse-hero-meta {
-    text-align: left;
-    width: 100%;
-  }
-
-  .pulse-title { font-size: 30px; }
-  .pulse-sub   { font-size: 15px; margin-top: 6px; }
-
-  /* Очередь видна */
   .pulse-queue {
     display: flex;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 16px;
     max-width: 100%;
     overflow: hidden;
-  }
-
-  .pulse-actions {
-    flex-direction: row;
-    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }
 
-/* --- Элемент очереди --- */
+/* Элемент очереди */
 .pulse-queue-item {
   flex: 1 1 0;
   min-width: 0;
-  max-width: 160px;
+  max-width: 180px;
   display: flex;
   gap: 8px;
   align-items: center;
-  padding: 5px 8px 5px 5px;
+  padding: 5px 10px 5px 5px;
   border-radius: 10px;
   background: rgba(255,255,255,.08);
   border: 1px solid rgba(255,255,255,.1);
@@ -3205,6 +3161,7 @@ body.track-open .topbar {
 .pulse-queue-item-meta {
   min-width: 0;
   flex: 1;
+  text-align: left;
 }
 
 .pulse-queue-item-title {
@@ -3225,48 +3182,7 @@ body.track-open .topbar {
   margin-top: 1px;
 }
 
-/* ================================================================
-   FIX v12 — Pulse: placeholder, bigger mobile cover, clickable
-   ================================================================ */
-
-/* Обложка ВСЕГДА видна (даже без трека — placeholder) */
-.pulse-hero-art-card {
-  opacity: 1 !important;
-  transform: translate(-50%, -50%) scale(1) !important;
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  width: 180px;
-  height: 180px;
-  border-radius: 22px;
-  box-shadow: 0 20px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.08) inset;
-  overflow: hidden;
-  z-index: 3;
-}
-
-/* Placeholder (нота) */
-.pulse-hero-art-placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, rgba(124,92,255,.55), rgba(255,64,158,.4) 55%, rgba(56,132,255,.55));
-  color: rgba(255,255,255,.6);
-  transition: opacity .4s ease;
-  pointer-events: none;
-}
-.pulse-hero-art-placeholder svg {
-  width: 56px;
-  height: 56px;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,.4));
-}
-
-.pulse-hero-art-card.has-track .pulse-hero-art-placeholder {
-  opacity: 0;
-}
-
-/* Кликабельные элементы в live-состоянии */
+/* Кликабельность в live-состоянии */
 .pulse-hero.live .pulse-title,
 .pulse-hero.live .pulse-artist,
 .pulse-hero.live .pulse-hero-art-card {
@@ -3283,44 +3199,6 @@ body.track-open .topbar {
 
 .pulse-hero.live .pulse-title:hover {
   color: rgba(255,255,255,.9);
-}
-
-/* Кнопка refresh — стилизуем как shuffle */
-.pulse-btn-refresh {
-  width: 48px;
-  height: 48px;
-  background: rgba(255,255,255,.16);
-  border: 1px solid rgba(255,255,255,.22);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  transition: transform .5s var(--spring), background .2s;
-}
-.pulse-btn-refresh:active {
-  transform: scale(.9) rotate(-180deg);
-  background: rgba(255,255,255,.24);
-}
-
-/* ПК: обложка крупнее и слева */
-@media (min-width: 900px) {
-  .pulse-hero-art-card {
-    top: 50%;
-    left: 32px;
-    transform: translateY(-50%) !important;
-    width: 270px;
-    height: 270px;
-  }
-  .pulse-hero-art-placeholder svg {
-    width: 80px;
-    height: 80px;
-  }
-}
-
-/* Мобилка: чуть больше, чем было (было 140) */
-@media (max-width: 899px) {
-  .pulse-hero-art-card {
-    width: 200px;
-    height: 200px;
-  }
 }
 
 /* ================================================================
