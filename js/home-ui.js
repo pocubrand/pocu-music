@@ -107,9 +107,24 @@ window.PocuHomeUI = (() => {
     el.textContent = FUNNY_TITLES[Math.floor(Math.random() * FUNNY_TITLES.length)];
   }
 
+  function ensureAuroraInBody() {
+    const aurora = document.getElementById('pulseAurora');
+    const fade = document.querySelector('.pulse-aurora-fade');
+    if (aurora && aurora.parentElement !== document.body) {
+      document.body.appendChild(aurora);
+      console.log('[home-ui] aurora moved to body');
+    }
+    if (fade && fade.parentElement !== document.body) {
+      document.body.appendChild(fade);
+      console.log('[home-ui] aurora-fade moved to body');
+    }
+  }
+
   function init() {
     if (initialized) return;
     initialized = true;
+
+    ensureAuroraInBody();
 
     els = {
       pulseCard:        document.getElementById('pulseCard'),

@@ -5249,7 +5249,7 @@ body.genre-open .topbar {
 .pulse-hero-rings { display: none !important; }
 
 /* ================================================================
-   PULSE AURORA v3 — fixed, без clip, blobs крупнее ядром
+   PULSE AURORA v4 — fixed + защита от animation-захвата, blobs v2
    ================================================================ */
 
 .pulse-aurora {
@@ -5265,7 +5265,9 @@ body.genre-open .topbar {
   transform: none !important;
   filter: none !important;
   contain: none !important;
-  /* overflow: hidden УБРАН — он резал blobs */
+  animation: none !important;     /* критично — иначе rise захватит fixed */
+  will-change: auto !important;
+  overflow: hidden;
   --aurora-1: rgb(124, 92, 255);
   --aurora-2: rgb(255, 64, 158);
   --aurora-3: rgb(56, 132, 255);
@@ -5290,37 +5292,37 @@ body.genre-open .topbar {
   will-change: transform;
 }
 
-/* Blobs 140vw — их полный цвет перекрывает края viewport без fade */
+/* ---- Размеры как в v2 (компактные) ---- */
 .pulse-aurora-blob-1 {
-  width: 140vw;
-  height: 140vw;
-  top: -25%;
-  left: -30%;
+  width: min(700px, 70vw);
+  height: min(700px, 70vw);
+  top: -10%;
+  left: -10%;
 }
 .pulse-aurora-blob-1::before {
-  background: radial-gradient(circle, var(--aurora-1) 0%, var(--aurora-1) 30%, transparent 75%);
+  background: radial-gradient(circle, var(--aurora-1) 0%, transparent 70%);
   animation: auroraGlobalDrift1 20s ease-in-out infinite;
 }
 
 .pulse-aurora-blob-2 {
-  width: 140vw;
-  height: 140vw;
-  top: -25%;
-  right: -30%;
+  width: min(800px, 80vw);
+  height: min(800px, 80vw);
+  top: -15%;
+  right: -15%;
 }
 .pulse-aurora-blob-2::before {
-  background: radial-gradient(circle, var(--aurora-2) 0%, var(--aurora-2) 30%, transparent 75%);
+  background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
   animation: auroraGlobalDrift2 24s ease-in-out infinite;
 }
 
 .pulse-aurora-blob-3 {
-  width: 120vw;
-  height: 120vw;
-  top: 30%;
-  left: 10%;
+  width: min(600px, 60vw);
+  height: min(600px, 60vw);
+  top: 22%;
+  left: 15%;
 }
 .pulse-aurora-blob-3::before {
-  background: radial-gradient(circle, var(--aurora-3) 0%, var(--aurora-3) 30%, transparent 75%);
+  background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
   animation: auroraGlobalDrift3 22s ease-in-out infinite;
 }
 
@@ -5330,35 +5332,32 @@ body.genre-open .topbar {
     filter: blur(60px);
     opacity: 0.65;
   }
-  .pulse-aurora-blob-1 { width: 130vw; height: 130vw; }
-  .pulse-aurora-blob-2 { width: 130vw; height: 130vw; }
-  .pulse-aurora-blob-3 { width: 110vw; height: 110vw; }
 }
 
 /* Scatter */
-.pulse-aurora.scatter .pulse-aurora-blob-1 { transform: translate(-10%, -8%); }
-.pulse-aurora.scatter .pulse-aurora-blob-2 { transform: translate(10%, -8%); }
-.pulse-aurora.scatter .pulse-aurora-blob-3 { transform: translate(0, 12%); }
+.pulse-aurora.scatter .pulse-aurora-blob-1 { transform: translate(-15%, -10%); }
+.pulse-aurora.scatter .pulse-aurora-blob-2 { transform: translate(15%, -10%); }
+.pulse-aurora.scatter .pulse-aurora-blob-3 { transform: translate(0, 15%); }
 
 @keyframes auroraGlobalDrift1 {
   0%   { transform: translate(0, 0) scale(1); }
-  33%  { transform: translate(15%, 10%) scale(1.08); }
-  66%  { transform: translate(3%, -8%) scale(0.94); }
+  33%  { transform: translate(25%, 15%) scale(1.1); }
+  66%  { transform: translate(5%, -10%) scale(0.92); }
   100% { transform: translate(0, 0) scale(1); }
 }
 @keyframes auroraGlobalDrift2 {
   0%   { transform: translate(0, 0) scale(1.05); }
-  50%  { transform: translate(-15%, 18%) scale(0.92); }
+  50%  { transform: translate(-25%, 25%) scale(0.9); }
   100% { transform: translate(0, 0) scale(1.05); }
 }
 @keyframes auroraGlobalDrift3 {
   0%   { transform: translate(0, 0) scale(0.95); }
-  40%  { transform: translate(-20%, -15%) scale(1.08); }
-  70%  { transform: translate(10%, -12%) scale(1.0); }
+  40%  { transform: translate(-30%, -25%) scale(1.1); }
+  70%  { transform: translate(15%, -20%) scale(1.0); }
   100% { transform: translate(0, 0) scale(0.95); }
 }
 
-/* Fade вниз — отдельный fixed-слой */
+/* Fade вниз */
 .pulse-aurora-fade {
   position: fixed !important;
   top: 0 !important;
@@ -5367,6 +5366,7 @@ body.genre-open .topbar {
   bottom: 0 !important;
   z-index: 2 !important;
   pointer-events: none !important;
+  animation: none !important;
   background: linear-gradient(
     to bottom,
     transparent 0%,
