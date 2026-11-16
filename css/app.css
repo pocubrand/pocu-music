@@ -5047,3 +5047,319 @@ body.genre-open .topbar {
   flex: none;
   font-variant-numeric: tabular-nums;
 }
+
+/* ================================================================
+   PULSE v3 — FIX FADE + Вариант B (мобилка) + like/dislike
+   ================================================================ */
+
+/* ---- 1. FIX FADE: убираем непрозрачный фон hero + маска на visual ---- */
+.pulse-hero {
+  background: transparent !important;
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.35),
+    0 6px 16px rgba(0,0,0,.25) !important;
+}
+
+.pulse-hero-visual {
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0,
+    rgba(0,0,0,0.2) 40px,
+    rgba(0,0,0,0.6) 100px,
+    black 160px);
+  mask-image: linear-gradient(to bottom,
+    transparent 0,
+    rgba(0,0,0,0.2) 40px,
+    rgba(0,0,0,0.6) 100px,
+    black 160px);
+}
+
+@media (max-width: 899px) {
+  .pulse-hero-visual {
+    -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0,
+      rgba(0,0,0,0.2) 30px,
+      rgba(0,0,0,0.6) 70px,
+      black 130px);
+    mask-image: linear-gradient(to bottom,
+      transparent 0,
+      rgba(0,0,0,0.2) 30px,
+      rgba(0,0,0,0.6) 70px,
+      black 130px);
+  }
+}
+
+/* ---- 2. Insight-чип — поверх обложки, SVG-иконка ---- */
+.pulse-insight {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 9px 14px 9px 12px;
+  background: rgba(8,8,12,0.55);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 999px;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #fff;
+  text-align: left;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: transform .3s var(--spring), background .2s;
+}
+.pulse-insight[hidden] { display: none; }
+.pulse-insight:active { transform: scale(0.97); }
+
+.pulse-insight-icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  color: #a78bfa;
+}
+.pulse-insight-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.pulse-insight-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.25;
+}
+
+.pulse-insight-arrow {
+  flex: none;
+  opacity: 0.6;
+  font-size: 14px;
+  line-height: 1;
+  margin-left: 2px;
+}
+
+/* ---- 3. Прогресс-бар мобильный ---- */
+.pulse-progress-mobile {
+  display: none;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 10px 0 12px;
+}
+.pulse-progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--violet), var(--pink));
+  border-radius: 999px;
+  transition: width 0.25s linear;
+}
+
+/* ---- 4. Активные состояния like/dislike ---- */
+.pulse-btn-like.active {
+  color: #ff4d8d;
+  background: rgba(255,77,141,0.18);
+  border-color: rgba(255,77,141,0.32);
+}
+.pulse-btn-like.active svg {
+  fill: currentColor;
+}
+.pulse-btn-like.just-activated {
+  animation: heartPop .45s var(--spring-bounce);
+}
+
+.pulse-btn-dislike.active {
+  color: #ff5c5c;
+  background: rgba(255,92,92,0.18);
+  border-color: rgba(255,92,92,0.32);
+}
+
+/* ---- 5. Вариант B — мобильный layout ---- */
+@media (max-width: 899px) {
+  .pulse-hero {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background: transparent !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,.35) !important;
+    border-radius: 22px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Visual — крупная обложка на всю ширину */
+  .pulse-hero-visual {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    border-radius: 0;
+    overflow: hidden;
+    transform: none;
+  }
+
+  /* Обложка как фон, без блюра */
+  .pulse-hero-bg {
+    filter: blur(0) saturate(180%) brightness(1) !important;
+    opacity: 1 !important;
+    transform: none !important;
+    background-size: cover;
+    background-position: center;
+  }
+
+  /* Aurora поверх обложки, приглушённая */
+  .aurora-blob {
+    opacity: 0.35 !important;
+    mix-blend-mode: soft-light;
+  }
+  .pulse-hero.live:not(.paused) .aurora-blob {
+    opacity: 0.5 !important;
+  }
+
+  /* Скрываем плавающую art-card — обложка теперь и есть visual */
+  .pulse-hero-art-card {
+    display: none !important;
+  }
+
+  /* Виньетка — снизу темнее для читаемости */
+  .pulse-hero-vignette {
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.15) 0%,
+      transparent 40%,
+      rgba(0,0,0,0.3) 75%,
+      rgba(0,0,0,0.7) 100%
+    ) !important;
+  }
+
+  .pulse-hero-overlay {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 60%,
+      rgba(8,8,12,0.5) 88%,
+      rgba(8,8,12,0.85) 100%
+    ) !important;
+  }
+
+  /* Insight-чип — поверх обложки, внизу слева */
+  .pulse-insight {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    margin: 0;
+    z-index: 5;
+    max-width: calc(100% - 28px);
+  }
+
+  /* Content — под visual, relative */
+  .pulse-hero-content {
+    position: relative;
+    inset: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 16px 16px 18px;
+    background: transparent;
+  }
+
+  .pulse-hero-meta {
+    text-align: left;
+    flex: none;
+  }
+
+  .pulse-title {
+    font-size: 20px;
+    color: var(--text);
+    text-shadow: none;
+  }
+  .pulse-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+    text-shadow: none;
+  }
+  .pulse-brand {
+    color: var(--text-dim);
+  }
+  .pulse-artist {
+    color: var(--text-dim);
+  }
+
+  /* Прогресс-бар — на мобилке виден */
+  .pulse-progress-mobile {
+    display: block;
+  }
+
+  /* Кнопки — в один ряд */
+  .pulse-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding-top: 0;
+    margin-top: 12px;
+  }
+
+  .pulse-btn-play {
+    width: 56px;
+    height: 56px;
+    flex: none;
+    order: 3;
+    background: linear-gradient(135deg, var(--violet), var(--pink));
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(124,92,255,.5);
+  }
+  .pulse-btn-play:active {
+    transform: scale(0.94);
+  }
+  .pulse-btn-play .pulse-icon-play,
+  .pulse-btn-play .pulse-icon-pause {
+    width: 24px;
+    height: 24px;
+  }
+
+  .pulse-btn-shuffle,
+  .pulse-btn-like,
+  .pulse-btn-dislike,
+  .pulse-btn-refresh {
+    width: 42px;
+    height: 42px;
+    flex: none;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.12);
+    color: #fff;
+  }
+  .pulse-btn-shuffle { order: 1; }
+  .pulse-btn-like { order: 2; }
+  .pulse-btn-dislike { order: 4; }
+  .pulse-btn-refresh { order: 5; }
+
+  /* Скрываем пустые кнопки */
+  .pulse-btn[hidden] { display: none !important; }
+
+  /* Старый shuffle (если был виден) — прячем, новый в actions */
+  .pulse-btn-shuffle { display: none; }
+}
+
+/* Иконки в Pulse Insights — SVG */
+.pulse-insights-hero-icon,
+.pulse-insights-row-icon {
+  display: grid;
+  place-items: center;
+  color: var(--violet);
+}
+.pulse-insights-hero-icon svg {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+.pulse-insights-row-icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}

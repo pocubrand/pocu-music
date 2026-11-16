@@ -1,6 +1,6 @@
 /* Pocu Music — Pocu Pulse 2.0
    Слоты времени / anti-repetition артистов / жанр длинных прослушиваний
-   + Insights («Pulse думает о вкусе») */
+   + Insights («Pulse думает о вкусе») с SVG-иконками */
 window.PocuPulse = (() => {
   let queue = [];
   let active = false;
@@ -25,6 +25,34 @@ window.PocuPulse = (() => {
     return 'night';
   }
   function getMods() { return SLOTS[getSlot()] || SLOTS.day; }
+
+  /* ---------- SVG-иконки ---------- */
+  const ICONS = {
+    learning:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>',
+    genre:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>',
+    picky:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 9v6l-4-2v-4z"/></svg>',
+    explorer:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5z"/></svg>',
+    fan:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/></svg>',
+    completionist:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>',
+    melomane:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/></svg>',
+    background:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
+    artist:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg>',
+    night:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
+    default:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>'
+  };
+
+  function getIconSvg(type) { return ICONS[type] || ICONS.default; }
 
   /* ---------- профиль ---------- */
   function buildProfile() {
@@ -237,7 +265,7 @@ window.PocuPulse = (() => {
   }
 
   /* ============================================================
-     Pulse Insights — «Что Pulse думает о вашем вкусе»
+     Pulse Insights
      ============================================================ */
 
   function getStats() {
@@ -306,7 +334,6 @@ window.PocuPulse = (() => {
     };
   }
 
-  /* Русский родительный падеж (для жанров) */
   function genitive(genre) {
     if (!genre) return genre;
     if (!/[а-яё]/i.test(genre)) return genre;
@@ -322,101 +349,102 @@ window.PocuPulse = (() => {
 
     if (stats.totalPlays < 10) {
       return {
-        type: 'learning', icon: '🎧',
+        type: 'learning',
+        icon: getIconSvg('learning'),
         text: 'Pulse изучает ваш вкус',
         detail: 'Прослушайте ещё немного треков — Pulse начнёт понимать вас'
       };
     }
 
-    // 1. Доминирующий жанр (> 40%)
     if (stats.topGenres.length) {
       const [genre, g] = stats.topGenres[0];
       const share = stats.totalPlays > 0 ? g.plays / stats.totalPlays : 0;
       if (share >= 0.4) {
         return {
-          type: 'genre', icon: '🎯',
+          type: 'genre',
+          icon: getIconSvg('genre'),
           text: `Вы слушаете много ${genitive(genre)}`,
           detail: `${genre} занимает ${Math.round(share * 100)}% ваших прослушиваний`
         };
       }
     }
 
-    // 2. Придирчивы
     if (stats.skipRate > 0.5) {
       return {
-        type: 'picky', icon: '🧐',
+        type: 'picky',
+        icon: getIconSvg('picky'),
         text: 'Вы очень придирчивы',
         detail: `${Math.round(stats.skipRate * 100)}% треков вы пропускаете`
       };
     }
 
-    // 3. Исследователь
     if (stats.discoveryRate > 0.4) {
       return {
-        type: 'explorer', icon: '🔭',
+        type: 'explorer',
+        icon: getIconSvg('explorer'),
         text: 'Вы — исследователь',
         detail: `Вы открыли ${Math.round(stats.discoveryRate * 100)}% библиотеки`
       };
     }
 
-    // 4. Верный фанат
     if (stats.repeatRate > 0.6) {
       return {
-        type: 'fan', icon: '💜',
+        type: 'fan',
+        icon: getIconSvg('fan'),
         text: 'Вы — верный фанат',
         detail: `${Math.round(stats.repeatRate * 100)}% прослушиваний — повторные`
       };
     }
 
-    // 5. Дослушиваете до конца
     if (stats.completeRate > 0.7) {
       return {
-        type: 'completionist', icon: '✅',
+        type: 'completionist',
+        icon: getIconSvg('completionist'),
         text: 'Вы любите дослушивать до конца',
         detail: `${Math.round(stats.completeRate * 100)}% треков дослушаны полностью`
       };
     }
 
-    // 6. Меломан
     if (stats.genresWithPlays >= 6) {
       return {
-        type: 'melomane', icon: '🎨',
+        type: 'melomane',
+        icon: getIconSvg('melomane'),
         text: 'Вы — меломан',
         detail: `Вы слушаете музыку в ${stats.genresWithPlays} жанрах`
       };
     }
 
-    // 7. Слушаете фоном
     if (stats.skipRate > 0.4 && stats.completeRate < 0.3) {
       return {
-        type: 'background', icon: '🌙',
+        type: 'background',
+        icon: getIconSvg('background'),
         text: 'Вы слушаете музыку фоном',
         detail: 'Много пропусков — Pulse учтёт это'
       };
     }
 
-    // 8. Любимый артист
     if (stats.topArtists.length && stats.topArtists[0][1].plays >= 5) {
       const [artist, a] = stats.topArtists[0];
       return {
-        type: 'artist', icon: '🎤',
+        type: 'artist',
+        icon: getIconSvg('artist'),
         text: `Ваш любимый артист — ${artist}`,
         detail: `${a.plays} прослушиваний`
       };
     }
 
-    // 9. Ночной слушатель
     if (stats.topSlot === 'night') {
       return {
-        type: 'night', icon: '🌃',
+        type: 'night',
+        icon: getIconSvg('night'),
         text: 'Вы — ночной слушатель',
         detail: 'Больше всего слушаете после 23:00'
       };
     }
 
-    // 10. Fallback
     return {
-      type: 'default', icon: '✨',
+      type: 'default',
+      icon: getIconSvg('default'),
       text: 'Pulse уже знает ваш вкус',
       detail: 'Откройте, чтобы увидеть статистику'
     };
@@ -426,7 +454,6 @@ window.PocuPulse = (() => {
     const stats = getStats();
     const out = [];
 
-    // Жанр (топ-3)
     if (stats.topGenres.length) {
       const [genre, g] = stats.topGenres[0];
       const share = stats.totalPlays > 0 ? g.plays / stats.totalPlays : 0;
@@ -436,55 +463,50 @@ window.PocuPulse = (() => {
           return `${gg} ${Math.round(sh * 100)}%`;
         }).join(' · ');
       out.push({
-        type: 'genre', icon: '🎯',
+        type: 'genre', icon: getIconSvg('genre'),
         title: `Топ-жанр: ${genre}`,
         value: `${Math.round(share * 100)}%`,
         detail: extra || `${g.plays} прослушиваний`
       });
     }
 
-    // Артист
     if (stats.topArtists.length) {
       const [artist, a] = stats.topArtists[0];
       out.push({
-        type: 'artist', icon: '🎤',
+        type: 'artist', icon: getIconSvg('artist'),
         title: `Любимый артист: ${artist}`,
         value: `${a.plays}`,
         detail: a.plays === 1 ? 'прослушивание' : (a.plays >= 2 && a.plays <= 4 ? 'прослушивания' : 'прослушиваний')
       });
     }
 
-    // Слот
     if (stats.topSlot) {
       const names  = { morning: 'утро', day: 'день', evening: 'вечер', night: 'ночь' };
       const ranges = { morning: '5:00–11:59', day: '12:00–17:59', evening: '18:00–22:59', night: '23:00–4:59' };
       out.push({
-        type: 'slot', icon: '⏰',
+        type: 'slot', icon: getIconSvg('night'),
         title: `Активнее всего — ${names[stats.topSlot]}`,
         value: ranges[stats.topSlot],
         detail: `${stats.slots[stats.topSlot]} прослушиваний`
       });
     }
 
-    // Complete
     out.push({
-      type: 'completion', icon: '✅',
+      type: 'completion', icon: getIconSvg('completionist'),
       title: 'Дослушиваете до конца',
       value: `${Math.round(stats.completeRate * 100)}%`,
       detail: `${stats.totalComplete} из ${stats.totalPlays}`
     });
 
-    // Skip
     out.push({
-      type: 'skip', icon: '⏭',
+      type: 'skip', icon: getIconSvg('picky'),
       title: 'Пропускаете',
       value: `${Math.round(stats.skipRate * 100)}%`,
       detail: `${stats.totalSkips} скипов`
     });
 
-    // Discovery
     out.push({
-      type: 'discovery', icon: '🔭',
+      type: 'discovery', icon: getIconSvg('explorer'),
       title: 'Исследование библиотеки',
       value: `${Math.round(stats.discoveryRate * 100)}%`,
       detail: `${stats.tracksPlayed} из ${stats.librarySize} треков`
@@ -496,7 +518,7 @@ window.PocuPulse = (() => {
   return {
     init, start, stop, refresh,
     preview(count = 10) { return generateQueue(count); },
-    getInsight, getAllInsights, getStats,
+    getInsight, getAllInsights, getStats, getIconSvg,
     get active() { return active; },
     get mood()   { return mood; },
     get slot()   { return getSlot(); },

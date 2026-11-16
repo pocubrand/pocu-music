@@ -566,3 +566,23 @@ html { transition: background-color .3s ease; }
   background: rgba(0, 0, 0, 0.03);
   border-color: rgba(0, 0, 0, 0.06);
 }
+
+/* Pulse v3 — светлая тема */
+[data-theme="light"] .pulse-insight {
+  background: rgba(255,255,255,0.85);
+  border-color: rgba(0,0,0,0.08);
+  color: #1a1a1f;
+}
+[data-theme="light"] .pulse-insight-icon { color: #7c5cff; }
+[data-theme="light"] .pulse-progress-mobile {
+  background: rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] .pulse-btn-shuffle,
+[data-theme="light"] .pulse-btn-like,
+[data-theme="light"] .pulse-btn-dislike,
+[data-theme="light"] .pulse-btn-refresh {
+  background: rgba(0,0,0,0.04);
+  border-color: rgba(0,0,0,0.08);
+  color: #1a1a1f;
+}

@@ -50,7 +50,7 @@ window.PocuPulseInsightsUI = (() => {
     const all     = window.PocuPulse.getAllInsights();
 
     els.hero.innerHTML = `
-      <div class="pulse-insights-hero-icon">${insight.icon}</div>
+      <div class="pulse-insights-hero-icon">${insight.icon || ''}</div>
       <div class="pulse-insights-hero-text">
         <div class="pulse-insights-hero-title">${esc(insight.text)}</div>
         <div class="pulse-insights-hero-detail">${esc(insight.detail || '')}</div>
@@ -62,7 +62,7 @@ window.PocuPulseInsightsUI = (() => {
       const row = document.createElement('div');
       row.className = 'pulse-insights-row';
       row.innerHTML = `
-        <div class="pulse-insights-row-icon">${item.icon}</div>
+        <div class="pulse-insights-row-icon">${item.icon || ''}</div>
         <div class="pulse-insights-row-main">
           <div class="pulse-insights-row-title">${esc(item.title)}</div>
           <div class="pulse-insights-row-detail">${esc(item.detail || '')}</div>

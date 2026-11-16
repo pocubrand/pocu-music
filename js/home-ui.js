@@ -117,7 +117,14 @@ window.PocuHomeUI = (() => {
       pulseQueue:       document.getElementById('pulseQueue'),
       pulsePlay:        document.getElementById('pulsePlay'),
       pulseRefresh:     document.getElementById('pulseRefresh'),
+      pulseShuffle:     document.getElementById('pulseShuffle'),
+      pulseLike:        document.getElementById('pulseLike'),
+      pulseDislike:     document.getElementById('pulseDislike'),
       pulseInsightCard: document.getElementById('pulseInsightCard'),
+      pulseInsightIcon: document.getElementById('pulseInsightIcon'),
+      pulseInsightText: document.getElementById('pulseInsightText'),
+      pulseProgressMobile: document.getElementById('pulseProgressMobile'),
+      pulseProgressFill:   document.getElementById('pulseProgressFill'),
 
       picksRow:      document.getElementById('homePicksRow'),
       picksSection:  document.getElementById('homePicks'),
@@ -158,13 +165,54 @@ window.PocuHomeUI = (() => {
         try { window.PocuPulse.refresh(); } catch (err) { console.error(err); }
       });
     }
+    if (els.pulseShuffle) {
+      els.pulseShuffle.addEventListener('click', e => {
+        e.stopPropagation();
+        window.PocuPlayer.toggleShuffle();
+      });
+    }
+
+    /* ---- LIKE ---- */
+    if (els.pulseLike) {
+      els.pulseLike.addEventListener('click', e => {
+        e.stopPropagation();
+        const track = window.PocuPlayer.current;
+        if (!track) return;
+        const nowFav = window.PocuStore.favorites.toggle(track.id);
+        window.PocuSupabase?.syncFavorite?.(track.id, nowFav);
+        els.pulseLike.classList.toggle('active', nowFav);
+        if (nowFav) {
+          els.pulseLike.classList.add('just-activated');
+          setTimeout(() => els.pulseLike.classList.remove('just-activated'), 450);
+        }
+        // Снимаем дизлайк, если стоял
+        els.pulseDislike?.classList.toggle('active', window.PocuStore.disliked.has(track.id));
+      });
+    }
+
+    /* ---- DISLIKE (с авто-скипом) ---- */
+    if (els.pulseDislike) {
+      els.pulseDislike.addEventListener('click', e => {
+        e.stopPropagation();
+        const track = window.PocuPlayer.current;
+        if (!track) return;
+        const nowDisliked = window.PocuStore.disliked.toggle(track.id);
+        window.PocuSupabase?.syncDislike?.(track.id, nowDisliked);
+        els.pulseDislike.classList.toggle('active', nowDisliked);
+        // Снимаем лайк, если стоял
+        els.pulseLike?.classList.toggle('active', window.PocuStore.favorites.has(track.id));
+        if (nowDisliked) {
+          // Авто-скип на следующий
+          setTimeout(() => window.PocuPlayer.next(), 80);
+        }
+      });
+    }
+
     if (els.pulseCard) {
       els.pulseCard.addEventListener('click', e => {
         if (e.target.closest('.pulse-actions')) return;
-        if (e.target.closest('.pulse-hero-art-card')) return;
-        if (e.target.closest('.pulse-artist')) return;
-        if (e.target.closest('.pulse-title')) return;
-        if (e.target.closest('.pulse-insight')) return;   // НОВОЕ
+        if (e.target.closest('.pulse-insight')) return;
+        if (e.target.closest('.pulse-btn')) return;
         togglePulse();
       });
     }
@@ -220,6 +268,8 @@ window.PocuHomeUI = (() => {
         safe(renderPulseState);
       }
       safe(syncHomeTilesPlaying);
+      safe(syncPulseActions);
+      safe(syncProgress);
     });
 
     window.PocuStore.subscribe(() => {
@@ -228,6 +278,7 @@ window.PocuHomeUI = (() => {
       safe(renderArtists);
       safe(renderRecent);
       safe(renderInsightCard);
+      safe(syncPulseActions);
     });
 
     safe(renderAll);
@@ -250,6 +301,35 @@ window.PocuHomeUI = (() => {
         el.classList.toggle('playing', !!(s.playing && el.dataset.id === curId));
       });
     });
+  }
+
+  /* ---- Активные состояния like/dislike + видимость кнопок ---- */
+  function syncPulseActions() {
+    const st = window.PocuPlayer.getState();
+    const track = st.track;
+    const hasTrack = !!track && window.PocuPulse?.active;
+
+    if (els.pulseLike) {
+      els.pulseLike.hidden = !hasTrack;
+      if (hasTrack) els.pulseLike.classList.toggle('active', window.PocuStore.favorites.has(track.id));
+    }
+    if (els.pulseDislike) {
+      els.pulseDislike.hidden = !hasTrack;
+      if (hasTrack) els.pulseDislike.classList.toggle('active', window.PocuStore.disliked.has(track.id));
+    }
+    if (els.pulseShuffle) {
+      els.pulseShuffle.hidden = !hasTrack;
+    }
+  }
+
+  /* ---- Прогресс-бар ---- */
+  function syncProgress() {
+    if (!els.pulseProgressFill) return;
+    const st = window.PocuPlayer.getState();
+    const dur = st.duration || 0;
+    const t   = st.time || 0;
+    const pct = dur > 0 ? Math.min(100, Math.max(0, (t / dur) * 100)) : 0;
+    els.pulseProgressFill.style.width = pct + '%';
   }
 
   function safe(fn) {
@@ -276,7 +356,6 @@ window.PocuHomeUI = (() => {
     renderSimilar();
   }
 
-  /* ---------- INSIGHT CARD ---------- */
   function renderInsightCard() {
     if (!els.pulseInsightCard) return;
     if (!window.PocuPulse?.getInsight) return;
@@ -285,10 +364,12 @@ window.PocuHomeUI = (() => {
     if (!lib.length) { els.pulseInsightCard.hidden = true; return; }
 
     const insight = window.PocuPulse.getInsight();
-    const iconEl = els.pulseInsightCard.querySelector('.pulse-insight-icon');
-    const textEl = els.pulseInsightCard.querySelector('.pulse-insight-text');
-    if (iconEl) iconEl.textContent = insight.icon || '✨';
-    if (textEl) textEl.textContent = insight.text || 'Pulse изучает ваш вкус';
+    if (els.pulseInsightIcon) {
+      els.pulseInsightIcon.innerHTML = insight.icon || '';
+    }
+    if (els.pulseInsightText) {
+      els.pulseInsightText.textContent = insight.text || 'Pulse изучает ваш вкус';
+    }
     els.pulseInsightCard.hidden = false;
   }
 

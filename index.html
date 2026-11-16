@@ -80,6 +80,12 @@
           <img src="" alt="" id="pulseArtImg">
         </div>
 
+        <button class="pulse-insight" id="pulseInsightCard" type="button" hidden>
+          <span class="pulse-insight-icon" id="pulseInsightIcon"></span>
+          <span class="pulse-insight-text" id="pulseInsightText">Pulse изучает ваш вкус</span>
+          <span class="pulse-insight-arrow">→</span>
+        </button>
+
         <div class="pulse-hero-overlay"></div>
       </div>
 
@@ -90,26 +96,29 @@
             <span class="pulse-artist" id="pulseArtist">Твой личный поток — на основе вкусов</span>
             <span class="pulse-brand" id="pulseBrand" hidden> · Pocu Pulse</span>
           </div>
-
-          <button class="pulse-insight" id="pulseInsightCard" type="button" hidden>
-            <span class="pulse-insight-icon">✨</span>
-            <span class="pulse-insight-text">Pulse изучает ваш вкус</span>
-            <span class="pulse-insight-arrow">→</span>
-          </button>
-
           <div class="pulse-queue" id="pulseQueue"></div>
         </div>
 
+        <div class="pulse-progress-mobile" id="pulseProgressMobile">
+          <div class="pulse-progress-fill" id="pulseProgressFill"></div>
+        </div>
+
         <div class="pulse-actions">
-          <button class="pulse-btn pulse-btn-refresh" id="pulseRefresh" aria-label="Обновить поток">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
-              <path d="M21 3v6h-6"/>
-            </svg>
+          <button class="pulse-btn pulse-btn-shuffle" id="pulseShuffle" aria-label="Перемешать" hidden>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>
+          </button>
+          <button class="pulse-btn pulse-btn-like" id="pulseLike" aria-label="В избранное" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/></svg>
           </button>
           <button class="pulse-btn pulse-btn-play" id="pulsePlay" aria-label="Запустить Pulse">
             <svg class="pulse-icon-play" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
             <svg class="pulse-icon-pause" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+          </button>
+          <button class="pulse-btn pulse-btn-dislike" id="pulseDislike" aria-label="Не нравится" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/><line x1="4" y1="4" x2="20" y2="20"/></svg>
+          </button>
+          <button class="pulse-btn pulse-btn-refresh" id="pulseRefresh" aria-label="Обновить поток">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
           </button>
         </div>
       </div>
