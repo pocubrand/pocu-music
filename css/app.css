@@ -4875,12 +4875,6 @@ body.genre-open .topbar {
   }
 }
 
-/* Обложка текущего трека должна быть выше fade */
-.pulse-hero-art-card {
-  z-index: 6;
-  position: relative;
-}
-
 /* ---- Insight card ---- */
 .pulse-insight {
   display: flex;
@@ -5049,16 +5043,15 @@ body.genre-open .topbar {
 }
 
 /* ================================================================
-   PULSE v8 — cover fix (contain off, margin-top) + live blobs
+   PULSE v9 — absolute cover (фикс. позиция) + работающие blobs
    ================================================================ */
 
-/* ---- Контейнер: убираем contain + фикс. высоту ---- */
 .pulse-hero {
   position: relative;
   width: 100%;
   height: auto !important;
-  min-height: 0 !important;
-  contain: none !important;            /* ключевой фикс */
+  min-height: 480px;
+  contain: none !important;
   border-radius: 28px;
   overflow: visible !important;
   background: transparent !important;
@@ -5069,20 +5062,21 @@ body.genre-open .topbar {
   cursor: pointer;
 }
 
-/* Visual: fade сверху (px) + по бокам, снизу — чёткий край */
+/* Visual: fade сверху + бока */
 .pulse-hero-visual {
   position: absolute;
   inset: 0;
   border-radius: 28px;
   overflow: hidden !important;
   z-index: 0;
+  transform: none !important;
   -webkit-mask-image:
-    linear-gradient(to bottom, transparent 0px, black 80px, black 100%),
-    linear-gradient(to right, transparent 0px, black 25px, black calc(100% - 25px), transparent 100%);
+    linear-gradient(to bottom, transparent 0px, black 100px, black 100%),
+    linear-gradient(to right, transparent 0px, black 30px, black calc(100% - 30px), transparent 100%);
   -webkit-mask-composite: source-in;
   mask-image:
-    linear-gradient(to bottom, transparent 0px, black 80px, black 100%),
-    linear-gradient(to right, transparent 0px, black 25px, black calc(100% - 25px), transparent 100%);
+    linear-gradient(to bottom, transparent 0px, black 100px, black 100%),
+    linear-gradient(to right, transparent 0px, black 30px, black calc(100% - 30px), transparent 100%);
   mask-composite: intersect;
   pointer-events: none;
 }
@@ -5090,7 +5084,7 @@ body.genre-open .topbar {
 .pulse-hero-overlay,
 .pulse-hero-vignette { display: none !important; }
 
-/* Inner — flex-start, без top-padding. Отступ у обложки */
+/* Inner — контент снизу, обложка absolute */
 .pulse-hero-inner {
   position: relative;
   z-index: 2;
@@ -5099,19 +5093,20 @@ body.genre-open .topbar {
   align-items: center;
   justify-content: flex-start !important;
   width: 100%;
-  padding: 0 20px 24px !important;
+  min-height: 480px;
+  padding: 300px 20px 30px !important;
   gap: 0;
   box-sizing: border-box;
-  min-height: 0 !important;
   height: auto !important;
 }
 
-/* Обложка — фикс. отступ сверху через margin-top (не padding) */
+/* Обложка — абсолютная позиция, фикс top */
 .pulse-hero-art-card {
-  position: relative !important;
-  top: auto !important;
-  left: auto !important;
-  transform: none !important;
+  position: absolute !important;
+  top: 48% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
   width: 180px;
   height: 180px;
   border-radius: 18px;
@@ -5120,13 +5115,12 @@ body.genre-open .topbar {
     0 20px 44px rgba(0,0,0,0.55),
     0 0 0 1px rgba(255,255,255,0.08) inset;
   opacity: 1 !important;
-  z-index: 3;
-  margin: 130px 0 14px !important;      /* ← ключевой фикс */
+  z-index: 5 !important;
   background: #1a1a22;
   transition: transform 0.3s var(--spring);
   flex: none;
 }
-.pulse-hero-art-card:active { transform: scale(0.98) !important; }
+.pulse-hero-art-card:active { transform: translate(-50%, -50%) scale(0.97) !important; }
 
 .pulse-hero-art-card img {
   width: 100%;
@@ -5148,7 +5142,7 @@ body.genre-open .topbar {
 .pulse-hero-art-card.has-track .pulse-hero-art-placeholder,
 .pulse-hero.live .pulse-hero-art-placeholder { display: none; }
 
-/* Meta */
+/* Meta — flex-колонка, центрируется */
 .pulse-hero-meta {
   display: flex;
   flex-direction: column;
@@ -5271,7 +5265,6 @@ body.genre-open .topbar {
   border: 1px solid rgba(255,255,255,0.12);
 }
 
-/* Порядок: EQ → Dislike → Play → Like → Refresh */
 .pulse-btn-eq      { order: 1; }
 .pulse-btn-dislike { order: 2; }
 .pulse-btn-play    { order: 3; }
@@ -5313,21 +5306,21 @@ body.genre-open .topbar {
 }
 
 /* ============================================================
-   AURORA BLOBS v8 — drift непрерывный (::before) + scatter на hover
+   AURORA BLOBS v9 — без "негатива": plus-lighter + мягкий scatter
    ============================================================ */
 
 .aurora-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(70px);
-  mix-blend-mode: screen;
-  opacity: 0.7 !important;
+  filter: blur(50px);
+  mix-blend-mode: plus-lighter;
+  opacity: 0.75 !important;
   pointer-events: none;
   will-change: transform;
   z-index: 1;
-  background: none !important;         /* убираем фон с обёртки */
-  animation: none !important;          /* убираем анимацию с обёртки */
-  transition: transform 1.2s cubic-bezier(.34, 1.4, .5, 1);
+  background: none !important;
+  animation: none !important;
+  transition: transform 1s cubic-bezier(.22, 1, .36, 1);
 }
 
 .aurora-blob::before {
@@ -5339,89 +5332,91 @@ body.genre-open .topbar {
 }
 
 .aurora-blob-1 {
-  width: 60%;
+  width: 70%;
   aspect-ratio: 1;
-  top: -15%;
-  left: -15%;
+  top: -20%;
+  left: -20%;
 }
 .aurora-blob-1::before {
   background: radial-gradient(circle, var(--aurora-1) 0%, transparent 70%);
-  animation: auroraDrift1 18s ease-in-out infinite;
+  animation: auroraDrift1 14s ease-in-out infinite;
 }
 
 .aurora-blob-2 {
-  width: 65%;
+  width: 75%;
   aspect-ratio: 1;
-  top: -20%;
-  right: -20%;
+  top: -25%;
+  right: -25%;
 }
 .aurora-blob-2::before {
   background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
-  animation: auroraDrift2 22s ease-in-out infinite;
+  animation: auroraDrift2 17s ease-in-out infinite;
 }
 
 .aurora-blob-3 {
-  width: 55%;
+  width: 65%;
   aspect-ratio: 1;
-  bottom: -20%;
-  left: 20%;
+  bottom: -25%;
+  left: 15%;
 }
 .aurora-blob-3::before {
   background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
-  animation: auroraDrift3 20s ease-in-out infinite;
+  animation: auroraDrift3 15s ease-in-out infinite;
 }
 
 /* Ускоряем при live */
-.pulse-hero.live:not(.paused) .aurora-blob-1::before { animation-duration: 12s; }
-.pulse-hero.live:not(.paused) .aurora-blob-2::before { animation-duration: 15s; }
-.pulse-hero.live:not(.paused) .aurora-blob-3::before { animation-duration: 13s; }
+.pulse-hero.live:not(.paused) .aurora-blob-1::before { animation-duration: 9s; }
+.pulse-hero.live:not(.paused) .aurora-blob-2::before { animation-duration: 11s; }
+.pulse-hero.live:not(.paused) .aurora-blob-3::before { animation-duration: 10s; }
 .pulse-hero.live:not(.paused) .aurora-blob { opacity: 1 !important; }
 
-/* Разбегание на hover — обёртка сдвигается от центра */
-.pulse-hero:hover .aurora-blob-1 { transform: translate(-45%, -35%) scale(1.25); }
-.pulse-hero:hover .aurora-blob-2 { transform: translate(45%, -35%)  scale(1.25); }
-.pulse-hero:hover .aurora-blob-3 { transform: translate(0, 55%)     scale(1.25); }
+/* Разбегание на hover — мягкое, без scale, без наложения */
+@media (hover: hover) and (pointer: fine) {
+  .pulse-hero:hover .aurora-blob-1 { transform: translate(-25%, -20%); }
+  .pulse-hero:hover .aurora-blob-2 { transform: translate(25%, -20%); }
+  .pulse-hero:hover .aurora-blob-3 { transform: translate(0, 25%); }
+}
 
 @keyframes auroraDrift1 {
   0%   { transform: translate(0, 0) scale(1); }
-  33%  { transform: translate(45%, 30%) scale(1.25); }
-  66%  { transform: translate(15%, -25%) scale(0.9); }
+  33%  { transform: translate(35%, 25%) scale(1.15); }
+  66%  { transform: translate(10%, -20%) scale(0.9); }
   100% { transform: translate(0, 0) scale(1); }
 }
 @keyframes auroraDrift2 {
-  0%   { transform: translate(0, 0) scale(1.1); }
-  50%  { transform: translate(-35%, 45%) scale(0.85); }
-  100% { transform: translate(0, 0) scale(1.1); }
+  0%   { transform: translate(0, 0) scale(1.05); }
+  50%  { transform: translate(-30%, 35%) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1.05); }
 }
 @keyframes auroraDrift3 {
-  0%   { transform: translate(0, 0) scale(0.9); }
-  40%  { transform: translate(-45%, -35%) scale(1.3); }
-  70%  { transform: translate(25%, -40%) scale(1.05); }
-  100% { transform: translate(0, 0) scale(0.9); }
+  0%   { transform: translate(0, 0) scale(0.95); }
+  40%  { transform: translate(-35%, -30%) scale(1.15); }
+  70%  { transform: translate(20%, -35%) scale(1.0); }
+  100% { transform: translate(0, 0) scale(0.95); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .aurora-blob::before { animation: none !important; }
-  .aurora-blob { transition: none !important; }
-}
-
-/* ---- ПК: обложка заметно ниже (тот же приём — margin-top) ---- */
+/* ---- ПК: тот же absolute, top: 48% ---- */
 @media (min-width: 900px) {
+  .pulse-hero {
+    min-height: 540px;
+  }
   .pulse-hero-inner {
+    min-height: 540px;
     padding: 0 28px 32px !important;
+    justify-content: flex-end !important;
   }
   .pulse-hero-art-card {
+    top: 48% !important;
     width: 220px;
     height: 220px;
-    margin: 200px 0 18px !important;   /* ← отступ сверху */
   }
   .pulse-hero-visual {
     -webkit-mask-image:
-      linear-gradient(to bottom, transparent 0px, black 160px, black 100%),
+      linear-gradient(to bottom, transparent 0px, black 120px, black 100%),
       linear-gradient(to right, transparent 0px, black 35px, black calc(100% - 35px), transparent 100%);
     -webkit-mask-composite: source-in;
     mask-image:
-      linear-gradient(to bottom, transparent 0px, black 160px, black 100%),
+      linear-gradient(to bottom, transparent 0px, black 120px, black 100%),
       linear-gradient(to right, transparent 0px, black 35px, black calc(100% - 35px), transparent 100%);
     mask-composite: intersect;
   }
@@ -5443,16 +5438,26 @@ body.genre-open .topbar {
   }
 }
 
-/* ---- Мобилка: узкие экраны — компактнее ---- */
+/* ---- Мобилка: чуть компактнее ---- */
 @media (max-width: 480px) {
-  .pulse-hero-inner { padding: 0 18px 22px !important; }
-  .pulse-hero-art-card { margin: 110px 0 12px !important; }
+  .pulse-hero {
+    min-height: 420px;
+  }
+  .pulse-hero-inner {
+    min-height: 420px;
+    padding: 0 18px 24px !important;
+  }
+  .pulse-hero-art-card {
+    top: 42% !important;
+    width: 160px;
+    height: 160px;
+  }
   .pulse-hero-visual {
     -webkit-mask-image:
-      linear-gradient(to bottom, transparent 0px, black 65px, black 100%),
+      linear-gradient(to bottom, transparent 0px, black 80px, black 100%),
       linear-gradient(to right, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
     mask-image:
-      linear-gradient(to bottom, transparent 0px, black 65px, black 100%),
+      linear-gradient(to bottom, transparent 0px, black 80px, black 100%),
       linear-gradient(to right, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
   }
 }
