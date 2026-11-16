@@ -544,3 +544,25 @@ html { transition: background-color .3s ease; }
   background: var(--ui-hi-2);
   color: var(--text);
 }
+
+/* Pulse: светлая тема для insights */
+[data-theme="light"] .pulse-hero-visual::before {
+  background: linear-gradient(to bottom,
+    var(--bg) 0%,
+    transparent 100%);
+}
+
+[data-theme="light"] .pulse-insight {
+  background: rgba(124, 92, 255, 0.10);
+  border-color: rgba(124, 92, 255, 0.22);
+}
+
+[data-theme="light"] .pulse-insight:hover {
+  background: rgba(124, 92, 255, 0.16);
+  box-shadow: 0 4px 20px rgba(124, 92, 255, 0.15);
+}
+
+[data-theme="light"] .pulse-insights-row {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.06);
+}

@@ -10,7 +10,6 @@ window.PocuHomeUI = (() => {
   let lastSimilarHash   = '';
   let lastTrackId       = null;
 
-  /* ---------- Aurora ---------- */
   const colorCache    = new Map();
   const colorPromises = new Map();
 
@@ -29,14 +28,11 @@ window.PocuHomeUI = (() => {
           const ctx = c.getContext('2d');
           ctx.drawImage(img, 0, 0, 40, 40);
           const data = ctx.getImageData(0, 0, 40, 40).data;
-
           const sample = (x, y) => {
             const i = (y * 40 + x) * 4;
             return [data[i], data[i + 1], data[i + 2]];
           };
-
           const raw = [sample(8, 8), sample(32, 32), sample(20, 20)];
-
           const enhanced = raw.map(([r, g, b]) => {
             const avg = (r + g + b) / 3;
             const boost = 1.7;
@@ -51,18 +47,13 @@ window.PocuHomeUI = (() => {
               Math.min(255, nb + lift)
             ];
           });
-
           colorCache.set(imageUrl, enhanced);
           resolve(enhanced);
-        } catch (err) {
-          console.warn('[aurora] extract failed:', err);
-          resolve(null);
-        }
+        } catch (err) { console.warn('[aurora] extract failed:', err); resolve(null); }
       };
       img.onerror = () => resolve(null);
       img.src = imageUrl;
     });
-
     colorPromises.set(imageUrl, promise);
     return promise;
   }
@@ -75,7 +66,6 @@ window.PocuHomeUI = (() => {
     els.pulseCard.style.setProperty('--aurora-3', toCss(colors[2]));
   }
 
-  /* ---------- Приветствие и Заголовок ---------- */
   const FUNNY_TITLES = [
     "Погрустим или оторвемся?",
     "Что включим в уши?",
@@ -97,23 +87,19 @@ window.PocuHomeUI = (() => {
   function updateGreeting() {
     const el = document.getElementById('homeGreeting');
     if (!el) return;
-    
     const hour = new Date().getHours();
     let text = 'Добрый вечер';
-
     if (hour >= 5 && hour < 12) text = 'Доброе утро';
     else if (hour >= 12 && hour < 18) text = 'Добрый день';
     else if (hour >= 18 && hour < 23) text = 'Добрый вечер';
     else text = 'Доброй ночи';
-
     el.textContent = text;
   }
 
   function updateTitle() {
     const el = document.getElementById('homeTitle');
     if (!el) return;
-    const randomIdx = Math.floor(Math.random() * FUNNY_TITLES.length);
-    el.textContent = FUNNY_TITLES[randomIdx];
+    el.textContent = FUNNY_TITLES[Math.floor(Math.random() * FUNNY_TITLES.length)];
   }
 
   function init() {
@@ -121,44 +107,38 @@ window.PocuHomeUI = (() => {
     initialized = true;
 
     els = {
-      pulseCard:      document.getElementById('pulseCard'),
-      pulseArt:       document.getElementById('pulseArt'),
-      pulseArtCard:   document.getElementById('pulseArtCard'),
-      pulseArtImg:    document.getElementById('pulseArtImg'),
-      pulseTitle:     document.getElementById('pulseTitle'),
-      pulseArtist:    document.getElementById('pulseArtist'),
-      pulseBrand:     document.getElementById('pulseBrand'),
-      pulseQueue:     document.getElementById('pulseQueue'),
-      pulsePlay:      document.getElementById('pulsePlay'),
-      pulseRefresh:   document.getElementById('pulseRefresh'),
+      pulseCard:        document.getElementById('pulseCard'),
+      pulseArt:         document.getElementById('pulseArt'),
+      pulseArtCard:     document.getElementById('pulseArtCard'),
+      pulseArtImg:      document.getElementById('pulseArtImg'),
+      pulseTitle:       document.getElementById('pulseTitle'),
+      pulseArtist:      document.getElementById('pulseArtist'),
+      pulseBrand:       document.getElementById('pulseBrand'),
+      pulseQueue:       document.getElementById('pulseQueue'),
+      pulsePlay:        document.getElementById('pulsePlay'),
+      pulseRefresh:     document.getElementById('pulseRefresh'),
+      pulseInsightCard: document.getElementById('pulseInsightCard'),
 
       picksRow:      document.getElementById('homePicksRow'),
       picksSection:  document.getElementById('homePicks'),
-
       recentRow:     document.getElementById('homeRecentRow'),
       recentSection: document.getElementById('homeRecent'),
-
       playlistsRow:     document.getElementById('homePlaylistsRow'),
       playlistsSection: document.getElementById('homePlaylists'),
-
       artistsRow:     document.getElementById('homeArtistsRow'),
       artistsSection: document.getElementById('homeArtists'),
-
       similarRow:     document.getElementById('homeSimilarRow'),
       similarSection: document.getElementById('homeSimilar'),
       similarTitle:   document.getElementById('homeSimilarTitle')
     };
 
-    /* Приветствие и случайный заголовок */
     updateGreeting();
     updateTitle();
 
-    // Обновляем приветствие при возвращении в приложение
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') updateGreeting();
     });
 
-    // Обновляем заголовок при каждом переходе на вкладку Главная
     document.addEventListener('pocu:tab-change', (e) => {
       if (e.detail && e.detail.tab === 'home') {
         updateTitle();
@@ -184,7 +164,15 @@ window.PocuHomeUI = (() => {
         if (e.target.closest('.pulse-hero-art-card')) return;
         if (e.target.closest('.pulse-artist')) return;
         if (e.target.closest('.pulse-title')) return;
+        if (e.target.closest('.pulse-insight')) return;   // НОВОЕ
         togglePulse();
+      });
+    }
+
+    if (els.pulseInsightCard) {
+      els.pulseInsightCard.addEventListener('click', e => {
+        e.stopPropagation();
+        window.PocuPulseInsightsUI?.open?.();
       });
     }
 
@@ -224,7 +212,6 @@ window.PocuHomeUI = (() => {
 
     window.PocuPlayer.subscribe(state => {
       const currentId = state.track ? state.track.id : null;
-
       if (currentId !== lastTrackId) {
         lastTrackId = currentId;
         safe(renderPulseState);
@@ -240,10 +227,12 @@ window.PocuHomeUI = (() => {
       safe(renderPlaylists);
       safe(renderArtists);
       safe(renderRecent);
+      safe(renderInsightCard);
     });
 
     safe(renderAll);
     safe(renderPulseState);
+    safe(renderInsightCard);
 
     if (els.pulseCard) {
       els.pulseCard.style.setProperty('--aurora-1', 'rgb(124, 92, 255)');
@@ -264,27 +253,19 @@ window.PocuHomeUI = (() => {
   }
 
   function safe(fn) {
-    try { fn(); }
-    catch (e) { console.warn('[home-ui]', fn.name, e.message); }
+    try { fn(); } catch (e) { console.warn('[home-ui]', fn.name, e.message); }
   }
 
   function togglePulse() {
     try {
       const pulse = window.PocuPulse;
       if (!pulse) { console.error('[home-ui] PocuPulse не загружен'); return; }
-
       const state = window.PocuPlayer.getState();
       const pulseQueue = pulse.queue;
       const trackInPulse = state.track && pulseQueue.some(t => t.id === state.track.id);
-
-      if (pulse.active && trackInPulse) {
-        window.PocuPlayer.togglePlay();
-        return;
-      }
+      if (pulse.active && trackInPulse) { window.PocuPlayer.togglePlay(); return; }
       pulse.start(true);
-    } catch (e) {
-      console.error('[home-ui] togglePulse failed:', e);
-    }
+    } catch (e) { console.error('[home-ui] togglePulse failed:', e); }
   }
 
   function renderAll() {
@@ -293,6 +274,22 @@ window.PocuHomeUI = (() => {
     renderArtists();
     renderRecent();
     renderSimilar();
+  }
+
+  /* ---------- INSIGHT CARD ---------- */
+  function renderInsightCard() {
+    if (!els.pulseInsightCard) return;
+    if (!window.PocuPulse?.getInsight) return;
+
+    const lib = window.PocuLibrary.all();
+    if (!lib.length) { els.pulseInsightCard.hidden = true; return; }
+
+    const insight = window.PocuPulse.getInsight();
+    const iconEl = els.pulseInsightCard.querySelector('.pulse-insight-icon');
+    const textEl = els.pulseInsightCard.querySelector('.pulse-insight-text');
+    if (iconEl) iconEl.textContent = insight.icon || '✨';
+    if (textEl) textEl.textContent = insight.text || 'Pulse изучает ваш вкус';
+    els.pulseInsightCard.hidden = false;
   }
 
   let lastQueueHash = '';
@@ -309,10 +306,7 @@ window.PocuHomeUI = (() => {
     if (hash === lastQueueHash) return;
     lastQueueHash = hash;
 
-    if (!upcoming.length) {
-      els.pulseQueue.innerHTML = '';
-      return;
-    }
+    if (!upcoming.length) { els.pulseQueue.innerHTML = ''; return; }
 
     els.pulseQueue.innerHTML = upcoming.map(t => `
       <div class="pulse-queue-item">
@@ -331,7 +325,6 @@ window.PocuHomeUI = (() => {
     );
   }
 
-  /* ---------- PULSE CARD ---------- */
   function renderPulseState() {
     if (!els.pulseCard) return;
     const playerState = window.PocuPlayer.getState();
@@ -394,10 +387,8 @@ window.PocuHomeUI = (() => {
     }
   }
 
-  /* ---------- PICKS ---------- */
   function renderPicks() {
     if (!els.picksSection) return;
-
     const all = window.PocuLibrary.all();
     if (!all.length) {
       els.picksSection.hidden = false;
@@ -442,7 +433,6 @@ window.PocuHomeUI = (() => {
     });
   }
 
-  /* ---------- RECENT ---------- */
   function renderRecent() {
     if (!els.recentSection) return;
     const recents = window.PocuStore.recent.all().slice(0, 8);
@@ -466,7 +456,6 @@ window.PocuHomeUI = (() => {
     });
   }
 
-  /* ---------- PLAYLISTS ---------- */
   function renderPlaylists() {
     if (!els.playlistsSection) return;
     const playlists = window.PocuStore.playlists.all();
@@ -495,7 +484,6 @@ window.PocuHomeUI = (() => {
 
       const info = document.createElement('div');
       info.className = 'home-tile-info';
-
       const text = document.createElement('div');
       text.className = 'home-tile-text';
 
@@ -509,30 +497,20 @@ window.PocuHomeUI = (() => {
 
       text.append(name, count);
       info.appendChild(text);
-
       el.append(artWrap, info);
       el.addEventListener('click', () => {
-        if (window.PocuPlaylistsUI) {
-          window.PocuPlaylistsUI.openPlaylistScreen(pl.id);
-        }
+        if (window.PocuPlaylistsUI) window.PocuPlaylistsUI.openPlaylistScreen(pl.id);
       });
       els.playlistsRow.appendChild(el);
     });
   }
 
-  /* ---------- ARTISTS (ЛЮБИМЫЕ АРТИСТЫ) ---------- */
   function renderArtists() {
     if (!els.artistsSection) return;
-    
     const ids = window.PocuStore.favoriteArtists.all();
-    if (!ids.length) { 
-      els.artistsSection.hidden = true; 
-      lastArtistsHash = ''; 
-      return; 
-    }
+    if (!ids.length) { els.artistsSection.hidden = true; lastArtistsHash = ''; return; }
 
     const lib = window.PocuLibrary.all();
-    
     const hash = ids.join(',');
     if (hash === lastArtistsHash) return;
     lastArtistsHash = hash;
@@ -543,9 +521,8 @@ window.PocuHomeUI = (() => {
     ids.forEach(id => {
       const pocu = window.PocuArtists.get(id);
       let name, photo;
-      if (pocu) { 
-        name = pocu.name; 
-        photo = pocu.photo; 
+      if (pocu) {
+        name = pocu.name; photo = pocu.photo;
       } else {
         name = id;
         const lower = id.toLowerCase();
@@ -591,7 +568,6 @@ window.PocuHomeUI = (() => {
     return tile;
   }
 
-  /* ---------- SIMILAR ---------- */
   function renderSimilar() {
     if (!els.similarSection) return;
     const last = window.PocuPlayer.current;
@@ -616,7 +592,6 @@ window.PocuHomeUI = (() => {
     });
   }
 
-  /* ---------- TILE (ТРЕКИ) ---------- */
   function createTile(track, onClick) {
     const el = document.createElement('div');
     el.className = 'home-tile';
@@ -642,7 +617,6 @@ window.PocuHomeUI = (() => {
 
     const info = document.createElement('div');
     info.className = 'home-tile-info';
-
     const text = document.createElement('div');
     text.className = 'home-tile-text';
 
