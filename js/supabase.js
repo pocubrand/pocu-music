@@ -129,9 +129,11 @@ window.PocuSupabase = (() => {
     catch (e) { console.warn('[fetch] dislikes:', e.message); }
 
     try {
-      const { data } = await client.from('skip_stats').select('track_id, plays, skips, last_play');
+      const { data } = await client.from('skip_stats').select('track_id, plays, skips, complete, last_play');
       if (data) for (const row of data) out.skipStats[row.track_id] = {
-        plays: row.plays || 0, skips: row.skips || 0,
+        plays:    row.plays    || 0,
+        skips:    row.skips    || 0,
+        complete: row.complete || 0,
         lastPlay: row.last_play ? new Date(row.last_play).getTime() : 0
       };
     } catch (e) { console.warn('[fetch] skip_stats:', e.message); }
@@ -187,6 +189,7 @@ window.PocuSupabase = (() => {
     if (local.profile.displayName || local.profile.avatarUrl) {
       await syncProfile(local.profile);
     }
+    // skipStats не пушим — сервер истина; новые события долетят через syncSkipStats
   }
 
   /* ============ ОПЕРАЦИИ ============ */
@@ -223,7 +226,6 @@ window.PocuSupabase = (() => {
       if ('avatarUrl'   in fields) patch.avatar_url   = fields.avatarUrl   || null;
       if (!Object.keys(patch).length) return;
 
-      // Проверяем наличие
       const { data: existing, error: selErr } = await client.from('profiles')
         .select('id').eq('id', currentUser.id).maybeSingle();
       if (selErr) throw selErr;
@@ -242,7 +244,6 @@ window.PocuSupabase = (() => {
     } catch (e) { console.warn('[sync] profile:', e.message); }
   }
 
-  /* Публичный fetchProfile — для принудительной синхронизации при открытии настроек */
   async function fetchProfile() {
     if (!currentUser || !client) return null;
     try {
@@ -301,20 +302,28 @@ window.PocuSupabase = (() => {
   async function syncSkipStats(trackId, type) {
     if (!currentUser || !client) return;
     try {
-      const { data } = await client.from('skip_stats').select('plays, skips')
+      const { data } = await client.from('skip_stats').select('plays, skips, complete')
         .match({ user_id: currentUser.id, track_id: trackId }).maybeSingle();
       if (data) {
-        const patch = type === 'play'
-          ? { plays: (data.plays || 0) + 1, last_play: new Date().toISOString() }
-          : { skips: (data.skips || 0) + 1 };
+        let patch = null;
+        if (type === 'play') {
+          patch = { plays: (data.plays || 0) + 1, last_play: new Date().toISOString() };
+        } else if (type === 'skip') {
+          patch = { skips: (data.skips || 0) + 1 };
+        } else if (type === 'complete') {
+          patch = { complete: (data.complete || 0) + 1 };
+        }
+        if (!patch) return;
         await client.from('skip_stats').update(patch).match({ user_id: currentUser.id, track_id: trackId });
       } else {
-        await client.from('skip_stats').insert({
+        const row = {
           user_id: currentUser.id, track_id: trackId,
-          plays: type === 'play' ? 1 : 0,
-          skips: type === 'skip' ? 1 : 0,
+          plays:    type === 'play'     ? 1 : 0,
+          skips:    type === 'skip'     ? 1 : 0,
+          complete: type === 'complete' ? 1 : 0,
           last_play: type === 'play' ? new Date().toISOString() : null
-        });
+        };
+        await client.from('skip_stats').insert(row);
       }
     } catch (e) { console.warn('[sync] skip_stats:', e.message); }
   }

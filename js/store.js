@@ -180,11 +180,11 @@ window.PocuStore = (() => {
 
   const skipStats = {
     all() { return state.skipStats; },
-    get(id) { return state.skipStats[String(id)] || { plays: 0, skips: 0, lastPlay: 0 }; },
+    get(id) { return state.skipStats[String(id)] || { plays: 0, skips: 0, complete: 0, lastPlay: 0 }; },
     recordPlay(id) {
       id = String(id);
       const now = Date.now();
-      const s = state.skipStats[id] || { plays: 0, skips: 0, lastPlay: 0 };
+      const s = state.skipStats[id] || { plays: 0, skips: 0, complete: 0, lastPlay: 0 };
       if (s.lastPlay && (now - s.lastPlay) < 20000) return;
       s.plays++; s.lastPlay = now;
       state.skipStats[id] = s;
@@ -194,24 +194,25 @@ window.PocuStore = (() => {
     },
     recordSkip(id) {
       id = String(id);
-      const s = state.skipStats[id] || { plays: 0, skips: 0, lastPlay: 0 };
+      const s = state.skipStats[id] || { plays: 0, skips: 0, complete: 0, lastPlay: 0 };
       s.skips++;
       state.skipStats[id] = s;
       persist();
       window.PocuSupabase?.syncSkipStats?.(id, 'skip');
     },
-    // НОВОЕ: трек дослушан до конца (natural end или crossfade-переход)
-    // Учитывается в Pulse для «жанра длинных прослушиваний».
+    // Трек дослушан: natural end или crossfade-переход.
+    // Идёт в Pulse для «жанра длинных прослушиваний» и синкается в облако.
     recordComplete(id) {
       id = String(id);
       const now = Date.now();
-      const s = state.skipStats[id] || { plays: 0, skips: 0, lastPlay: 0 };
-      // dedup 20 сек — на случай repeat-one или очень короткого трека
+      const s = state.skipStats[id] || { plays: 0, skips: 0, complete: 0, lastPlay: 0 };
+      // dedup 20 сек — от повторного зачёта в repeat='one' / очень коротких треках
       if (s.lastComplete && (now - s.lastComplete) < 20000) return;
       s.complete = (s.complete || 0) + 1;
       s.lastComplete = now;
       state.skipStats[id] = s;
       persist();
+      window.PocuSupabase?.syncSkipStats?.(id, 'complete');
     }
   };
 
@@ -246,8 +247,7 @@ window.PocuStore = (() => {
         };
       }
 
-      // skipStats — сервер истина. ВНИМАНИЕ: поле complete в облаке пока отсутствует,
-      // поэтому после синка локальный complete теряется (мягкий сигнал, допустимо).
+      // skipStats — сервер истина (включая complete, начиная с этой версии)
       if (cloudData.skipStats && typeof cloudData.skipStats === 'object') {
         state.skipStats = JSON.parse(JSON.stringify(cloudData.skipStats));
       }
@@ -264,6 +264,7 @@ window.PocuStore = (() => {
       state.favoriteAlbums = [];
       state.favoriteArtists = [];
       state.profile = { displayName: '', avatarUrl: '' };
+      // preferences оставляем локально — не привязаны к аккаунту
       persist();
       notify();
     }
