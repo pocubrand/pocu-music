@@ -3205,17 +3205,7 @@ body.track-open .topbar {
    FIX v13 — Aurora hover boost (ПК)
    ================================================================ */
 
-/* Плавный переход при наведении */
-.aurora-blob {
-  transition: opacity .5s ease, filter .5s ease;
-}
-
 @media (hover: hover) and (pointer: fine) {
-  .pulse-hero:hover .aurora-blob {
-    opacity: 1;
-    filter: blur(55px) brightness(1.25) saturate(1.4);
-  }
-
   /* Дополнительно: чуть ярче обложка и виньетка */
   .pulse-hero:hover .pulse-hero-art-card {
     box-shadow:
