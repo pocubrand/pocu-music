@@ -59,11 +59,13 @@ window.PocuHomeUI = (() => {
   }
 
   function applyAuroraColors(colors) {
-    if (!els.pulseCard || !Array.isArray(colors) || colors.length < 3) return;
+    if (!Array.isArray(colors) || colors.length < 3) return;
     const toCss = (c) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
-    els.pulseCard.style.setProperty('--aurora-1', toCss(colors[0]));
-    els.pulseCard.style.setProperty('--aurora-2', toCss(colors[1]));
-    els.pulseCard.style.setProperty('--aurora-3', toCss(colors[2]));
+    const root = document.documentElement;
+    root.style.setProperty('--aurora-1', toCss(colors[0]));
+    root.style.setProperty('--aurora-2', toCss(colors[1]));
+    root.style.setProperty('--aurora-3', toCss(colors[2]));
+    console.log('[aurora] colors applied:', colors);
   }
 
   const FUNNY_TITLES = [
@@ -108,6 +110,7 @@ window.PocuHomeUI = (() => {
 
     els = {
       pulseCard:        document.getElementById('pulseCard'),
+      pulseAurora:      document.getElementById('pulseAurora'),
       pulseArtCard:     document.getElementById('pulseArtCard'),
       pulseArtImg:      document.getElementById('pulseArtImg'),
       pulseTitle:       document.getElementById('pulseTitle'),
@@ -170,13 +173,13 @@ window.PocuHomeUI = (() => {
     }
 
     /* ---- Aurora scatter on hover (только обложка + кнопки) ---- */
-    if (els.pulseCard) {
+    if (els.pulseAurora) {
       const scatterTargets = [
         els.pulseArtCard,
         document.querySelector('.pulse-actions')
       ].filter(Boolean);
-      const onEnter = () => els.pulseCard.classList.add('scatter');
-      const onLeave = () => els.pulseCard.classList.remove('scatter');
+      const onEnter = () => els.pulseAurora.classList.add('scatter');
+      const onLeave = () => els.pulseAurora.classList.remove('scatter');
       scatterTargets.forEach(el => {
         el.addEventListener('mouseenter', onEnter);
         el.addEventListener('mouseleave', onLeave);
