@@ -110,7 +110,6 @@ window.PocuStore = (() => {
         genres:  Array.isArray(prefs.genres)  ? [...new Set(prefs.genres.map(String))]  : [],
         artists: Array.isArray(prefs.artists) ? [...new Set(prefs.artists.map(String))] : []
       };
-      // silent — изменения применятся к Pulse при следующем generateQueue, без перерисовки сейчас
       persist();
     }
   };
@@ -162,7 +161,6 @@ window.PocuStore = (() => {
 
   const settings = {
     get(key, fallback) { return key in state.settings ? state.settings[key] : fallback; },
-    // silent: пишем в localStorage без notify — чтобы не триггерить перерисовку рекомендаций/подборок
     set(key, value) { state.settings[key] = value; persist(); }
   };
 
@@ -201,6 +199,19 @@ window.PocuStore = (() => {
       state.skipStats[id] = s;
       persist();
       window.PocuSupabase?.syncSkipStats?.(id, 'skip');
+    },
+    // НОВОЕ: трек дослушан до конца (natural end или crossfade-переход)
+    // Учитывается в Pulse для «жанра длинных прослушиваний».
+    recordComplete(id) {
+      id = String(id);
+      const now = Date.now();
+      const s = state.skipStats[id] || { plays: 0, skips: 0, lastPlay: 0 };
+      // dedup 20 сек — на случай repeat-one или очень короткого трека
+      if (s.lastComplete && (now - s.lastComplete) < 20000) return;
+      s.complete = (s.complete || 0) + 1;
+      s.lastComplete = now;
+      state.skipStats[id] = s;
+      persist();
     }
   };
 
@@ -219,7 +230,6 @@ window.PocuStore = (() => {
       if (Array.isArray(cloudData.favoriteAlbums)) state.favoriteAlbums = cloudData.favoriteAlbums;
       if (Array.isArray(cloudData.favoriteArtists)) state.favoriteArtists = cloudData.favoriteArtists;
 
-      // profile: НЕ затираем непустые локальные значения пустыми из облака
       if (cloudData.profile && typeof cloudData.profile === 'object') {
         const local  = state.profile;
         const remote = cloudData.profile;
@@ -229,7 +239,6 @@ window.PocuStore = (() => {
         };
       }
 
-      // preferences — только из облака (если там есть; иначе локальные)
       if (cloudData.preferences && typeof cloudData.preferences === 'object') {
         state.preferences = {
           genres:  Array.isArray(cloudData.preferences.genres)  ? cloudData.preferences.genres  : (state.preferences.genres || []),
@@ -237,7 +246,8 @@ window.PocuStore = (() => {
         };
       }
 
-      // skipStats — сервер истина
+      // skipStats — сервер истина. ВНИМАНИЕ: поле complete в облаке пока отсутствует,
+      // поэтому после синка локальный complete теряется (мягкий сигнал, допустимо).
       if (cloudData.skipStats && typeof cloudData.skipStats === 'object') {
         state.skipStats = JSON.parse(JSON.stringify(cloudData.skipStats));
       }
@@ -254,7 +264,6 @@ window.PocuStore = (() => {
       state.favoriteAlbums = [];
       state.favoriteArtists = [];
       state.profile = { displayName: '', avatarUrl: '' };
-      // preferences оставляем локально — не привязаны к аккаунту
       persist();
       notify();
     }

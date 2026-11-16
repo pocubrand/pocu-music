@@ -31,7 +31,6 @@ window.PocuPlayer = (() => {
   let isCrossfading = false;
   let crossfadeToken = 0;
 
-  /* Читаем сохранённые EQ из store — пробуем известные ключи */
   function readSavedEQ() {
     try {
       const store = window.PocuStore?.settings;
@@ -84,7 +83,6 @@ window.PocuPlayer = (() => {
       eqFilters[eqFilters.length - 1].connect(masterGain);
       masterGain.connect(audioCtx.destination);
 
-      // Применяем сохранённый EQ сразу, чтобы граф стартовал с правильными gain
       const saved = readSavedEQ();
       if (saved) {
         applyEQValues(saved);
@@ -95,7 +93,6 @@ window.PocuPlayer = (() => {
         console.log('[audio] ctx state →', audioCtx.state);
       });
 
-      // Громкость теперь через masterGain
       audioA.volume = 1; audioB.volume = 1;
       audioA.muted = false; audioB.muted = false;
 
@@ -106,7 +103,6 @@ window.PocuPlayer = (() => {
       }
     } catch (e) {
       console.warn('[audio] init failed:', e);
-      // Полный сброс, чтобы следующая попытка пересоздала
       try { audioCtx?.close?.(); } catch {}
       audioCtx = null;
       sourceA = sourceB = null;
@@ -131,7 +127,6 @@ window.PocuPlayer = (() => {
     }
     if (!Array.isArray(bands)) return;
     applyEQValues(bands);
-    // setEQ обычно зовётся из user gesture (ползунок) — можно resume
     if (audioCtx && audioCtx.state === 'suspended') {
       audioCtx.resume().catch(() => {});
     }
@@ -316,6 +311,11 @@ window.PocuPlayer = (() => {
     newGain.gain.cancelScheduledValues(now);
     newGain.gain.setValueAtTime(0, now);
     newGain.gain.linearRampToValueAtTime(1, now + fadeTime);
+
+    // Засчитываем завершение предыдущего трека (crossfade = услышал почти до конца)
+    if (current) {
+      try { window.PocuStore?.skipStats?.recordComplete?.(current.id); } catch {}
+    }
 
     markNewTrack(nextTrack);
     current = nextTrack;
@@ -553,7 +553,9 @@ window.PocuPlayer = (() => {
     }
     if (!isCrossfading) {
       const cf = getCrossfadeTime();
-      if (cf > 0 && el.duration && isFinite(el.duration)) {
+      // Фикс: при repeat='one' crossfade не запускаем — иначе перепрыгивает
+      // на следующий трек вместо повтора текущего
+      if (cf > 0 && repeat !== 'one' && el.duration && isFinite(el.duration)) {
         const remaining = el.duration - el.currentTime;
         if (remaining > 0.2 && remaining <= cf + 0.5) {
           const fadeTime = Math.max(1, Math.min(cf, remaining - 0.2));
@@ -568,6 +570,12 @@ window.PocuPlayer = (() => {
   function onEnded(el) {
     if (el !== activeAudio) return;
     if (isCrossfading) return;
+
+    // Засчитываем завершение трека (natural end)
+    if (current) {
+      try { window.PocuStore?.skipStats?.recordComplete?.(current.id); } catch {}
+    }
+
     if (repeat === 'one') { el.currentTime = 0; el.play().catch(() => {}); }
     else next();
   }
@@ -581,9 +589,7 @@ window.PocuPlayer = (() => {
         notify();
       });
     });
-    // play/pause — важны оба элемента
     el.addEventListener('play', () => {
-      // Авто-резюм при любом старте — ключ к работе EQ
       if (audioCtx && audioCtx.state !== 'running') {
         audioCtx.resume().catch(() => {});
       }
