@@ -5249,20 +5249,23 @@ body.genre-open .topbar {
 .pulse-hero-rings { display: none !important; }
 
 /* ================================================================
-   PULSE AURORA — глобальный живой фон (Variant B, v2)
-   Без mask (mask ломал position: fixed). Fade вниз — отдельный
-   fixed-слой с linear-gradient.
+   PULSE AURORA v3 — fixed, без clip, blobs крупнее ядром
    ================================================================ */
 
 .pulse-aurora {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;                /* выше .bg (0), ниже main (10) */
-  pointer-events: none;
-  overflow: hidden;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  transform: none !important;
+  filter: none !important;
+  contain: none !important;
+  /* overflow: hidden УБРАН — он резал blobs */
   --aurora-1: rgb(124, 92, 255);
   --aurora-2: rgb(255, 64, 158);
   --aurora-3: rgb(56, 132, 255);
@@ -5287,79 +5290,83 @@ body.genre-open .topbar {
   will-change: transform;
 }
 
+/* Blobs 140vw — их полный цвет перекрывает края viewport без fade */
 .pulse-aurora-blob-1 {
-  width: min(700px, 70vw);
-  height: min(700px, 70vw);
-  top: -10%;
-  left: -10%;
+  width: 140vw;
+  height: 140vw;
+  top: -25%;
+  left: -30%;
 }
 .pulse-aurora-blob-1::before {
-  background: radial-gradient(circle, var(--aurora-1) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--aurora-1) 0%, var(--aurora-1) 30%, transparent 75%);
   animation: auroraGlobalDrift1 20s ease-in-out infinite;
 }
 
 .pulse-aurora-blob-2 {
-  width: min(800px, 80vw);
-  height: min(800px, 80vw);
-  top: -15%;
-  right: -15%;
+  width: 140vw;
+  height: 140vw;
+  top: -25%;
+  right: -30%;
 }
 .pulse-aurora-blob-2::before {
-  background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--aurora-2) 0%, var(--aurora-2) 30%, transparent 75%);
   animation: auroraGlobalDrift2 24s ease-in-out infinite;
 }
 
 .pulse-aurora-blob-3 {
-  width: min(600px, 60vw);
-  height: min(600px, 60vw);
-  top: 22%;
-  left: 15%;
+  width: 120vw;
+  height: 120vw;
+  top: 30%;
+  left: 10%;
 }
 .pulse-aurora-blob-3::before {
-  background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--aurora-3) 0%, var(--aurora-3) 30%, transparent 75%);
   animation: auroraGlobalDrift3 22s ease-in-out infinite;
 }
 
-/* Мобилка: чуть меньше blur и размер */
+/* Мобилка */
 @media (max-width: 899px) {
   .pulse-aurora-blob {
     filter: blur(60px);
     opacity: 0.65;
   }
-  .pulse-aurora-blob-1 { width: 90vw; height: 90vw; }
-  .pulse-aurora-blob-2 { width: 100vw; height: 100vw; }
-  .pulse-aurora-blob-3 { width: 80vw; height: 80vw; }
+  .pulse-aurora-blob-1 { width: 130vw; height: 130vw; }
+  .pulse-aurora-blob-2 { width: 130vw; height: 130vw; }
+  .pulse-aurora-blob-3 { width: 110vw; height: 110vw; }
 }
 
-/* Scatter при наведении на обложку / кнопки */
-.pulse-aurora.scatter .pulse-aurora-blob-1 { transform: translate(-15%, -10%); }
-.pulse-aurora.scatter .pulse-aurora-blob-2 { transform: translate(15%, -10%); }
-.pulse-aurora.scatter .pulse-aurora-blob-3 { transform: translate(0, 15%); }
+/* Scatter */
+.pulse-aurora.scatter .pulse-aurora-blob-1 { transform: translate(-10%, -8%); }
+.pulse-aurora.scatter .pulse-aurora-blob-2 { transform: translate(10%, -8%); }
+.pulse-aurora.scatter .pulse-aurora-blob-3 { transform: translate(0, 12%); }
 
 @keyframes auroraGlobalDrift1 {
   0%   { transform: translate(0, 0) scale(1); }
-  33%  { transform: translate(25%, 15%) scale(1.1); }
-  66%  { transform: translate(5%, -10%) scale(0.92); }
+  33%  { transform: translate(15%, 10%) scale(1.08); }
+  66%  { transform: translate(3%, -8%) scale(0.94); }
   100% { transform: translate(0, 0) scale(1); }
 }
 @keyframes auroraGlobalDrift2 {
   0%   { transform: translate(0, 0) scale(1.05); }
-  50%  { transform: translate(-25%, 25%) scale(0.9); }
+  50%  { transform: translate(-15%, 18%) scale(0.92); }
   100% { transform: translate(0, 0) scale(1.05); }
 }
 @keyframes auroraGlobalDrift3 {
   0%   { transform: translate(0, 0) scale(0.95); }
-  40%  { transform: translate(-30%, -25%) scale(1.1); }
-  70%  { transform: translate(15%, -20%) scale(1.0); }
+  40%  { transform: translate(-20%, -15%) scale(1.08); }
+  70%  { transform: translate(10%, -12%) scale(1.0); }
   100% { transform: translate(0, 0) scale(0.95); }
 }
 
-/* ---- Fade вниз: от прозрачного к --bg, начиная с 45vh ---- */
+/* Fade вниз — отдельный fixed-слой */
 .pulse-aurora-fade {
-  position: fixed;
-  inset: 0;
-  z-index: 2;                /* выше aurora, ниже main (10) */
-  pointer-events: none;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
   background: linear-gradient(
     to bottom,
     transparent 0%,
