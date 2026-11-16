@@ -2950,89 +2950,12 @@ body.track-open .topbar {
   }
 }
 
-/* ================================================================
-   AURORA PULSE — живой mesh-градиент из цветов обложки
-   ================================================================ */
-
-.pulse-hero {
-  --aurora-1: rgb(124, 92, 255);
-  --aurora-2: rgb(255, 64, 158);
-  --aurora-3: rgb(56, 132, 255);
-  contain: layout paint;
-}
-
 /* Обложка — тонкая база под aurora, приглушённая и размытая */
 .pulse-hero-bg {
   filter: blur(70px) saturate(180%) brightness(0.4) !important;
   opacity: 0.5 !important;
   transform: scale(1.4);
   transition: background-image .8s ease, opacity .6s ease;
-}
-
-/* --- Blobs --- */
-.aurora-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  mix-blend-mode: screen;
-  opacity: 0.8;
-  pointer-events: none;
-  will-change: transform;
-  z-index: 1;
-  transition: background .8s ease, opacity .6s ease;
-}
-
-.aurora-blob-1 {
-  width: 60%;
-  aspect-ratio: 1;
-  top: -15%;
-  left: -15%;
-  background: radial-gradient(circle, var(--aurora-1) 0%, transparent 70%);
-  animation: auroraDrift1 18s ease-in-out infinite;
-}
-
-.aurora-blob-2 {
-  width: 65%;
-  aspect-ratio: 1;
-  top: -20%;
-  right: -20%;
-  background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
-  animation: auroraDrift2 22s ease-in-out infinite;
-}
-
-.aurora-blob-3 {
-  width: 55%;
-  aspect-ratio: 1;
-  bottom: -20%;
-  left: 20%;
-  background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
-  animation: auroraDrift3 20s ease-in-out infinite;
-}
-
-/* Ускоряем движение, когда трек играет */
-.pulse-hero.live:not(.paused) .aurora-blob-1 { animation-duration: 12s; }
-.pulse-hero.live:not(.paused) .aurora-blob-2 { animation-duration: 15s; }
-.pulse-hero.live:not(.paused) .aurora-blob-3 { animation-duration: 13s; }
-.pulse-hero.live:not(.paused) .aurora-blob { opacity: 1; }
-
-@keyframes auroraDrift1 {
-  0%   { transform: translate(0, 0) scale(1); }
-  33%  { transform: translate(45%, 30%) scale(1.25); }
-  66%  { transform: translate(15%, -25%) scale(0.9); }
-  100% { transform: translate(0, 0) scale(1); }
-}
-
-@keyframes auroraDrift2 {
-  0%   { transform: translate(0, 0) scale(1.1); }
-  50%  { transform: translate(-35%, 45%) scale(0.85); }
-  100% { transform: translate(0, 0) scale(1.1); }
-}
-
-@keyframes auroraDrift3 {
-  0%   { transform: translate(0, 0) scale(0.9); }
-  40%  { transform: translate(-45%, -35%) scale(1.3); }
-  70%  { transform: translate(25%, -40%) scale(1.05); }
-  100% { transform: translate(0, 0) scale(0.9); }
 }
 
 /* --- Шум (премиум-текстура) --- */
@@ -3062,11 +2985,6 @@ body.track-open .topbar {
 
 /* Старый ambient больше не нужен — убираем */
 .pulse-hero-ambient { display: none !important; }
-
-/* Замедляем анимации при скрытом окне — экономим CPU */
-@media (prefers-reduced-motion: reduce) {
-  .aurora-blob { animation: none !important; }
-}
 
 /* --- Контейнер для обложки --- */
 .pulse-hero-art-card {
