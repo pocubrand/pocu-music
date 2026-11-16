@@ -3016,14 +3016,6 @@ body.track-open .topbar {
   display: block;
 }
 
-/* Корректируем прозрачность фоновых слоёв, чтобы обложка не терялась */
-.pulse-hero-bg {
-  opacity: 0.25 !important; /* Было 0.5 */
-}
-.pulse-hero .aurora-blob {
-  opacity: 0.5; /* Было 0.8 */
-}
-
 /* ПК-версия */
 @media (min-width: 900px) {
   .pulse-hero-art-card {
@@ -3117,25 +3109,6 @@ body.track-open .topbar {
 
 .pulse-hero.live .pulse-title:hover {
   color: rgba(255,255,255,.9);
-}
-
-/* ================================================================
-   FIX v13 — Aurora hover boost (ПК)
-   ================================================================ */
-
-@media (hover: hover) and (pointer: fine) {
-  /* Дополнительно: чуть ярче обложка и виньетка */
-  .pulse-hero:hover .pulse-hero-art-card {
-    box-shadow:
-      0 24px 50px rgba(0,0,0,.5),
-      0 0 40px rgba(124,92,255,.35),
-      0 0 0 1px rgba(255,255,255,.12) inset;
-    transition: box-shadow .5s ease;
-  }
-
-  .pulse-hero:hover .pulse-hero-noise {
-    opacity: 0.14;
-  }
 }
 
 /* ================================================================
@@ -5308,10 +5281,6 @@ body.genre-open .topbar {
   }
 }
 
-[data-theme="light"] .pulse-brand-top {
-  filter: drop-shadow(0 2px 10px rgba(124,92,255,0.3));
-}
-
 /* ---- Fix: hover на «пустой» hero НЕ должен усиливать blobs ---- */
 .pulse-hero:hover .aurora-blob { opacity: 0.75 !important; }
 .pulse-hero:hover .aurora-blob::before {
@@ -5361,3 +5330,39 @@ body.genre-open .topbar {
   opacity: 1 !important;
   transition: opacity 0.4s ease;
 }
+
+/* ================================================================
+   PULSE — blobs: базовые правила (никаких hover-описаний)
+   ================================================================ */
+
+.pulse-hero .pulse-aurora-wrap .aurora-blob {
+  opacity: 0.75 !important;
+  filter: blur(55px) !important;
+}
+
+.pulse-hero .pulse-aurora-wrap .aurora-blob-1::before {
+  animation: auroraDrift1 11s ease-in-out infinite !important;
+}
+.pulse-hero .pulse-aurora-wrap .aurora-blob-2::before {
+  animation: auroraDrift2 14s ease-in-out infinite !important;
+}
+.pulse-hero .pulse-aurora-wrap .aurora-blob-3::before {
+  animation: auroraDrift3 12s ease-in-out infinite !important;
+}
+
+.pulse-hero.live:not(.paused) .pulse-aurora-wrap .aurora-blob {
+  opacity: 0.95 !important;
+}
+.pulse-hero.live:not(.paused) .pulse-aurora-wrap .aurora-blob-1::before {
+  animation-duration: 7s !important;
+}
+.pulse-hero.live:not(.paused) .pulse-aurora-wrap .aurora-blob-2::before {
+  animation-duration: 9s !important;
+}
+.pulse-hero.live:not(.paused) .pulse-aurora-wrap .aurora-blob-3::before {
+  animation-duration: 8s !important;
+}
+
+.pulse-aurora-wrap.scatter .aurora-blob-1 { transform: translate(-25%, -22%) !important; }
+.pulse-aurora-wrap.scatter .aurora-blob-2 { transform: translate(25%, -22%) !important; }
+.pulse-aurora-wrap.scatter .aurora-blob-3 { transform: translate(0, 25%) !important; }

@@ -603,3 +603,20 @@ html { transition: background-color .3s ease; }
     var(--bg) 100%
   );
 }
+
+[data-theme="light"] .pulse-brand-top {
+  filter: drop-shadow(0 2px 10px rgba(124,92,255,0.3));
+}
+
+/* ---- Надпись «Pocu Pulse» — светлая тема ---- */
+[data-theme="light"] .pulse-brand-top {
+  background: linear-gradient(90deg,
+    #6a4ad9 0%,
+    #d63384 50%,
+    #2563eb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 1px 4px rgba(124, 92, 255, 0.25));
+}
