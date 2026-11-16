@@ -5249,9 +5249,9 @@ body.genre-open .topbar {
 .pulse-hero-rings { display: none !important; }
 
 /* ================================================================
-   PULSE AURORA — глобальный живой фон (Variant B)
-   Aurora живёт вне hero, всегда видна, плавно затухает к середине
-   раздела «Собрано для тебя».
+   PULSE AURORA — глобальный живой фон (Variant B, v2)
+   Без mask (mask ломал position: fixed). Fade вниз — отдельный
+   fixed-слой с linear-gradient.
    ================================================================ */
 
 .pulse-aurora {
@@ -5259,37 +5259,13 @@ body.genre-open .topbar {
   top: 0;
   left: 0;
   right: 0;
-  height: 100vh;
-  z-index: 1;                /* выше .bg (z:0), ниже main (z:10) */
+  bottom: 0;
+  z-index: 1;                /* выше .bg (0), ниже main (10) */
   pointer-events: none;
   overflow: hidden;
   --aurora-1: rgb(124, 92, 255);
   --aurora-2: rgb(255, 64, 158);
   --aurora-3: rgb(56, 132, 255);
-  -webkit-mask-image:
-    linear-gradient(to bottom,
-      black 0,
-      black 50vh,
-      transparent 90vh,
-      transparent 100%),
-    linear-gradient(to right,
-      transparent 0,
-      black 4%,
-      black 96%,
-      transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to bottom,
-      black 0,
-      black 50vh,
-      transparent 90vh,
-      transparent 100%),
-    linear-gradient(to right,
-      transparent 0,
-      black 4%,
-      black 96%,
-      transparent 100%);
-  mask-composite: intersect;
 }
 
 .pulse-aurora-blob {
@@ -5344,7 +5320,7 @@ body.genre-open .topbar {
   animation: auroraGlobalDrift3 22s ease-in-out infinite;
 }
 
-/* Мобилка: чуть меньше blur и размер, чтобы не «слепить» */
+/* Мобилка: чуть меньше blur и размер */
 @media (max-width: 899px) {
   .pulse-aurora-blob {
     filter: blur(60px);
@@ -5376,4 +5352,21 @@ body.genre-open .topbar {
   40%  { transform: translate(-30%, -25%) scale(1.1); }
   70%  { transform: translate(15%, -20%) scale(1.0); }
   100% { transform: translate(0, 0) scale(0.95); }
+}
+
+/* ---- Fade вниз: от прозрачного к --bg, начиная с 45vh ---- */
+.pulse-aurora-fade {
+  position: fixed;
+  inset: 0;
+  z-index: 2;                /* выше aurora, ниже main (10) */
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 45vh,
+    rgba(8, 8, 12, 0.4) 65vh,
+    rgba(8, 8, 12, 0.85) 82vh,
+    var(--bg) 96vh,
+    var(--bg) 100%
+  );
 }

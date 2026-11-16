@@ -590,3 +590,16 @@ html { transition: background-color .3s ease; }
     0 20px 44px rgba(0,0,0,0.15),
     0 0 0 1px rgba(0,0,0,0.06) inset;
 }
+
+/* Светлая тема */
+[data-theme="light"] .pulse-aurora-fade {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 45vh,
+    rgba(242, 242, 245, 0.4) 65vh,
+    rgba(242, 242, 245, 0.85) 82vh,
+    var(--bg) 96vh,
+    var(--bg) 100%
+  );
+}
