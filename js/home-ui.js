@@ -1,4 +1,4 @@
-/* Pocu Music — Главная: Pocu Pulse + подборки */
+/* Pocu Music — Главная: Pocu Pulse + подборки + prev/next в hero */
 window.PocuHomeUI = (() => {
   let els = {};
   let initialized = false;
@@ -102,6 +102,41 @@ window.PocuHomeUI = (() => {
     el.textContent = FUNNY_TITLES[Math.floor(Math.random() * FUNNY_TITLES.length)];
   }
 
+  /* ---------- prev/next в Pulse hero ---------- */
+  function createPulseRailBtn(dir) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pulse-btn pulse-btn-rail pulse-btn-' + dir;
+    btn.setAttribute('aria-label', dir === 'prev' ? 'Предыдущий трек' : 'Следующий трек');
+    btn.innerHTML = dir === 'prev'
+      ? '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 6h2v12H6zM9.5 12L18 18V6z"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M16 6h2v12h-2zM14.5 12L6 18V6z"/></svg>';
+    btn.classList.add('disabled');
+    return btn;
+  }
+
+  function injectPulseRail() {
+    if (!els.pulsePlay || !els.pulsePlay.parentNode) return;
+    const prevBtn = createPulseRailBtn('prev');
+    const nextBtn = createPulseRailBtn('next');
+    els.pulsePlay.parentNode.insertBefore(prevBtn, els.pulsePlay);
+    els.pulsePlay.parentNode.insertBefore(nextBtn, els.pulsePlay.nextSibling);
+
+    prevBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (prevBtn.classList.contains('disabled')) return;
+      try { window.PocuPlayer.prev(); } catch (err) { console.warn(err); }
+    });
+    nextBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (nextBtn.classList.contains('disabled')) return;
+      try { window.PocuPlayer.next(); } catch (err) { console.warn(err); }
+    });
+
+    els.pulsePrev = prevBtn;
+    els.pulseNext = nextBtn;
+  }
+
   function init() {
     if (initialized) return;
     initialized = true;
@@ -169,6 +204,9 @@ window.PocuHomeUI = (() => {
         window.PocuEquilizerUI?.open?.();
       });
     }
+
+    /* ---- Вставляем prev/next в .pulse-actions ---- */
+    injectPulseRail();
 
     /* ---- Aurora scatter on hover (только обложка + кнопки) ---- */
     if (els.pulseAurora) {
@@ -333,6 +371,10 @@ window.PocuHomeUI = (() => {
         els.pulseDislike.classList.remove('active');
       }
     }
+
+    /* prev/next: disabled, если нет трека или Pulse не активен */
+    if (els.pulsePrev) els.pulsePrev.classList.toggle('disabled', !hasTrack);
+    if (els.pulseNext) els.pulseNext.classList.toggle('disabled', !hasTrack);
   }
 
   function safe(fn) {

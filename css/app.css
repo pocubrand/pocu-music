@@ -5359,3 +5359,74 @@ body.genre-open .topbar {
 .pulse-aurora-wrap.scatter .aurora-blob-1 { transform: translate(-25%, -22%) !important; }
 .pulse-aurora-wrap.scatter .aurora-blob-2 { transform: translate(25%, -22%) !important; }
 .pulse-aurora-wrap.scatter .aurora-blob-3 { transform: translate(0, 25%) !important; }
+
+/* ================================================================
+   PULSE v12 + VOLUME WHEEL (ноябрь 2026)
+   ================================================================ */
+
+/* --- PULSE: prev/next в hero --- */
+.pulse-btn-rail {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.22);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  color: #fff;
+}
+.pulse-btn-rail svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+.pulse-btn-rail.disabled {
+  opacity: .35;
+  pointer-events: none;
+}
+
+/* --- NOW-PLAYING: сближаем кнопки (ПК) --- */
+@media (min-width: 900px) {
+  .np-controls {
+    justify-content: center;
+    gap: 16px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}
+
+/* --- VOLUME TOAST (всплывашка «40%» при прокрутке колесом) --- */
+.volume-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(140px + env(safe-area-inset-bottom));
+  transform: translateX(-50%) translateY(8px);
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: rgba(30,30,38,.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255,255,255,.12);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums;
+  z-index: 95;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .25s var(--spring);
+}
+.volume-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+@media (min-width: 900px) {
+  .volume-toast { bottom: 92px; }
+}
+
+/* Мобилка: PULSE hero — компактнее (теперь 7 кнопок в ряд) */
+@media (max-width: 380px) {
+  .pulse-actions { gap: 6px; }
+  .pulse-btn-rail { width: 38px; height: 38px; }
+  .pulse-btn-rail svg { width: 18px; height: 18px; }
+}

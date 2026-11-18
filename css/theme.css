@@ -617,3 +617,21 @@ html { transition: background-color .3s ease; }
   color: #0a0a0f !important;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08)) !important;
 }
+
+/* ================================================================
+   НОВОЕ (ноябрь 2026) — светлая тема: pulse prev/next + volume toast
+   ================================================================ */
+
+[data-theme="light"] .pulse-btn-rail {
+  background: rgba(0,0,0,.06);
+  border-color: rgba(0,0,0,.10);
+  color: #0a0a0f;
+}
+[data-theme="light"] .pulse-btn-rail.disabled { opacity: .35; }
+
+[data-theme="light"] .volume-toast {
+  background: rgba(255,255,255,.94);
+  border-color: rgba(0,0,0,.08);
+  color: #0a0a0f;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
