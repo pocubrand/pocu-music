@@ -117,10 +117,22 @@ window.PocuHomeUI = (() => {
 
   function injectPulseRail() {
     if (!els.pulsePlay || !els.pulsePlay.parentNode) return;
+
+    // Защита от повторной инъекции (например, при переинициализации)
+    const parent = els.pulsePlay.parentNode;
+    if (parent.querySelector('.pulse-btn-rail')) {
+      els.pulsePrev = parent.querySelector('.pulse-btn-prev');
+      els.pulseNext = parent.querySelector('.pulse-btn-next');
+      return;
+    }
+
     const prevBtn = createPulseRailBtn('prev');
     const nextBtn = createPulseRailBtn('next');
-    els.pulsePlay.parentNode.insertBefore(prevBtn, els.pulsePlay);
-    els.pulsePlay.parentNode.insertBefore(nextBtn, els.pulsePlay.nextSibling);
+
+    // insertAdjacentElement — точное позиционирование, независимо от whitespace-нод:
+    // 'beforebegin' = перед pulsePlay, 'afterend' = сразу после pulsePlay
+    els.pulsePlay.insertAdjacentElement('beforebegin', prevBtn);
+    els.pulsePlay.insertAdjacentElement('afterend', nextBtn);
 
     prevBtn.addEventListener('click', e => {
       e.stopPropagation();

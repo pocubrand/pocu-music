@@ -42,6 +42,9 @@ window.PocuUI = (() => {
       mpVolumeIcon: document.getElementById('mpVolumeIcon')
     };
 
+    /* ---- Группировка центральных кнопок (shuffle/repeat в углах) ---- */
+    groupNpControls();
+
     /* controls */
     els.mpToggle.addEventListener('click', e => {
       e.stopPropagation();
@@ -104,6 +107,29 @@ window.PocuUI = (() => {
     if (window.PocuStore) {
       window.PocuStore.subscribe(() => updateHearts());
     }
+  }
+
+  /* ---------- группировка shuffle/repeat по углам ---------- */
+  function groupNpControls() {
+    const { npShuffle, npRepeat } = els;
+    if (!npShuffle || !npRepeat) return;
+    const parent = npShuffle.parentNode;
+    if (!parent) return;
+    if (parent.querySelector('.np-controls-main')) return; // уже сгруппированы
+
+    const group = document.createElement('div');
+    group.className = 'np-controls-main';
+
+    // Собираем всё между shuffle и repeat (dislike, prev, play, next, heart)
+    let node = npShuffle.nextSibling;
+    while (node && node !== npRepeat) {
+      const next = node.nextSibling;
+      if (node.nodeType === 1) { // ELEMENT_NODE
+        group.appendChild(node);
+      }
+      node = next;
+    }
+    parent.insertBefore(group, npRepeat);
   }
 
   /* ---------- helpers ---------- */
@@ -452,7 +478,6 @@ window.PocuUI = (() => {
         slider.addEventListener('input', e => {
           window.PocuPlayer.setVolume(parseFloat(e.target.value));
         });
-        /* Колесо мыши над слайдером */
         slider.addEventListener('wheel', handleVolumeWheel, { passive: false });
       }
       if (icon) {
@@ -460,7 +485,6 @@ window.PocuUI = (() => {
           e.stopPropagation();
           window.PocuPlayer.toggleMute();
         });
-        /* Колесо мыши над иконкой тоже работает */
         icon.addEventListener('wheel', handleVolumeWheel, { passive: false });
       }
     };
@@ -469,10 +493,10 @@ window.PocuUI = (() => {
   }
 
   function handleVolumeWheel(e) {
-    e.preventDefault();                 // не скроллим страницу
-    const dir = e.deltaY < 0 ? 1 : -1;  // вверх = громче
+    e.preventDefault();
+    const dir = e.deltaY < 0 ? 1 : -1;
     const cur = window.PocuPlayer.getState().volume;
-    const next = Math.max(0, Math.min(1, cur + dir * 0.05));  // шаг 5%
+    const next = Math.max(0, Math.min(1, cur + dir * 0.05));
     window.PocuPlayer.setVolume(next);
     showVolumeToast(Math.round(next * 100));
   }
