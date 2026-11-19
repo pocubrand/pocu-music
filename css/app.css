@@ -5444,5 +5444,44 @@ body.genre-open .topbar {
 }
 
 @media (min-width: 768px) {
-  .np-controls-main { gap: 6px; }   /* на ПК чуть просторнее */
+  .np-controls-main { gap: 10px; }   /* на ПК чуть просторнее */
+}
+
+/* ===== FIX (mobile only): Pulse hero — EQ/Refresh в углы, кнопки крупнее ===== */
+@media (max-width: 767px) {
+  .pulse-hero {
+    position: relative;
+  }
+
+  /* EQ и Refresh — в верхние углы карточки, вне общего ряда */
+  .pulse-actions #pulseEq,
+  .pulse-actions #pulseRefresh {
+    position: absolute;
+    top: 14px;
+    width: 40px;
+    height: 40px;
+    z-index: 6;
+    margin: 0;
+  }
+  .pulse-actions #pulseEq      { left: 14px; }
+  .pulse-actions #pulseRefresh { right: 14px; }
+
+  /* Like / Dislike / Prev / Next — крупнее */
+  .pulse-actions #pulseLike,
+  .pulse-actions #pulseDislike,
+  .pulse-actions #pulsePrev,
+  .pulse-actions #pulseNext {
+    width: 48px;
+    height: 48px;
+  }
+
+  /* Play — заметно больше остальных */
+  .pulse-actions #pulsePlay {
+    width: 70px;
+    height: 70px;
+  }
+  .pulse-actions #pulsePlay svg {
+    width: 34px;
+    height: 34px;
+  }
 }
