@@ -5023,12 +5023,6 @@ body.genre-open .topbar {
   border: 1px solid rgba(255,255,255,0.12);
 }
 
-.pulse-btn-eq      { order: 1; }
-.pulse-btn-dislike { order: 2; }
-.pulse-btn-play    { order: 3; }
-.pulse-btn-like    { order: 4; }
-.pulse-btn-refresh { order: 5; }
-
 .pulse-btn-play {
   width: 56px;
   height: 56px;
@@ -5384,17 +5378,6 @@ body.genre-open .topbar {
   pointer-events: none;
 }
 
-/* ===== FIX: PC — сближаем кнопки управления в фулл-плеере ===== */
-@media (min-width: 768px) {
-  .np-controls-main {
-    gap: 4px;
-  }
-  .np-controls-main > .np-ctrl {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-
 /* --- VOLUME TOAST (всплывашка «40%» при прокрутке колесом) --- */
 .volume-toast {
   position: fixed;
@@ -5431,4 +5414,35 @@ body.genre-open .topbar {
   .pulse-btn-rail { width: 38px; height: 38px; }
   .pulse-btn-rail svg { width: 18px; height: 18px; }
   .np-controls-main { gap: 8px; }
+}
+
+/* ===== FIX: Pulse hero — жёсткий порядок кнопок (prev/play/next рядом) ===== */
+.pulse-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.pulse-actions > #pulseEq       { order: 1; }
+.pulse-actions > #pulseDislike  { order: 2; }
+.pulse-actions > #pulsePrev     { order: 3; }
+.pulse-actions > #pulsePlay     { order: 4; }
+.pulse-actions > #pulseNext     { order: 5; }
+.pulse-actions > #pulseLike     { order: 6; }
+.pulse-actions > #pulseRefresh  { order: 7; }
+
+/* ===== FIX: .np-controls-main без стилей => block => кнопки колонной ===== */
+.np-controls-main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 4px;
+}
+
+@media (min-width: 768px) {
+  .np-controls-main { gap: 6px; }   /* на ПК чуть просторнее */
 }
