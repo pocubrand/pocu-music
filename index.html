@@ -106,9 +106,15 @@
           <button class="pulse-btn pulse-btn-dislike" id="pulseDislike" aria-label="Не нравится">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/><line x1="4" y1="4" x2="20" y2="20"/></svg>
           </button>
+          <button class="pulse-btn pulse-btn-rail pulse-btn-prev disabled" id="pulsePrev" aria-label="Предыдущий трек">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 6h2v12H6zM9.5 12L18 18V6z"/></svg>
+          </button>
           <button class="pulse-btn pulse-btn-play" id="pulsePlay" aria-label="Запустить Pulse">
             <svg class="pulse-icon-play" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
             <svg class="pulse-icon-pause" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+          </button>
+          <button class="pulse-btn pulse-btn-rail pulse-btn-next disabled" id="pulseNext" aria-label="Следующий трек">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M16 6h2v12h-2zM14.5 12L6 18V6z"/></svg>
           </button>
           <button class="pulse-btn pulse-btn-like" id="pulseLike" aria-label="В избранное">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/></svg>
@@ -506,14 +512,16 @@
     </div>
     <div class="np-controls">
       <button class="np-ctrl" id="npShuffle" aria-label="Перемешать"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg></button>
-      <button class="np-ctrl np-ctrl-dislike" id="npDislike" aria-label="Не нравится"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/><line x1="4" y1="4" x2="20" y2="20"/></svg></button>
-      <button class="np-ctrl np-ctrl-lg" id="npPrev" aria-label="Назад"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2.5v14H6zM20 5v14L9 12z"/></svg></button>
-      <button class="np-ctrl np-ctrl-play" id="npPlay" aria-label="Играть / пауза">
-        <svg class="np-icon-play" width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        <svg class="np-icon-pause" width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
-      </button>
-      <button class="np-ctrl np-ctrl-lg" id="npNext" aria-label="Вперёд"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 5H18v14h-2.5zM4 5v14l11-7z"/></svg></button>
-      <button class="np-ctrl np-ctrl-heart" id="npHeart" aria-label="В избранное"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/></svg></button>
+      <div class="np-controls-main">
+        <button class="np-ctrl np-ctrl-dislike" id="npDislike" aria-label="Не нравится"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/><line x1="4" y1="4" x2="20" y2="20"/></svg></button>
+        <button class="np-ctrl np-ctrl-lg" id="npPrev" aria-label="Назад"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2.5v14H6zM20 5v14L9 12z"/></svg></button>
+        <button class="np-ctrl np-ctrl-play" id="npPlay" aria-label="Играть / пауза">
+          <svg class="np-icon-play" width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="np-icon-pause" width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+        </button>
+        <button class="np-ctrl np-ctrl-lg" id="npNext" aria-label="Вперёд"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 5H18v14h-2.5zM4 5v14l11-7z"/></svg></button>
+        <button class="np-ctrl np-ctrl-heart" id="npHeart" aria-label="В избранное"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/></svg></button>
+      </div>
       <button class="np-ctrl" id="npRepeat" aria-label="Повтор" data-mode="off">
         <svg class="rep-all" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
         <svg class="rep-one" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/><text x="12" y="15.6" text-anchor="middle" font-size="8" font-weight="800" fill="currentColor" stroke="none">1</text></svg>

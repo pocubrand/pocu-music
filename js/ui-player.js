@@ -42,9 +42,6 @@ window.PocuUI = (() => {
       mpVolumeIcon: document.getElementById('mpVolumeIcon')
     };
 
-    /* ---- Группировка центральных кнопок (shuffle/repeat в углах) ---- */
-    groupNpControls();
-
     /* controls */
     els.mpToggle.addEventListener('click', e => {
       e.stopPropagation();
@@ -107,29 +104,8 @@ window.PocuUI = (() => {
     if (window.PocuStore) {
       window.PocuStore.subscribe(() => updateHearts());
     }
-  }
 
-  /* ---------- группировка shuffle/repeat по углам ---------- */
-  function groupNpControls() {
-    const { npShuffle, npRepeat } = els;
-    if (!npShuffle || !npRepeat) return;
-    const parent = npShuffle.parentNode;
-    if (!parent) return;
-    if (parent.querySelector('.np-controls-main')) return; // уже сгруппированы
-
-    const group = document.createElement('div');
-    group.className = 'np-controls-main';
-
-    // Собираем всё между shuffle и repeat (dislike, prev, play, next, heart)
-    let node = npShuffle.nextSibling;
-    while (node && node !== npRepeat) {
-      const next = node.nextSibling;
-      if (node.nodeType === 1) { // ELEMENT_NODE
-        group.appendChild(node);
-      }
-      node = next;
-    }
-    parent.insertBefore(group, npRepeat);
+    console.log('[ui-player] init OK, np-controls-main:', !!document.querySelector('.np-controls-main'));
   }
 
   /* ---------- helpers ---------- */
@@ -442,6 +418,7 @@ window.PocuUI = (() => {
     window.PocuStore.disliked.toggle(t.id);
     window.PocuSupabase?.syncDislike?.(t.id, !wasDisliked);
     updateDislikeState();
+    // Если ставим дизлайк текущему — сразу переключаем на следующий
     if (!wasDisliked) {
       setTimeout(() => window.PocuPlayer.next(), 150);
     }
@@ -467,6 +444,7 @@ window.PocuUI = (() => {
       name = parts[0] || t.artist;
     }
     if (!name) return;
+    // Если открываем из now-playing — сначала закроем его
     if (els.np?.classList.contains('open')) closeNowPlaying();
     window.PocuArtistUI?.openArtist?.(name);
   }
@@ -478,44 +456,20 @@ window.PocuUI = (() => {
         slider.addEventListener('input', e => {
           window.PocuPlayer.setVolume(parseFloat(e.target.value));
         });
-        slider.addEventListener('wheel', handleVolumeWheel, { passive: false });
       }
       if (icon) {
         icon.addEventListener('click', e => {
           e.stopPropagation();
           window.PocuPlayer.toggleMute();
         });
-        icon.addEventListener('wheel', handleVolumeWheel, { passive: false });
       }
     };
     bind(els.npVolume, els.npVolumeIcon);
     bind(els.mpVolume, els.mpVolumeIcon);
   }
 
-  function handleVolumeWheel(e) {
-    e.preventDefault();
-    const dir = e.deltaY < 0 ? 1 : -1;
-    const cur = window.PocuPlayer.getState().volume;
-    const next = Math.max(0, Math.min(1, cur + dir * 0.05));
-    window.PocuPlayer.setVolume(next);
-    showVolumeToast(Math.round(next * 100));
-  }
-
-  function showVolumeToast(pct) {
-    let toast = document.getElementById('pocuVolumeToast');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.id = 'pocuVolumeToast';
-      toast.className = 'volume-toast';
-      document.body.appendChild(toast);
-    }
-    toast.textContent = `${pct}%`;
-    toast.classList.add('show');
-    clearTimeout(showVolumeToast._t);
-    showVolumeToast._t = setTimeout(() => toast.classList.remove('show'), 900);
-  }
-
   function updateVolumeUI(state) {
+    const v = state.muted ? 0 : state.volume;
     const isMuted = state.muted || state.volume === 0;
 
     [els.npVolume, els.mpVolume].forEach(sl => {

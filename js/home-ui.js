@@ -102,53 +102,6 @@ window.PocuHomeUI = (() => {
     el.textContent = FUNNY_TITLES[Math.floor(Math.random() * FUNNY_TITLES.length)];
   }
 
-  /* ---------- prev/next в Pulse hero ---------- */
-  function createPulseRailBtn(dir) {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'pulse-btn pulse-btn-rail pulse-btn-' + dir;
-    btn.setAttribute('aria-label', dir === 'prev' ? 'Предыдущий трек' : 'Следующий трек');
-    btn.innerHTML = dir === 'prev'
-      ? '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 6h2v12H6zM9.5 12L18 18V6z"/></svg>'
-      : '<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M16 6h2v12h-2zM14.5 12L6 18V6z"/></svg>';
-    btn.classList.add('disabled');
-    return btn;
-  }
-
-  function injectPulseRail() {
-    if (!els.pulsePlay || !els.pulsePlay.parentNode) return;
-
-    // Защита от повторной инъекции (например, при переинициализации)
-    const parent = els.pulsePlay.parentNode;
-    if (parent.querySelector('.pulse-btn-rail')) {
-      els.pulsePrev = parent.querySelector('.pulse-btn-prev');
-      els.pulseNext = parent.querySelector('.pulse-btn-next');
-      return;
-    }
-
-    const prevBtn = createPulseRailBtn('prev');
-    const nextBtn = createPulseRailBtn('next');
-
-    // insertAdjacentElement — точное позиционирование, независимо от whitespace-нод:
-    // 'beforebegin' = перед pulsePlay, 'afterend' = сразу после pulsePlay
-    els.pulsePlay.insertAdjacentElement('beforebegin', prevBtn);
-    els.pulsePlay.insertAdjacentElement('afterend', nextBtn);
-
-    prevBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      if (prevBtn.classList.contains('disabled')) return;
-      try { window.PocuPlayer.prev(); } catch (err) { console.warn(err); }
-    });
-    nextBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      if (nextBtn.classList.contains('disabled')) return;
-      try { window.PocuPlayer.next(); } catch (err) { console.warn(err); }
-    });
-
-    els.pulsePrev = prevBtn;
-    els.pulseNext = nextBtn;
-  }
-
   function init() {
     if (initialized) return;
     initialized = true;
@@ -163,6 +116,8 @@ window.PocuHomeUI = (() => {
       pulseBrand:       document.getElementById('pulseBrand'),
       pulseQueue:       document.getElementById('pulseQueue'),
       pulsePlay:        document.getElementById('pulsePlay'),
+      pulsePrev:        document.getElementById('pulsePrev'),
+      pulseNext:        document.getElementById('pulseNext'),
       pulseRefresh:     document.getElementById('pulseRefresh'),
       pulseEq:          document.getElementById('pulseEq'),
       pulseLike:        document.getElementById('pulseLike'),
@@ -204,6 +159,20 @@ window.PocuHomeUI = (() => {
         togglePulse();
       });
     }
+    if (els.pulsePrev) {
+      els.pulsePrev.addEventListener('click', e => {
+        e.stopPropagation();
+        if (els.pulsePrev.classList.contains('disabled')) return;
+        try { window.PocuPlayer.prev(); } catch (err) { console.warn(err); }
+      });
+    }
+    if (els.pulseNext) {
+      els.pulseNext.addEventListener('click', e => {
+        e.stopPropagation();
+        if (els.pulseNext.classList.contains('disabled')) return;
+        try { window.PocuPlayer.next(); } catch (err) { console.warn(err); }
+      });
+    }
     if (els.pulseRefresh) {
       els.pulseRefresh.addEventListener('click', e => {
         e.stopPropagation();
@@ -216,9 +185,6 @@ window.PocuHomeUI = (() => {
         window.PocuEquilizerUI?.open?.();
       });
     }
-
-    /* ---- Вставляем prev/next в .pulse-actions ---- */
-    injectPulseRail();
 
     /* ---- Aurora scatter on hover (только обложка + кнопки) ---- */
     if (els.pulseAurora) {
@@ -349,6 +315,8 @@ window.PocuHomeUI = (() => {
       els.pulseCard.style.setProperty('--aurora-2', 'rgb(255, 64, 158)');
       els.pulseCard.style.setProperty('--aurora-3', 'rgb(56, 132, 255)');
     }
+
+    console.log('[home-ui] init OK, pulsePrev:', !!els.pulsePrev, 'pulseNext:', !!els.pulseNext);
   }
 
   function syncHomeTilesPlaying() {
@@ -384,7 +352,6 @@ window.PocuHomeUI = (() => {
       }
     }
 
-    /* prev/next: disabled, если нет трека или Pulse не активен */
     if (els.pulsePrev) els.pulsePrev.classList.toggle('disabled', !hasTrack);
     if (els.pulseNext) els.pulseNext.classList.toggle('disabled', !hasTrack);
   }
@@ -786,7 +753,7 @@ window.PocuHomeUI = (() => {
       e.stopPropagation();
       const parts = window.PocuArtists.splitArtists(track.artist);
       const n = parts[0] || track.artist;
-      if (n) window.PocuArtistUI?.openArtist?.(n);
+      if (n) window.PocuUI?.openArtist?.(n);
     });
 
     el.append(artWrap, info);
