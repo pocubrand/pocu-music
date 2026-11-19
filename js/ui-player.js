@@ -104,8 +104,6 @@ window.PocuUI = (() => {
     if (window.PocuStore) {
       window.PocuStore.subscribe(() => updateHearts());
     }
-
-    console.log('[ui-player] init OK, np-controls-main:', !!document.querySelector('.np-controls-main'));
   }
 
   /* ---------- helpers ---------- */
@@ -418,7 +416,6 @@ window.PocuUI = (() => {
     window.PocuStore.disliked.toggle(t.id);
     window.PocuSupabase?.syncDislike?.(t.id, !wasDisliked);
     updateDislikeState();
-    // Если ставим дизлайк текущему — сразу переключаем на следующий
     if (!wasDisliked) {
       setTimeout(() => window.PocuPlayer.next(), 150);
     }
@@ -444,7 +441,6 @@ window.PocuUI = (() => {
       name = parts[0] || t.artist;
     }
     if (!name) return;
-    // Если открываем из now-playing — сначала закроем его
     if (els.np?.classList.contains('open')) closeNowPlaying();
     window.PocuArtistUI?.openArtist?.(name);
   }
@@ -456,20 +452,46 @@ window.PocuUI = (() => {
         slider.addEventListener('input', e => {
           window.PocuPlayer.setVolume(parseFloat(e.target.value));
         });
+        /* Колесо мыши над слайдером */
+        slider.addEventListener('wheel', handleVolumeWheel, { passive: false });
       }
       if (icon) {
         icon.addEventListener('click', e => {
           e.stopPropagation();
           window.PocuPlayer.toggleMute();
         });
+        /* Колесо мыши над иконкой тоже работает */
+        icon.addEventListener('wheel', handleVolumeWheel, { passive: false });
       }
     };
     bind(els.npVolume, els.npVolumeIcon);
     bind(els.mpVolume, els.mpVolumeIcon);
   }
 
+  function handleVolumeWheel(e) {
+    e.preventDefault();                 // не скроллим страницу
+    const dir = e.deltaY < 0 ? 1 : -1;  // вверх = громче
+    const cur = window.PocuPlayer.getState().volume;
+    const next = Math.max(0, Math.min(1, cur + dir * 0.05));  // шаг 5%
+    window.PocuPlayer.setVolume(next);
+    showVolumeToast(Math.round(next * 100));
+  }
+
+  function showVolumeToast(pct) {
+    let toast = document.getElementById('pocuVolumeToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'pocuVolumeToast';
+      toast.className = 'volume-toast';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = `${pct}%`;
+    toast.classList.add('show');
+    clearTimeout(showVolumeToast._t);
+    showVolumeToast._t = setTimeout(() => toast.classList.remove('show'), 900);
+  }
+
   function updateVolumeUI(state) {
-    const v = state.muted ? 0 : state.volume;
     const isMuted = state.muted || state.volume === 0;
 
     [els.npVolume, els.mpVolume].forEach(sl => {

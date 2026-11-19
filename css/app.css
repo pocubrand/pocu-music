@@ -5384,29 +5384,14 @@ body.genre-open .topbar {
   pointer-events: none;
 }
 
-/* --- NOW-PLAYING: shuffle/repeat по углам, центр — компактной группой --- */
-.np-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-}
-.np-controls-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  flex: 0 0 auto;
-}
-
-@media (min-width: 900px) {
-  .np-controls {
-    max-width: 480px;
-    margin: 0 auto;
-    gap: 8px;
-  }
+/* ===== FIX: PC — сближаем кнопки управления в фулл-плеере ===== */
+@media (min-width: 768px) {
   .np-controls-main {
-    gap: 16px;
+    gap: 4px;
+  }
+  .np-controls-main > .np-ctrl {
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 

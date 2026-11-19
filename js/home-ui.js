@@ -333,7 +333,10 @@ window.PocuHomeUI = (() => {
   function syncPulseActions() {
     const st = window.PocuPlayer.getState();
     const track = st.track;
-    const hasTrack = !!track && window.PocuPulse?.active;
+    const pulseActive = window.PocuPulse?.active;
+    const hasTrack = !!track && pulseActive;
+    const queueLen = window.PocuPulse?.queue?.length || 0;
+    const hasQueue = pulseActive && queueLen > 1;
 
     if (els.pulseLike) {
       els.pulseLike.classList.toggle('disabled', !hasTrack);
@@ -352,8 +355,8 @@ window.PocuHomeUI = (() => {
       }
     }
 
-    if (els.pulsePrev) els.pulsePrev.classList.toggle('disabled', !hasTrack);
-    if (els.pulseNext) els.pulseNext.classList.toggle('disabled', !hasTrack);
+    if (els.pulsePrev) els.pulsePrev.classList.toggle('disabled', !hasQueue);
+    if (els.pulseNext) els.pulseNext.classList.toggle('disabled', !hasQueue);
   }
 
   function safe(fn) {
