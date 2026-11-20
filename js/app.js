@@ -295,6 +295,7 @@
     try { await window.PocuArtists?.load?.(); } catch (e) { console.error('[init] Artists.load:', e); }
 
     safeInit('PocuAuthUI.init',     () => window.PocuAuthUI?.init?.());
+    safeInit('PocuSyncQueue.init',   () => window.PocuSyncQueue?.init?.());
     safeInit('PocuSupabase.init',   () => window.PocuSupabase?.init?.());
     safeInit('PocuStore.load',      () => window.PocuStore?.load?.());
     safeInit('PocuPulse.init',      () => window.PocuPulse?.init?.());

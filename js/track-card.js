@@ -69,12 +69,7 @@ window.PocuTrackCard=(()=> {
 
     const artist = document.createElement('div');
     artist.className = 'track-artist';
-    artist.textContent = track.artist;
-    artist.style.cursor = 'pointer';
-    artist.addEventListener('click', e => {
-      e.stopPropagation();
-      openArtistFromTrack(track);
-    });
+    window.PocuArtists.renderInline(artist, track);
 
     meta.append(title, artist);
 

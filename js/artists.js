@@ -132,12 +132,41 @@ window.PocuArtists = (() => {
     return [...set];
   }
 
+  /* Рендерит в container кликабельные имена артистов через запятую.
+     Каждое имя открывает страницу артиста. */
+  function renderInline(container, track, opts = {}) {
+    if (!container) return;
+    const { className = '', separator = ', ' } = opts;
+    const names = splitTrackArtists(track);
+    container.replaceChildren();
+    if (!names.length) return;
+
+    if (className) container.className = className;
+
+    names.forEach((name, i) => {
+      if (i > 0) container.appendChild(document.createTextNode(separator));
+      const span = document.createElement('span');
+      span.textContent = name;
+      span.style.cursor = 'pointer';
+      span.style.textDecoration = 'none';
+      span.addEventListener('click', e => {
+        e.stopPropagation();
+        e.preventDefault();
+        window.PocuArtistUI?.openArtist?.(name);
+      });
+      span.addEventListener('mouseenter', () => { span.style.textDecoration = 'underline'; });
+      span.addEventListener('mouseleave', () => { span.style.textDecoration = 'none'; });
+      container.appendChild(span);
+    });
+  }
+
   return {
     load, all, featured, get,
     matchTrack,          // "первый" артист (совместимость)
     trackMatchesArtist,  // строгая проверка
     tracksFor,
     splitTrackArtists,
+    renderInline,
     splitArtists
   };
 })();

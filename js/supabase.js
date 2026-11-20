@@ -42,6 +42,21 @@ window.PocuSupabase = (() => {
     return client;
   }
 
+  /* Обёртка: если офлайн или сетевая ошибка — кладём в очередь */
+  async function queuedSync(queueType, payload, networkFn) {
+    if (!currentUser || !client) return;
+    if (!navigator.onLine) {
+      window.PocuSyncQueue?.enqueue(queueType, payload);
+      return;
+    }
+    try {
+      await networkFn();
+    } catch (e) {
+      console.warn('[sync] network fail, queue:', queueType, e.message || e);
+      window.PocuSyncQueue?.enqueue(queueType, payload);
+    }
+  }
+
   async function signIn(email, password) {
     if (!client) init();
     const { data, error } = await client.auth.signInWithPassword({ email, password });
@@ -80,6 +95,21 @@ window.PocuSupabase = (() => {
   /* ============ ЛОГИН-СИНК ============ */
   async function handleLoginSync() {
     console.log('[sync] start');
+
+    /* 1. Сначала проигрываем офлайн-очередь (если есть) */
+    try {
+      await window.PocuSyncQueue?.flush?.();
+    } catch (e) { console.warn('[sync] queue flush failed:', e); }
+
+    /* 2. Если после flush в очереди что-то осталось (сеть упала / ошибка),
+          НЕ затираем локальный state — пусть данные доживут до следующего flush */
+    const remaining = window.PocuSyncQueue?.count?.() || 0;
+    if (remaining > 0) {
+      console.warn('[sync] queue still has', remaining, 'op(s) — skip cloud overwrite');
+      return;
+    }
+
+    /* 3. Обычная синхронизация */
     try {
       const cloudData = await fetchCloudData();
       const hasCloudData =
@@ -98,7 +128,6 @@ window.PocuSupabase = (() => {
         await pushLocalToCloud();
       }
 
-      // Подгружаем лайкнутые публичные плейлисты
       try {
         const favPls = await fetchFavoritePlaylists();
         window.PocuStore.favoritePlaylists.replaceAll(favPls);
@@ -213,54 +242,61 @@ window.PocuSupabase = (() => {
 
   /* ============ ОПЕРАЦИИ ============ */
   async function syncFavorite(trackId, isFav) {
-    if (!currentUser || !client) return;
-    try {
-      if (isFav) await client.from('favorites').upsert({ user_id: currentUser.id, track_id: trackId }, { onConflict: 'user_id,track_id' });
-      else await client.from('favorites').delete().match({ user_id: currentUser.id, track_id: trackId });
-    } catch (e) { console.warn('[sync] favorite:', e.message); }
+    return queuedSync(
+      isFav ? 'favorite.add' : 'favorite.remove',
+      trackId,
+      async () => {
+        if (isFav) await client.from('favorites').upsert({ user_id: currentUser.id, track_id: trackId }, { onConflict: 'user_id,track_id' });
+        else await client.from('favorites').delete().match({ user_id: currentUser.id, track_id: trackId });
+      }
+    );
   }
 
   async function syncFavoriteAlbum(artist, album, isFav) {
-    if (!currentUser || !client) return;
-    try {
-      if (isFav) await client.from('favorite_albums').upsert({ user_id: currentUser.id, artist, album }, { onConflict: 'user_id,artist,album' });
-      else await client.from('favorite_albums').delete().match({ user_id: currentUser.id, artist, album });
-    } catch (e) { console.warn('[sync] favorite_album:', e.message); }
+    return queuedSync(
+      isFav ? 'favorite.album.add' : 'favorite.album.remove',
+      { artist, album },
+      async () => {
+        if (isFav) await client.from('favorite_albums').upsert({ user_id: currentUser.id, artist, album }, { onConflict: 'user_id,artist,album' });
+        else await client.from('favorite_albums').delete().match({ user_id: currentUser.id, artist, album });
+      }
+    );
   }
 
   async function syncFavoriteArtist(artistId, isFav) {
-    if (!currentUser || !client) return;
-    try {
-      if (isFav) await client.from('favorite_artists').upsert({ user_id: currentUser.id, artist_id: artistId }, { onConflict: 'user_id,artist_id' });
-      else await client.from('favorite_artists').delete().match({ user_id: currentUser.id, artist_id: artistId });
-    } catch (e) { console.warn('[sync] favorite_artist:', e.message); }
+    return queuedSync(
+      isFav ? 'favorite.artist.add' : 'favorite.artist.remove',
+      artistId,
+      async () => {
+        if (isFav) await client.from('favorite_artists').upsert({ user_id: currentUser.id, artist_id: artistId }, { onConflict: 'user_id,artist_id' });
+        else await client.from('favorite_artists').delete().match({ user_id: currentUser.id, artist_id: artistId });
+      }
+    );
   }
 
   /* syncProfile: select → update/insert (надёжнее upsert при RLS) */
   async function syncProfile(fields) {
     if (!currentUser || !client) return;
-    try {
-      const patch = {};
-      if ('displayName' in fields) patch.display_name = fields.displayName || null;
-      if ('avatarUrl'   in fields) patch.avatar_url   = fields.avatarUrl   || null;
-      if (!Object.keys(patch).length) return;
+    const patch = {};
+    if ('displayName' in fields) patch.displayName = fields.displayName || '';
+    if ('avatarUrl'   in fields) patch.avatarUrl   = fields.avatarUrl   || '';
+    if (!Object.keys(patch).length) return;
 
-      const { data: existing, error: selErr } = await client.from('profiles')
+    return queuedSync('profile.update', patch, async () => {
+      const dbPatch = {};
+      if ('displayName' in patch) dbPatch.display_name = patch.displayName || null;
+      if ('avatarUrl'   in patch) dbPatch.avatar_url   = patch.avatarUrl   || null;
+
+      const { data: existing } = await client.from('profiles')
         .select('id').eq('id', currentUser.id).maybeSingle();
-      if (selErr) throw selErr;
-
       if (existing) {
-        const { error } = await client.from('profiles')
-          .update(patch).eq('id', currentUser.id);
+        const { error } = await client.from('profiles').update(dbPatch).eq('id', currentUser.id);
         if (error) throw error;
-        console.log('[profile] updated');
       } else {
-        const { error } = await client.from('profiles')
-          .insert({ id: currentUser.id, ...patch });
+        const { error } = await client.from('profiles').insert({ id: currentUser.id, ...dbPatch });
         if (error) throw error;
-        console.log('[profile] inserted');
       }
-    } catch (e) { console.warn('[sync] profile:', e.message); }
+    });
   }
 
   async function fetchProfile() {
@@ -348,28 +384,29 @@ window.PocuSupabase = (() => {
   }
 
   async function syncDislike(trackId, isDisliked) {
-    if (!currentUser || !client) return;
-    try {
-      if (isDisliked) await client.from('dislikes').upsert({ user_id: currentUser.id, track_id: trackId });
-      else await client.from('dislikes').delete().match({ user_id: currentUser.id, track_id: trackId });
-    } catch (e) { console.warn('[sync] dislike:', e.message); }
+    return queuedSync(
+      isDisliked ? 'dislike.add' : 'dislike.remove',
+      trackId,
+      async () => {
+        if (isDisliked) await client.from('dislikes').upsert({ user_id: currentUser.id, track_id: trackId });
+        else await client.from('dislikes').delete().match({ user_id: currentUser.id, track_id: trackId });
+      }
+    );
   }
 
   async function syncPlaylistCreate(pl) {
-    if (!currentUser || !client) return;
-    try {
+    return queuedSync('playlist.create', pl, async () => {
       await client.from('playlists').insert({
         id: pl.id, user_id: currentUser.id, name: pl.name,
         is_public: !!pl.isPublic,
         description: pl.description || '',
         cover_url: pl.coverUrl || ''
       });
-    } catch (e) { console.warn('[sync] pl create:', e.message); }
+    });
   }
 
   async function syncPlaylistUpdate(plId, fields) {
-    if (!currentUser || !client) return;
-    try {
+    return queuedSync('playlist.update', { plId, fields }, async () => {
       const patch = {};
       if ('name' in fields)        patch.name = fields.name;
       if ('description' in fields) patch.description = fields.description || '';
@@ -377,10 +414,9 @@ window.PocuSupabase = (() => {
       if ('isPublic' in fields)    patch.is_public = !!fields.isPublic;
       if (!Object.keys(patch).length) return;
       const { error } = await client.from('playlists').update(patch)
-        .eq('id', plId)
-        .eq('user_id', currentUser.id);
-      if (error) console.warn('[sync] pl update failed:', error.message, patch);
-    } catch (e) { console.warn('[sync] pl update:', e.message); }
+        .eq('id', plId).eq('user_id', currentUser.id);
+      if (error) throw error;
+    });
   }
 
   async function compressToBlob(file, size = 400) {
@@ -484,18 +520,21 @@ window.PocuSupabase = (() => {
   }
 
   async function syncFavoritePlaylist(playlistId, isFav) {
-    if (!currentUser || !client) return;
-    try {
-      if (isFav) {
-        await client.from('favorite_playlists').upsert(
-          { user_id: currentUser.id, playlist_id: playlistId },
-          { onConflict: 'user_id,playlist_id' }
-        );
-      } else {
-        await client.from('favorite_playlists').delete()
-          .match({ user_id: currentUser.id, playlist_id: playlistId });
+    return queuedSync(
+      isFav ? 'favorite.playlist.add' : 'favorite.playlist.remove',
+      playlistId,
+      async () => {
+        if (isFav) {
+          await client.from('favorite_playlists').upsert(
+            { user_id: currentUser.id, playlist_id: playlistId },
+            { onConflict: 'user_id,playlist_id' }
+          );
+        } else {
+          await client.from('favorite_playlists').delete()
+            .match({ user_id: currentUser.id, playlist_id: playlistId });
+        }
       }
-    } catch (e) { console.warn('[sync] favorite_playlist:', e.message); }
+    );
   }
 
   async function fetchFavoritePlaylists() {
@@ -535,23 +574,22 @@ window.PocuSupabase = (() => {
     catch (e) { console.warn('[sync] pl rename:', e.message); }
   }
   async function syncPlaylistDelete(plId) {
-    if (!currentUser || !client) return;
-    try { await client.from('playlists').delete().match({ id: plId, user_id: currentUser.id }); }
-    catch (e) { console.warn('[sync] pl delete:', e.message); }
+    return queuedSync('playlist.delete', plId, async () => {
+      await client.from('playlists').delete().match({ id: plId, user_id: currentUser.id });
+    });
   }
   async function syncPlaylistTrackAdd(plId, trackId) {
-    if (!currentUser || !client) return;
-    try {
+    return queuedSync('playlist.track.add', { plId, trackId }, async () => {
       const { data } = await client.from('playlist_tracks').select('position')
         .eq('playlist_id', plId).order('position', { ascending: false }).limit(1);
       const nextPos = data && data.length ? data[0].position + 1 : 0;
       await client.from('playlist_tracks').insert({ playlist_id: plId, track_id: trackId, position: nextPos });
-    } catch (e) { console.warn('[sync] pl track add:', e.message); }
+    });
   }
   async function syncPlaylistTrackRemove(plId, trackId) {
-    if (!currentUser || !client) return;
-    try { await client.from('playlist_tracks').delete().match({ playlist_id: plId, track_id: trackId }); }
-    catch (e) { console.warn('[sync] pl track remove:', e.message); }
+    return queuedSync('playlist.track.remove', { plId, trackId }, async () => {
+      await client.from('playlist_tracks').delete().match({ playlist_id: plId, track_id: trackId });
+    });
   }
 
   return {

@@ -132,8 +132,7 @@ window.PocuUI = (() => {
       document.body.classList.add('has-miniplayer');
 
       els.mpTitle.textContent  = track.title;
-      const fullArtist = (window.PocuArtists?.splitTrackArtists?.(track) || [track.artist]).join(', ');
-      els.mpArtist.textContent = fullArtist;
+      els.mpArtist.textContent = (window.PocuArtists?.splitTrackArtists?.(track) || [track.artist]).join(', ');
 
       if (track.artwork && els.mpArt.getAttribute('src') !== track.artwork) {
         els.mpArt.src = track.artwork;
@@ -160,8 +159,7 @@ window.PocuUI = (() => {
     /* now playing meta */
     if (track) {
       els.npTitle.textContent  = track.title;
-      const fullArtist = (window.PocuArtists?.splitTrackArtists?.(track) || [track.artist]).join(', ');
-      els.npArtist.textContent = fullArtist;
+      els.npArtist.textContent = (window.PocuArtists?.splitTrackArtists?.(track) || [track.artist]).join(', ');
 
       if (track.artwork) {
         if (els.npArt.getAttribute('src') !== track.artwork) {
