@@ -67,17 +67,19 @@ window.PocuPulse = (() => {
     const genreW = new Map(), artistW = new Map();
     const add = (m, k, w) => { if (!k) return; m.set(k, (m.get(k) || 0) + w); };
 
+    const splitA = (s) => window.PocuArtists?.splitArtists?.(s) || [s];
+
     for (const id of favorites) {
       const t = map.get(id); if (!t) continue;
       add(genreW, t.genre, 3);
-      add(artistW, t.artist, 3);
+      for (const a of splitA(t.artist)) add(artistW, a, 3);
     }
     const now = Date.now();
     for (const r of recent) {
       const t = map.get(r.id); if (!t) continue;
       const w = Math.max(0.2, 1 - (now - r.t) / 86400000 / 30);
       add(genreW, t.genre, w);
-      add(artistW, t.artist, w);
+      for (const a of splitA(t.artist)) add(artistW, a, w);
     }
     for (const g of prefs.genres)  add(genreW, g, 5);
     for (const a of prefs.artists) add(artistW, a, 5);
@@ -108,7 +110,10 @@ window.PocuPulse = (() => {
     const start = Math.max(0, st.queueIndex - ARTIST_HISTORY_WINDOW + 1);
     const history = st.queue.slice(start, st.queueIndex + 1);
     for (const t of history) {
-      if (t?.artist) counts.set(t.artist, (counts.get(t.artist) || 0) + 1);
+      if (!t?.artist) continue;
+      for (const a of (window.PocuArtists?.splitArtists?.(t.artist) || [t.artist])) {
+        counts.set(a, (counts.get(a) || 0) + 1);
+      }
     }
     return counts;
   }
@@ -121,9 +126,12 @@ window.PocuPulse = (() => {
       if (cr != null) score += (cr - 0.5) * 4 * mods.completion;
     }
     if (track.artist) {
-      score += (profile.artistW.get(track.artist) || 0) * 0.9 * mods.artistBoost;
-      const n = artistCounts.get(track.artist) || 0;
-      if (n > 0) score -= n * 2.5;
+      const artists = window.PocuArtists?.splitArtists?.(track.artist) || [track.artist];
+      for (const a of artists) {
+        score += (profile.artistW.get(a) || 0) * 0.9 * mods.artistBoost;
+        const n = artistCounts.get(a) || 0;
+        if (n > 0) score -= n * 2.5;
+      }
     }
     if (profile.favoriteIds.has(track.id)) score += 2.0 * mods.favBoost;
     if (recentIds.has(track.id)) score -= mods.recencyPenalty;
@@ -165,6 +173,15 @@ window.PocuPulse = (() => {
     scored.sort((a, b) => b.score - a.score);
 
     const pool = scored.slice(0, Math.min(scored.length, count * 3));
+    // Гарантируем попадание всех лайкнутых треков в пул,
+    // иначе они проигрывают топ-жанру и вылетают из топ-60
+    const poolIds = new Set(pool.map(p => p.track.id));
+    for (const s of scored) {
+      if (profile.favoriteIds.has(s.track.id) && !poolIds.has(s.track.id)) {
+        pool.push(s);
+        poolIds.add(s.track.id);
+      }
+    }
     for (let i = pool.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       if (Math.abs(pool[i].score - pool[j].score) < Math.max(0.5, pool[i].score * 0.15)) {
@@ -174,6 +191,21 @@ window.PocuPulse = (() => {
 
     const picked = [];
     const lastArtists = [];
+    // Гарантируем 2 лайкнутых трека в начале (если они не в recent-окне)
+    const guaranteedLiked = [];
+    const recentSet = new Set(window.PocuStore.recent.all().slice(0, 8).map(r => r.id));
+    for (const s of scored) {
+      if (guaranteedLiked.length >= 2) break;
+      if (profile.favoriteIds.has(s.track.id) && !recentSet.has(s.track.id)) {
+        guaranteedLiked.push(s.track);
+      }
+    }
+    for (const t of guaranteedLiked) {
+      picked.push(t);
+      for (const a of (window.PocuArtists?.splitArtists?.(t.artist) || [t.artist])) {
+        lastArtists.push(a);
+      }
+    }
     const st = window.PocuPlayer?.getState?.();
     if (st && st.queueIndex >= 0) {
       const start = Math.max(0, st.queueIndex - 1);
@@ -184,10 +216,12 @@ window.PocuPulse = (() => {
     let poolIdx = 0;
     while (picked.length < count && poolIdx < pool.length) {
       const cand = pool[poolIdx].track;
+      if (picked.some(p => p.id === cand.id)) { poolIdx++; continue; }
+      const candArtists = window.PocuArtists?.splitArtists?.(cand.artist) || [cand.artist];
       const lastTwo = lastArtists.slice(-2);
-      if (cand.artist && lastTwo.includes(cand.artist)) { poolIdx++; continue; }
+      if (candArtists.some(a => lastTwo.includes(a))) { poolIdx++; continue; }
       picked.push(cand);
-      if (cand.artist) lastArtists.push(cand.artist);
+      lastArtists.push(...candArtists);
       poolIdx++;
     }
     if (picked.length < count) {

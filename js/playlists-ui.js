@@ -255,7 +255,7 @@ window.PocuPlaylistsUI = (() => {
         </div>
         <div class="sheet-actions">
           <button class="btn btn-secondary" id="confirmDeleteCancel">Отмена</button>
-          <button class="btn btn-primary" id="confirmDeleteOk" style="background:linear-gradient(135deg,#ff409e,#ff6b9e);color:#fff;">Удалить</button>
+          <button class="btn btn-primary" id="confirmDeleteOk">Удалить</button>
         </div>
       </div>
     `;

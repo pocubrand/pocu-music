@@ -676,9 +676,6 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .context-item:hover {
   background: rgba(0,0,0,.05);
 }
-[data-theme="light"] .context-item:hover .context-label {
-  color: #0a0a0f;
-}
 [data-theme="light"] .context-item:active {
   background: rgba(0,0,0,.09);
 }
