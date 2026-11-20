@@ -163,13 +163,13 @@ window.PocuSearch = (() => {
     }
     if (!window.PocuSupabase?.fetchPublicPlaylists) { els.playlistsBlock.hidden = true; return; }
     let list = [];
-    try { list = await window.PocuSupabase.fetchPublicPlaylists(q, 12); } catch {}
+    try { list = await window.PocuSupabase.fetchPublicPlaylists(q, 30); } catch (e) { console.warn('[search] fetchPublicPlaylists:', e); }
     if (myId !== playlistReqId) return;
-    const filtered = list.filter(p => p.authorId !== window.PocuSupabase.getUser()?.id);
-    if (!filtered.length) { els.playlistsBlock.hidden = true; return; }
+    console.log('[search] public playlists found:', list.length, list.map(p => p.name));
+    if (!list.length) { els.playlistsBlock.hidden = true; return; }
     els.playlistsBlock.hidden = false;
     els.playlistsList.replaceChildren();
-    filtered.forEach(pl => els.playlistsList.appendChild(createPlaylistTile(pl)));
+    list.forEach(pl => els.playlistsList.appendChild(createPlaylistTile(pl)));
   }
 
   function createPlaylistTile(pl) {
@@ -189,6 +189,21 @@ window.PocuSearch = (() => {
     }
     artWrap.appendChild(art);
 
+    const myId = window.PocuSupabase.getUser()?.id;
+    const isOwn = myId && pl.authorId === myId;
+    if (isOwn) {
+      const badge = document.createElement('div');
+      badge.className = 'playlist-public-badge';
+      badge.style.background = 'rgba(124,92,255,.95)';
+      badge.textContent = 'Мой';
+      badge.style.fontSize = '9px';
+      badge.style.fontWeight = '700';
+      badge.style.width = 'auto';
+      badge.style.padding = '0 6px';
+      badge.style.borderRadius = '6px';
+      artWrap.appendChild(badge);
+    }
+
     const info = document.createElement('div');
     info.className = 'home-tile-info';
     const text = document.createElement('div');
@@ -198,11 +213,18 @@ window.PocuSearch = (() => {
     name.textContent = pl.name;
     const sub = document.createElement('div');
     sub.className = 'home-tile-artist';
-    sub.textContent = `${pl.authorName || 'Аноним'} · ${pl.trackIds.length} трек.`;
+    sub.textContent = isOwn
+      ? `Мой плейлист · ${pl.trackIds.length} трек.`
+      : `${pl.authorName || 'Аноним'} · ${pl.trackIds.length} трек.`;
     text.append(name, sub);
     info.appendChild(text);
     tile.append(artWrap, info);
-    tile.addEventListener('click', () => window.PocuPlaylistsUI?.openPlaylist?.(pl.id, 'public'));
+
+    // Свой открываем в режиме 'own', чужой — в 'public'
+    tile.addEventListener('click', () => {
+      if (isOwn) window.PocuPlaylistsUI?.openPlaylist?.(pl.id, 'own');
+      else       window.PocuPlaylistsUI?.openPlaylist?.(pl.id, 'public');
+    });
     return tile;
   }
 
