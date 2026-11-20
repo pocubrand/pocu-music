@@ -9,6 +9,8 @@ window.PocuPlaylistsUI = (() => {
     if (initialized) return;
     initialized = true;
 
+    ensureConfirmSheet();
+
     $libPlaylists = document.getElementById('libPlaylists');
     $sheet = document.getElementById('sheet-create-playlist');
     $sheetInput = document.getElementById('sheetPlaylistName');
@@ -218,14 +220,57 @@ window.PocuPlaylistsUI = (() => {
       }
     });
     document.getElementById('plDelete').addEventListener('click', () => {
-      if (confirm(`Удалить плейлист "${pl.name}"?`)) {
+      ensureConfirmSheet();
+      const sheet  = document.getElementById('sheetConfirmDelete');
+      const textEl = sheet.querySelector('#confirmDeleteText');
+      const okBtn  = sheet.querySelector('#confirmDeleteOk');
+
+      textEl.textContent = `Плейлист «${pl.name}» будет удалён безвозвратно.`;
+
+      // onclick (а не addEventListener) — заменяет старый обработчик,
+      // чтобы не накапливались листенеры с замыканием на старый pl.id
+      okBtn.onclick = () => {
+        sheet.classList.remove('open');
         window.PocuStore.playlists.delete(pl.id);
         window.PocuSupabase?.syncPlaylistDelete(pl.id);
         closePlaylistScreen();
-      }
+      };
+
+      sheet.classList.add('open');
     });
 
     PocuTrackCard.syncPlaying($playlistTracks, window.PocuPlayer.getState());
+  }
+
+  function ensureConfirmSheet() {
+    if (document.getElementById('sheetConfirmDelete')) return;
+    const sheet = document.createElement('div');
+    sheet.className = 'sheet-overlay';
+    sheet.id = 'sheetConfirmDelete';
+    sheet.innerHTML = `
+      <div class="sheet-panel">
+        <div class="sheet-header"><h2>Удалить плейлист?</h2></div>
+        <div class="sheet-body">
+          <p id="confirmDeleteText" style="font-size:14px;line-height:1.5;color:var(--text-dim);margin:0"></p>
+        </div>
+        <div class="sheet-actions">
+          <button class="btn btn-secondary" id="confirmDeleteCancel">Отмена</button>
+          <button class="btn btn-primary" id="confirmDeleteOk" style="background:linear-gradient(135deg,#ff409e,#ff6b9e);color:#fff;">Удалить</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(sheet);
+    sheet.addEventListener('click', (e) => {
+      if (e.target === sheet) sheet.classList.remove('open');
+    });
+    sheet.querySelector('#confirmDeleteCancel').addEventListener('click', () => {
+      sheet.classList.remove('open');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sheet.classList.contains('open')) {
+        sheet.classList.remove('open');
+      }
+    });
   }
 
   return { init, openPlaylistScreen, closePlaylistScreen };

@@ -5666,3 +5666,39 @@ body.genre-open .topbar {
 }
 .report-option:last-child { margin-bottom: 0; }
 .report-option:active { background: rgba(255,255,255,.1); }
+
+/* ===== HOVER: context menu items (и подменю, и report) ===== */
+.context-item {
+  transition: background .15s ease, color .15s ease;
+}
+.context-item:hover {
+  background: rgba(255,255,255,.07);
+}
+.context-item:hover .context-icon {
+  color: #7c5cff;
+}
+.context-item:hover .context-label {
+  color: #fff;
+}
+.context-item:hover .context-chevron {
+  color: #7c5cff;
+  transform: translateX(2px);
+}
+.context-item .context-chevron {
+  transition: transform .15s ease, color .15s ease;
+}
+.context-item:active {
+  background: rgba(255,255,255,.12);
+}
+
+.report-option {
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.report-option:hover {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(124,92,255,.35);
+}
+.report-option:active {
+  background: rgba(255,255,255,.14);
+  transform: scale(.98);
+}
