@@ -258,7 +258,7 @@ window.PocuPulse = (() => {
     }
     for (const t of guaranteedLiked) {
       picked.push(t);
-      for (const a of (window.PocuArtists?.splitArtists?.(t.artist) || [t.artist])) {
+      for (const a of (window.PocuArtists?.splitTrackArtists?.(t) || [t.artist])) {
         lastArtists.push(a);
       }
     }
@@ -273,7 +273,7 @@ window.PocuPulse = (() => {
     while (picked.length < count && poolIdx < pool.length) {
       const cand = pool[poolIdx].track;
       if (picked.some(p => p.id === cand.id)) { poolIdx++; continue; }
-      for (const a of (window.PocuArtists?.splitTrackArtists?.(t) || [t.artist])) {
+      const candArtists = window.PocuArtists?.splitTrackArtists?.(cand) || [cand.artist];
       const lastTwo = lastArtists.slice(-2);
       if (candArtists.some(a => lastTwo.includes(a))) { poolIdx++; continue; }
       picked.push(cand);
