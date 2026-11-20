@@ -241,6 +241,11 @@
       <div class="home-row" id="searchArtistsList"></div>
     </div>
 
+    <div id="searchPlaylists" style="margin-bottom:20px" hidden>
+      <div class="section-head"><h2>Плейлисты</h2></div>
+      <div class="home-row" id="searchPlaylistsList"></div>
+    </div>
+
     <div id="results" class="results"></div>
   </section>
 
@@ -295,6 +300,11 @@
     <div class="lib-section" id="favArtists" hidden>
       <div class="section-head"><h2>Артисты</h2></div>
       <div class="home-row" id="favArtistsRow"></div>
+    </div>
+
+    <div class="lib-section" id="favLikedPlaylists" hidden>
+      <div class="section-head"><h2>Сохранённые плейлисты</h2></div>
+      <div class="home-row" id="favLikedPlaylistsRow"></div>
     </div>
 
     <div class="lib-section" id="favTracks" hidden>
@@ -439,7 +449,8 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         <span>Назад</span>
       </button>
-      <h1 class="title" id="playlistTitle">Плейлист</h1>
+      <div class="playlist-banner" id="playlistBanner"></div>
+      <h1 class="title" id="playlistTitle" style="display:none"></h1>
       <div id="playlistActions" class="playlist-actions"></div>
       <div id="playlistTracks" class="results"></div>
     </div>

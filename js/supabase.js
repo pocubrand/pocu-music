@@ -97,6 +97,12 @@ window.PocuSupabase = (() => {
         console.log('[sync] cloud empty — pushing local');
         await pushLocalToCloud();
       }
+
+      // Подгружаем лайкнутые публичные плейлисты
+      try {
+        const favPls = await fetchFavoritePlaylists();
+        window.PocuStore.favoritePlaylists.replaceAll(favPls);
+      } catch {}
     } catch (e) {
       console.error('[sync] failed:', e);
     }
@@ -338,9 +344,175 @@ window.PocuSupabase = (() => {
 
   async function syncPlaylistCreate(pl) {
     if (!currentUser || !client) return;
-    try { await client.from('playlists').insert({ id: pl.id, user_id: currentUser.id, name: pl.name }); }
-    catch (e) { console.warn('[sync] pl create:', e.message); }
+    try {
+      await client.from('playlists').insert({
+        id: pl.id, user_id: currentUser.id, name: pl.name,
+        is_public: !!pl.isPublic,
+        description: pl.description || '',
+        cover_url: pl.coverUrl || ''
+      });
+    } catch (e) { console.warn('[sync] pl create:', e.message); }
   }
+
+  async function syncPlaylistUpdate(plId, fields) {
+    if (!currentUser || !client) return;
+    try {
+      const patch = {};
+      if ('name' in fields)        patch.name = fields.name;
+      if ('description' in fields) patch.description = fields.description || '';
+      if ('coverUrl' in fields)    patch.cover_url = fields.coverUrl || '';
+      if ('isPublic' in fields)    patch.is_public = !!fields.isPublic;
+      if (!Object.keys(patch).length) return;
+      await client.from('playlists').update(patch).match({ id: plId, user_id: currentUser.id });
+    } catch (e) { console.warn('[sync] pl update:', e.message); }
+  }
+
+  async function compressToBlob(file, size = 400) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const c = document.createElement('canvas');
+        c.width = size; c.height = size;
+        const ctx = c.getContext('2d');
+        const min = Math.min(img.width, img.height);
+        ctx.drawImage(img, (img.width-min)/2, (img.height-min)/2, min, min, 0, 0, size, size);
+        c.toBlob(b => b ? resolve(b) : reject(new Error('blob fail')), 'image/jpeg', 0.85);
+      };
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
+
+  async function uploadPlaylistCover(playlistId, file) {
+    if (!currentUser || !client) return null;
+    try {
+      const blob = await compressToBlob(file, 400);
+      const path = `${currentUser.id}/${playlistId}-${Date.now()}.jpg`;
+      const { error } = await client.storage.from('playlist-covers').upload(path, blob, {
+        upsert: false, contentType: 'image/jpeg'
+      });
+      if (error) throw error;
+      const { data } = client.storage.from('playlist-covers').getPublicUrl(path);
+      return data.publicUrl;
+    } catch (e) { console.warn('[upload] cover:', e.message); return null; }
+  }
+
+  async function fetchPublicPlaylists(query, limit = 20) {
+    if (!client) init();
+    try {
+      let authorIds = [];
+      if (query) {
+        try {
+          const { data: profs } = await client.from('profiles')
+            .select('id').ilike('display_name', `%${query}%`).limit(20);
+          authorIds = (profs || []).map(p => p.id);
+        } catch {}
+      }
+      let q = client.from('playlists')
+        .select('id, name, description, cover_url, user_id, created_at, playlist_tracks(track_id, position)')
+        .eq('is_public', true)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+      if (query) {
+        const clauses = [`name.ilike.%${query}%`, `description.ilike.%${query}%`];
+        if (authorIds.length) clauses.push(`user_id.in.(${authorIds.join(',')})`);
+        q = q.or(clauses.join(','));
+      }
+      const { data, error } = await q;
+      if (error) throw error;
+      const rows = data || [];
+      const userIds = [...new Set(rows.map(p => p.user_id))];
+      let profMap = new Map();
+      if (userIds.length) {
+        try {
+          const { data: profs } = await client.from('profiles').select('id, display_name').in('id', userIds);
+          profMap = new Map((profs || []).map(p => [p.id, p.display_name || 'Аноним']));
+        } catch {}
+      }
+      return rows.map(p => ({
+        id: p.id, name: p.name,
+        description: p.description || '',
+        coverUrl: p.cover_url || '',
+        authorId: p.user_id,
+        authorName: profMap.get(p.user_id) || 'Аноним',
+        trackIds: (p.playlist_tracks || []).sort((a,b)=>a.position-b.position).map(t => t.track_id)
+      }));
+    } catch (e) { console.warn('[fetch] public playlists:', e.message); return []; }
+  }
+
+  async function fetchPublicPlaylistById(id) {
+    if (!client) init();
+    try {
+      const { data, error } = await client.from('playlists')
+        .select('id, name, description, cover_url, user_id, created_at, is_public, playlist_tracks(track_id, position)')
+        .eq('id', id).maybeSingle();
+      if (error) throw error;
+      if (!data) return null;
+      let authorName = 'Аноним';
+      try {
+        const { data: prof } = await client.from('profiles').select('display_name').eq('id', data.user_id).maybeSingle();
+        if (prof?.display_name) authorName = prof.display_name;
+      } catch {}
+      return {
+        id: data.id, name: data.name,
+        description: data.description || '',
+        coverUrl: data.cover_url || '',
+        authorId: data.user_id,
+        authorName,
+        isPublic: !!data.is_public,
+        trackIds: (data.playlist_tracks || []).sort((a,b)=>a.position-b.position).map(t => t.track_id)
+      };
+    } catch (e) { console.warn('[fetch] public playlist:', e.message); return null; }
+  }
+
+  async function syncFavoritePlaylist(playlistId, isFav) {
+    if (!currentUser || !client) return;
+    try {
+      if (isFav) {
+        await client.from('favorite_playlists').upsert(
+          { user_id: currentUser.id, playlist_id: playlistId },
+          { onConflict: 'user_id,playlist_id' }
+        );
+      } else {
+        await client.from('favorite_playlists').delete()
+          .match({ user_id: currentUser.id, playlist_id: playlistId });
+      }
+    } catch (e) { console.warn('[sync] favorite_playlist:', e.message); }
+  }
+
+  async function fetchFavoritePlaylists() {
+    if (!currentUser || !client) return [];
+    try {
+      const { data, error } = await client.from('favorite_playlists')
+        .select('playlist_id').eq('user_id', currentUser.id);
+      if (error) throw error;
+      const ids = (data || []).map(r => r.playlist_id);
+      if (!ids.length) return [];
+      const { data: pls } = await client.from('playlists')
+        .select('id, name, description, cover_url, user_id, playlist_tracks(track_id, position)')
+        .in('id', ids);
+      const userIds = [...new Set((pls || []).map(p => p.user_id))];
+      let profMap = new Map();
+      if (userIds.length) {
+        try {
+          const { data: profs } = await client.from('profiles').select('id, display_name').in('id', userIds);
+          profMap = new Map((profs || []).map(p => [p.id, p.display_name || 'Аноним']));
+        } catch {}
+      }
+      return (pls || []).map(p => ({
+        id: p.id, name: p.name,
+        description: p.description || '',
+        coverUrl: p.cover_url || '',
+        authorId: p.user_id,
+        authorName: profMap.get(p.user_id) || 'Аноним',
+        trackIds: (p.playlist_tracks || []).sort((a,b)=>a.position-b.position).map(t => t.track_id),
+        cachedAt: Date.now()
+      }));
+    } catch (e) { console.warn('[fetch] favorite playlists:', e.message); return []; }
+  }
+
   async function syncPlaylistRename(plId, name) {
     if (!currentUser || !client) return;
     try { await client.from('playlists').update({ name }).match({ id: plId, user_id: currentUser.id }); }
@@ -372,6 +544,9 @@ window.PocuSupabase = (() => {
     syncTrackPlay, fetchTopTracks, fetchNewTracks,
     syncPlaylistCreate, syncPlaylistRename, syncPlaylistDelete,
     syncPlaylistTrackAdd, syncPlaylistTrackRemove,
+    syncPlaylistUpdate, uploadPlaylistCover,
+    fetchPublicPlaylists, fetchPublicPlaylistById,
+    syncFavoritePlaylist, fetchFavoritePlaylists,
     syncRecent, syncSkipStats, syncDislike
   };
 })();

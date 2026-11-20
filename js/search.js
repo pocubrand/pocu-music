@@ -8,13 +8,15 @@ window.PocuSearch = (() => {
     initialized = true;
 
     els = {
-      form:        document.getElementById('searchForm'),
-      input:       document.getElementById('searchInput'),
-      clear:       document.getElementById('clearBtn'),
-      initial:     document.getElementById('searchInitial'),
-      artistsBlock:document.getElementById('searchArtists'),
-      artistsList: document.getElementById('searchArtistsList'),
-      results:     document.getElementById('results')
+      form:            document.getElementById('searchForm'),
+      input:           document.getElementById('searchInput'),
+      clear:           document.getElementById('clearBtn'),
+      initial:         document.getElementById('searchInitial'),
+      artistsBlock:    document.getElementById('searchArtists'),
+      artistsList:     document.getElementById('searchArtistsList'),
+      playlistsBlock:  document.getElementById('searchPlaylists'),
+      playlistsList:   document.getElementById('searchPlaylistsList'),
+      results:         document.getElementById('results')
     };
 
     if (!els.input) return;
@@ -36,6 +38,7 @@ window.PocuSearch = (() => {
     if (!q) {
       els.initial.hidden = false;
       els.artistsBlock.hidden = true;
+      els.playlistsBlock.hidden = true;
       els.results.innerHTML = '';
       return;
     }
@@ -43,6 +46,7 @@ window.PocuSearch = (() => {
     els.initial.hidden = true;
     renderArtists(q);
     renderTracks(q);
+    renderPlaylists(q);
   }
 
   /* ---------- Артисты ---------- */
@@ -147,6 +151,59 @@ window.PocuSearch = (() => {
         onPlay: () => window.PocuPlayer.playQueue(tracks, i)
       }));
     });
+  }
+
+  let playlistReqId = 0;
+  async function renderPlaylists(q) {
+    const myId = ++playlistReqId;
+    if (!navigator.onLine) {
+      els.playlistsBlock.hidden = false;
+      els.playlistsList.innerHTML = '<p class="hint">Публичные плейлисты недоступны офлайн</p>';
+      return;
+    }
+    if (!window.PocuSupabase?.fetchPublicPlaylists) { els.playlistsBlock.hidden = true; return; }
+    let list = [];
+    try { list = await window.PocuSupabase.fetchPublicPlaylists(q, 12); } catch {}
+    if (myId !== playlistReqId) return;
+    const filtered = list.filter(p => p.authorId !== window.PocuSupabase.getUser()?.id);
+    if (!filtered.length) { els.playlistsBlock.hidden = true; return; }
+    els.playlistsBlock.hidden = false;
+    els.playlistsList.replaceChildren();
+    filtered.forEach(pl => els.playlistsList.appendChild(createPlaylistTile(pl)));
+  }
+
+  function createPlaylistTile(pl) {
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'home-tile';
+
+    const artWrap = document.createElement('div');
+    artWrap.className = 'home-tile-art-wrap';
+    const art = document.createElement('div');
+    art.className = 'home-tile-art';
+    if (pl.coverUrl) art.style.backgroundImage = `url("${pl.coverUrl}")`;
+    else {
+      art.classList.add('home-tile-art--placeholder');
+      art.textContent = (pl.name || '?').slice(0, 1).toUpperCase();
+      art.style.background = 'linear-gradient(135deg, #7c5cff, #ff409e)';
+    }
+    artWrap.appendChild(art);
+
+    const info = document.createElement('div');
+    info.className = 'home-tile-info';
+    const text = document.createElement('div');
+    text.className = 'home-tile-text';
+    const name = document.createElement('div');
+    name.className = 'home-tile-name';
+    name.textContent = pl.name;
+    const sub = document.createElement('div');
+    sub.className = 'home-tile-artist';
+    sub.textContent = `${pl.authorName || 'Аноним'} · ${pl.trackIds.length} трек.`;
+    text.append(name, sub);
+    info.appendChild(text);
+    tile.append(artWrap, info);
+    tile.addEventListener('click', () => window.PocuPlaylistsUI?.openPlaylist?.(pl.id, 'public'));
+    return tile;
   }
 
   function capitalize(s) {

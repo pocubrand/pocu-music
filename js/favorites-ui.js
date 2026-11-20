@@ -12,16 +12,18 @@ window.PocuFavoritesUI = (() => {
     initialized = true;
 
     els = {
-      container:      document.getElementById('favoritesList'),
-      recentSection:  document.getElementById('favRecent'),
-      recentRow:      document.getElementById('favRecentRow'),
-      albumsSection:  document.getElementById('favAlbums'),
-      albumsRow:      document.getElementById('favAlbumsRow'),
-      artistsSection: document.getElementById('favArtists'),
-      artistsRow:     document.getElementById('favArtistsRow'),
-      tracksSection:  document.getElementById('favTracks'),
-      tracksList:     document.getElementById('favTracksList'),
-      emptyBlock:     document.getElementById('favEmpty')
+      container:        document.getElementById('favoritesList'),
+      recentSection:    document.getElementById('favRecent'),
+      recentRow:        document.getElementById('favRecentRow'),
+      albumsSection:    document.getElementById('favAlbums'),
+      albumsRow:        document.getElementById('favAlbumsRow'),
+      artistsSection:   document.getElementById('favArtists'),
+      artistsRow:       document.getElementById('favArtistsRow'),
+      tracksSection:    document.getElementById('favTracks'),
+      tracksList:       document.getElementById('favTracksList'),
+      playlistsSection: document.getElementById('favLikedPlaylists'),
+      playlistsRow:     document.getElementById('favLikedPlaylistsRow'),
+      emptyBlock:       document.getElementById('favEmpty')
     };
 
     window.PocuPlayer.subscribe(state => {
@@ -341,13 +343,60 @@ window.PocuFavoritesUI = (() => {
     const recentHas  = window.PocuStore.recent.all().length > 0;
     const plCount    = window.PocuStore.playlists.all().length;
 
-    const showEmpty = !favCount && !albumCount && !artCount && !recentHas && !plCount;
+    const likedCount = window.PocuStore.favoritePlaylists.all().length;
+    const showEmpty = !favCount && !albumCount && !artCount && !recentHas && !plCount && !likedCount;
     if (els.emptyBlock) els.emptyBlock.hidden = !showEmpty;
 
     renderRecent();
     renderAlbums();
     renderArtists();
+    renderLikedPlaylists();
     renderTracks(animate);
+  }
+
+  function renderLikedPlaylists() {
+    const sec = document.getElementById('favLikedPlaylists');
+    const row = document.getElementById('favLikedPlaylistsRow');
+    if (!sec || !row) return;
+    const list = window.PocuStore.favoritePlaylists.all();
+    if (!list.length) { sec.hidden = true; return; }
+    sec.hidden = false;
+    row.replaceChildren();
+    list.forEach(pl => {
+      const tile = document.createElement('button');
+      tile.type = 'button';
+      tile.className = 'home-tile';
+      const artWrap = document.createElement('div');
+      artWrap.className = 'home-tile-art-wrap';
+      const art = document.createElement('div');
+      art.className = 'home-tile-art';
+      if (pl.coverUrl) art.style.backgroundImage = `url("${pl.coverUrl}")`;
+      else {
+        const first = pl.trackIds[0] ? window.PocuLibrary.get(pl.trackIds[0]) : null;
+        if (first?.artwork) art.style.backgroundImage = `url("${first.artwork}")`;
+        else {
+          art.classList.add('home-tile-art--placeholder');
+          art.textContent = (pl.name || '?').slice(0, 1).toUpperCase();
+          art.style.background = 'linear-gradient(135deg, #7c5cff, #ff409e)';
+        }
+      }
+      artWrap.appendChild(art);
+      const info = document.createElement('div');
+      info.className = 'home-tile-info';
+      const text = document.createElement('div');
+      text.className = 'home-tile-text';
+      const name = document.createElement('div');
+      name.className = 'home-tile-name';
+      name.textContent = pl.name;
+      const sub = document.createElement('div');
+      sub.className = 'home-tile-artist';
+      sub.textContent = pl.authorName || 'Аноним';
+      text.append(name, sub);
+      info.appendChild(text);
+      tile.append(artWrap, info);
+      tile.addEventListener('click', () => window.PocuPlaylistsUI?.openPlaylist?.(pl.id, 'public'));
+      row.appendChild(tile);
+    });
   }
 
   return { init };

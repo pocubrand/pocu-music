@@ -6,7 +6,7 @@ window.PocuStore = (() => {
   let state = {
     favorites: [], recent: [], playlists: [], disliked: [],
     settings: {}, skipStats: {},
-    favoriteAlbums: [], favoriteArtists: [],
+    favoriteAlbums: [], favoriteArtists: [], favoritePlaylists: [],
     profile: { displayName: '', avatarUrl: '' },
     preferences: { genres: [], artists: [] }
   };
@@ -28,6 +28,7 @@ window.PocuStore = (() => {
           skipStats: (p.skipStats && typeof p.skipStats === 'object') ? p.skipStats : {},
           favoriteAlbums:  Array.isArray(p.favoriteAlbums) ? p.favoriteAlbums.map(String) : [],
           favoriteArtists: Array.isArray(p.favoriteArtists) ? p.favoriteArtists.map(String) : [],
+          favoritePlaylists: Array.isArray(p.favoritePlaylists) ? p.favoritePlaylists : [],
           profile: (p.profile && typeof p.profile === 'object')
             ? { displayName: String(p.profile.displayName || ''), avatarUrl: String(p.profile.avatarUrl || '') }
             : { displayName: '', avatarUrl: '' },
@@ -134,8 +135,17 @@ window.PocuStore = (() => {
   const playlists = {
     all() { return state.playlists.slice(); },
     get(id) { return state.playlists.find(p => p.id === id) || null; },
-    create(name) {
-      const pl = { id: genId(), name: (name || 'Новый плейлист').trim() || 'Новый плейлист', trackIds: [], createdAt: Date.now() };
+    create(name, extra = {}) {
+      const pl = {
+        id: genId(),
+        name: (name || 'Новый плейлист').trim() || 'Новый плейлист',
+        trackIds: [],
+        createdAt: Date.now(),
+        isPublic: !!extra.isPublic,
+        description: String(extra.description || ''),
+        coverUrl: String(extra.coverUrl || ''),
+        authorName: String(extra.authorName || '')
+      };
       state.playlists.unshift(pl); commit(); return pl;
     },
     rename(id, name) {
@@ -144,7 +154,21 @@ window.PocuStore = (() => {
       const n = (name || '').trim();
       if (n) { pl.name = n; commit(); }
     },
-    delete(id) { state.playlists = state.playlists.filter(p => p.id !== id); commit(); },
+    update(id, fields) {
+      const pl = state.playlists.find(p => p.id === id);
+      if (!pl) return;
+      ['name','description','coverUrl'].forEach(k => {
+        if (k in fields) pl[k] = String(fields[k] || '');
+      });
+      if ('isPublic' in fields) pl.isPublic = !!fields.isPublic;
+      commit();
+      return pl;
+    },
+    delete(id) {
+      state.playlists = state.playlists.filter(p => p.id !== id);
+      state.favoritePlaylists = state.favoritePlaylists.filter(p => p.id !== id);
+      commit();
+    },
     addTrack(plId, trackId) {
       const pl = state.playlists.find(p => p.id === plId);
       if (!pl) return;
@@ -155,6 +179,26 @@ window.PocuStore = (() => {
       const pl = state.playlists.find(p => p.id === plId);
       if (!pl) return;
       pl.trackIds = pl.trackIds.filter(t => t !== String(trackId));
+      commit();
+    }
+  };
+
+  const favoritePlaylists = {
+    all() { return state.favoritePlaylists.slice(); },
+    has(id) { return state.favoritePlaylists.some(p => p.id === id); },
+    get(id) { return state.favoritePlaylists.find(p => p.id === id) || null; },
+    add(snapshot) {
+      if (!snapshot || !snapshot.id) return;
+      if (this.has(snapshot.id)) return;
+      state.favoritePlaylists.unshift({ ...snapshot, cachedAt: Date.now() });
+      commit();
+    },
+    remove(id) {
+      state.favoritePlaylists = state.favoritePlaylists.filter(p => p.id !== id);
+      commit();
+    },
+    replaceAll(list) {
+      state.favoritePlaylists = Array.isArray(list) ? list.slice() : [];
       commit();
     }
   };
@@ -219,11 +263,14 @@ window.PocuStore = (() => {
   return {
     load, persist: commit, subscribe,
     favorites, recent, playlists, disliked, settings, skipStats,
-    favoriteAlbums, favoriteArtists, profile, preferences,
+    favoriteAlbums, favoriteArtists, favoritePlaylists, profile, preferences,
 
     exportState() { return JSON.parse(JSON.stringify(state)); },
 
     applyCloudState(cloudData) {
+      if (Array.isArray(cloudData.favoritePlaylists)) {
+        state.favoritePlaylists = cloudData.favoritePlaylists;
+      }
       state.favorites = cloudData.favorites || [];
       state.recent = cloudData.recent || [];
       state.playlists = cloudData.playlists || [];
@@ -263,6 +310,7 @@ window.PocuStore = (() => {
       state.disliked = [];
       state.favoriteAlbums = [];
       state.favoriteArtists = [];
+      state.favoritePlaylists = [];
       state.profile = { displayName: '', avatarUrl: '' };
       // preferences оставляем локально — не привязаны к аккаунту
       persist();
