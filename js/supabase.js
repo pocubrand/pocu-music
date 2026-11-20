@@ -376,7 +376,10 @@ window.PocuSupabase = (() => {
       if ('coverUrl' in fields)    patch.cover_url = fields.coverUrl || '';
       if ('isPublic' in fields)    patch.is_public = !!fields.isPublic;
       if (!Object.keys(patch).length) return;
-      await client.from('playlists').update(patch).match({ id: plId, user_id: currentUser.id });
+      const { error } = await client.from('playlists').update(patch)
+        .eq('id', plId)
+        .eq('user_id', currentUser.id);
+      if (error) console.warn('[sync] pl update failed:', error.message, patch);
     } catch (e) { console.warn('[sync] pl update:', e.message); }
   }
 

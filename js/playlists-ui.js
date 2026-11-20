@@ -266,12 +266,13 @@ window.PocuPlaylistsUI = (() => {
           toast('Войдите, чтобы публиковать плейлисты');
           return;
         }
-        if (!pl.coverUrl && !pl.description) {
+        const nextValue = !pl.isPublic;
+        if (nextValue && !pl.coverUrl && !pl.description) {
           const ok = confirm('Плейлист будет виден всем в поиске. Продолжить?');
           if (!ok) return;
         }
-        window.PocuStore.playlists.update(pl.id, { isPublic: !pl.isPublic });
-        window.PocuSupabase?.syncPlaylistUpdate(pl.id, { isPublic: !pl.isPublic });
+        window.PocuStore.playlists.update(pl.id, { isPublic: nextValue });
+        window.PocuSupabase?.syncPlaylistUpdate(pl.id, { isPublic: nextValue });
         renderScreen();
       });
     } else {
