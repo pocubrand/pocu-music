@@ -143,7 +143,6 @@ window.PocuContextMenu = (() => {
         suppressTileClick = true;
         setTimeout(() => suppressTileClick = false, 400);
         open(track, e.clientX, e.clientY);
-        activeTrack = null;
       }, 500);
       return;
     }
@@ -162,7 +161,6 @@ window.PocuContextMenu = (() => {
       suppressTileClick = true;
       setTimeout(() => suppressTileClick = false, 400);
       open(track, e.clientX, e.clientY);
-      activeTrack = null;
     }, 500);
   }
 
@@ -312,7 +310,7 @@ window.PocuContextMenu = (() => {
       window.PocuPlayer?.appendTrack?.(track);
       close();
     } else if (action === 'add-playlist') {
-      openPlaylistSubmenu(btn.getBoundingClientRect());
+      openPlaylistSubmenu(btn.getBoundingClientRect(), track);
     } else if (action === 'lyrics') {
       close(); openDrawer('lyrics', track);
     } else if (action === 'info') {
@@ -341,7 +339,7 @@ window.PocuContextMenu = (() => {
   }
 
   /* ---------- Submenu «Добавить в плейлист» ---------- */
-  function openPlaylistSubmenu(anchorRect) {
+  function openPlaylistSubmenu(anchorRect, track) {
     const playlists = window.PocuStore.playlists.all();
     const m = 16;
     const vw = window.innerWidth;
@@ -393,16 +391,15 @@ window.PocuContextMenu = (() => {
     $submenu.querySelectorAll('[data-playlist-id]').forEach(btn => {
       btn.addEventListener('click', () => {
         const plId = btn.dataset.playlistId;
-        if (!activeTrack) return;
-        window.PocuStore.playlists.addTrack(plId, activeTrack.id);
-        window.PocuSupabase?.syncPlaylistTrackAdd?.(plId, activeTrack.id);
+        if (!track) return;
+        window.PocuStore.playlists.addTrack(plId, track.id);
+        window.PocuSupabase?.syncPlaylistTrackAdd?.(plId, track.id);
         showToast('Добавлено в плейлист');
         closeAll();
       });
     });
 
     $submenu.querySelector('[data-action="create-new"]')?.addEventListener('click', () => {
-      const track = activeTrack;
       if (!track) { closeAll(); return; }
 
       const trackName = (track.title || 'Новый плейлист').trim();
