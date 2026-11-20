@@ -64,10 +64,10 @@ window.PocuPulse = (() => {
     const favArtists = new Set(window.PocuStore.favoriteArtists?.all?.() || []);
     const skipStats  = window.PocuStore.skipStats;
 
+    const splitA = (s) => window.PocuArtists?.splitArtists?.(s) || [s];
+
     const genreW = new Map(), artistW = new Map();
     const add = (m, k, w) => { if (!k) return; m.set(k, (m.get(k) || 0) + w); };
-
-    const splitA = (s) => window.PocuArtists?.splitArtists?.(s) || [s];
 
     for (const id of favorites) {
       const t = map.get(id); if (!t) continue;
@@ -82,8 +82,39 @@ window.PocuPulse = (() => {
       for (const a of splitA(t.artist)) add(artistW, a, w);
     }
     for (const g of prefs.genres)  add(genreW, g, 5);
-    for (const a of prefs.artists) add(artistW, a, 5);
+    // prefs.artists могут храниться как id — попробуем подтянуть имя через PocuArtists
+    for (const a of prefs.artists) {
+      add(artistW, a, 5);
+      const obj = window.PocuArtists?.get?.(a);
+      if (obj?.name && obj.name !== a) add(artistW, obj.name, 5);
+    }
     for (const a of favArtists)    add(artistW, a, 2);
+
+    // === НОРМАЛИЗАЦИЯ: log-сжатие сырых весов ===
+    // Формула: norm = log(1 + raw) * scale
+    // Смысл: любимые жанры/артисты всё равно выше остальных,
+    // но разрыв между топ-жанром (raw=50) и минорным (raw=3) падает
+    // с 16x (50/3) до ~2.8x (log(51)*5 / log(4)*5).
+    // Итог: лайк (+2..3.6) и явные prefs (+5) реально влияют.
+    const GENRE_LOG_SCALE  = 5;
+    const ARTIST_LOG_SCALE = 4;
+    const squash = (rawMap, scale) => {
+      const out = new Map();
+      for (const [k, w] of rawMap) out.set(k, Math.log(1 + w) * scale);
+      return out;
+    };
+    const genreWNorm  = squash(genreW,  GENRE_LOG_SCALE);
+    const artistWNorm = squash(artistW, ARTIST_LOG_SCALE);
+
+    // Явные предпочтения — отдельные Set для быстрой проверки в scoreTrack.
+    // prefs.artists могут храниться как id — добавим и имя, если найдём.
+    const preferredGenres = new Set(prefs.genres.map(String));
+    const preferredArtists = new Set();
+    for (const a of prefs.artists) {
+      preferredArtists.add(String(a));
+      const obj = window.PocuArtists?.get?.(a);
+      if (obj?.name) preferredArtists.add(obj.name);
+    }
 
     const genreStat = new Map();
     for (const t of all) {
@@ -100,7 +131,14 @@ window.PocuPulse = (() => {
       genreCompletion.set(g, (s.complete + 0.5) / (s.plays + s.skips + 1));
     }
 
-    return { genreW, artistW, favoriteIds: new Set(favorites), genreCompletion };
+    return {
+      genreW: genreWNorm,
+      artistW: artistWNorm,
+      favoriteIds: new Set(favorites),
+      genreCompletion,
+      preferredGenres,
+      preferredArtists
+    };
   }
 
   function getRecentArtistCounts() {
@@ -124,14 +162,26 @@ window.PocuPulse = (() => {
       score += (profile.genreW.get(track.genre) || 0) * 1.2;
       const cr = profile.genreCompletion.get(track.genre);
       if (cr != null) score += (cr - 0.5) * 4 * mods.completion;
+
+      // Явный сигнал: пользователь выбрал этот жанр в настройках.
+      // +5 не сжимается log-нормализацией, поэтому явный выбор
+      // всегда «слышен» даже в минорном жанре.
+      if (profile.preferredGenres.has(track.genre)) score += 5;
     }
     if (track.artist) {
       const artists = window.PocuArtists?.splitArtists?.(track.artist) || [track.artist];
+      let hasPreferredArtist = false;
       for (const a of artists) {
         score += (profile.artistW.get(a) || 0) * 0.9 * mods.artistBoost;
         const n = artistCounts.get(a) || 0;
         if (n > 0) score -= n * 2.5;
+
+        if (profile.preferredArtists.has(a)) hasPreferredArtist = true;
       }
+      // Бонус за артиста — один раз на трек, не за каждого в коллабе
+      if (hasPreferredArtist) score += 4;
+      // На случай, если prefs.artists хранят artistId — проверяем и его
+      if (track.artistId && profile.preferredArtists.has(track.artistId)) score += 4;
     }
     if (profile.favoriteIds.has(track.id)) score += 2.0 * mods.favBoost;
     if (recentIds.has(track.id)) score -= mods.recencyPenalty;
@@ -144,8 +194,13 @@ window.PocuPulse = (() => {
       const skipRate = skips / (plays + skips);
       if (skipRate > 0.5) score -= 2 * skipRate;
     }
-    if (plays === 0) score += mods.discovery;
-    else score -= Math.min(plays / 10, 1) * mods.discovery * 0.3;
+
+    // Discovery: новое — приоритет. Только что открытое (1-2 прослушивания)
+    // получает половину бонуса — шанс «закрепиться», а не исчезнуть после
+    // первого прослушивания.
+    if (plays === 0)         score += mods.discovery;
+    else if (plays <= 2)     score += mods.discovery * 0.5;
+    else                     score -= Math.min(plays / 10, 1) * mods.discovery * 0.3;
 
     if (mods.longBoost > 0 && track.duration) {
       if (track.duration >= 240) score += mods.longBoost;
