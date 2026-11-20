@@ -103,25 +103,66 @@ window.PocuArtistUI = (() => {
     return 'треков';
   }
 
+  /* Ищет артиста по id или имени в ЛЮБОМ регистре.
+     Приоритет: точный id → id в lowercase → имя в lowercase → alias → виртуальный. */
+  function findArtist(idStr) {
+    const key = String(idStr || '').trim();
+    if (!key) return null;
+
+    // 1. Точный id
+    let a = window.PocuArtists.get(key);
+    if (a) return a;
+
+    // 2. Точное имя / alias
+    const lower = key.toLowerCase();
+    a = window.PocuArtists.all().find(x =>
+      x.name.toLowerCase() === lower ||
+      String(x.id).toLowerCase() === lower ||
+      (Array.isArray(x.aliases) && x.aliases.some(al => String(al).toLowerCase() === lower))
+    );
+    if (a) return a;
+
+    return null;
+  }
+
+  /* Ищет все треки, где артист упомянут (по имени/id, case-insensitive, включая feat) */
+  function findTracksByArtistName(name) {
+    const lower = String(name || '').trim().toLowerCase();
+    if (!lower) return [];
+    return window.PocuLibrary.all().filter(t => {
+      const parts = window.PocuArtists.splitTrackArtists(t);
+      return parts.some(p => p.toLowerCase() === lower);
+    });
+  }
+
   function openArtist(artistIdOrName) {
     const idStr = String(artistIdOrName || '').trim();
     if (!idStr) return;
 
-    let artist = window.PocuArtists.get(idStr);
+    let artist = findArtist(idStr);
     let tracks;
 
-    if (artist) tracks = window.PocuArtists.tracksFor(artist.id);
-    else {
-      const lower = idStr.toLowerCase();
-      tracks = window.PocuLibrary.all().filter(t => {
-        const parts = window.PocuArtists.splitArtists(t.artist);
-        return parts.includes(lower);
-      });
-      if (!tracks.length) return;
-
+    if (artist) {
+      tracks = window.PocuArtists.tracksFor(artist.id);
+    } else {
+      // Виртуальный артист — нет в artists.json, но есть в library.json
+      tracks = findTracksByArtistName(idStr);
+      if (!tracks.length) {
+        console.warn('[artist-ui] artist not found and no tracks:', idStr);
+        return;
+      }
       const firstWithArt = tracks.find(t => t.artwork);
+      // Сохраняем оригинальный регистр для отображения
+      const displayName = (() => {
+        for (const t of tracks) {
+          const parts = window.PocuArtists.splitTrackArtists(t);
+          const found = parts.find(p => p.toLowerCase() === idStr.toLowerCase());
+          if (found) return found;
+        }
+        return idStr;
+      })();
       artist = {
-        id: idStr, name: idStr, bio: '',
+        id: idStr, name: displayName, bio: '',
         photo: firstWithArt?.artwork || '',
         featured: false, aliases: []
       };

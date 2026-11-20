@@ -276,7 +276,7 @@ window.PocuHomeUI = (() => {
         const track = window.PocuPlayer.current;
         if (track && window.PocuPulse?.active) {
           e.stopPropagation();
-          const parts = window.PocuArtists.splitArtists(track.artist);
+          const parts = window.PocuArtists.splitTrackArtists(track);
           const name = parts[0] || track.artist;
           if (name) window.PocuArtistUI?.openArtist?.(name);
         }
@@ -754,9 +754,9 @@ window.PocuHomeUI = (() => {
 
     artist.addEventListener('click', e => {
       e.stopPropagation();
-      const parts = window.PocuArtists.splitArtists(track.artist);
+      const parts = window.PocuArtists.splitTrackArtists(track);
       const n = parts[0] || track.artist;
-      if (n) window.PocuUI?.openArtist?.(n);
+      if (n) window.PocuArtistUI?.openArtist?.(n);
     });
 
     el.append(artWrap, info);
