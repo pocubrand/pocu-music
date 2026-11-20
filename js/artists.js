@@ -119,11 +119,25 @@ window.PocuArtists = (() => {
     return window.PocuLibrary.all().filter(t => trackMatchesArtist(t, artist));
   }
 
+  /* Возвращает [основной артист, ...фиты] для трека.
+     Учитывает и track.artist (через splitArtists), и track.featArtists. */
+  function splitTrackArtists(track) {
+    if (!track) return [];
+    const set = new Set();
+    const main = splitArtists(track.artist || '');
+    main.forEach(a => a && set.add(a));
+    if (Array.isArray(track.featArtists)) {
+      track.featArtists.forEach(a => a && set.add(a));
+    }
+    return [...set];
+  }
+
   return {
     load, all, featured, get,
     matchTrack,          // "первый" артист (совместимость)
     trackMatchesArtist,  // строгая проверка
     tracksFor,
+    splitTrackArtists,
     splitArtists
   };
 })();

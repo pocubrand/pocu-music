@@ -539,8 +539,9 @@ window.PocuPlayer = (() => {
   function updateMediaSession(track) {
     if (!('mediaSession' in navigator)) return;
     try {
+      const fullArtist = (window.PocuArtists?.splitTrackArtists?.(track) || [track.artist]).join(', ');
       navigator.mediaSession.metadata = new MediaMetadata({
-        title: track.title, artist: track.artist, album: track.album || '',
+        title: track.title, artist: fullArtist, album: track.album || '',
         artwork: track.artwork ? [{ src: track.artwork, sizes: '512x512', type: 'image/jpeg' }] : []
       });
     } catch (e) {}

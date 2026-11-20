@@ -199,7 +199,7 @@ window.PocuTrackCard=(()=> {
       if (a) name = a.name;
     }
     if (!name) {
-      const parts = window.PocuArtists.splitArtists(track.artist);
+      const parts = window.PocuArtists.splitTrackArtists(track);
       name = parts[0] || track.artist;
     }
     if (name) window.PocuArtistUI?.openArtist?.(name);

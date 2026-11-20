@@ -49,9 +49,10 @@ window.PocuTrackUI = (() => {
     window.PocuRouter?.setHash?.('track', track.id);
 
     els.title.textContent = track.title;
-    els.artist.textContent = track.artist;
+    const fullArtist = (window.PocuArtists?.splitTrackArtists?.(track) || [track.artist]).join(', ');
+    els.artist.textContent = fullArtist;
     els.artist.onclick = () => {
-      const parts = window.PocuArtists.splitArtists(track.artist);
+      const parts = window.PocuArtists.splitTrackArtists(track);
       const name = parts[0] || track.artist;
       if (name) window.PocuArtistUI?.openArtist?.(name);
     };

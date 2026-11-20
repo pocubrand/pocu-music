@@ -317,7 +317,7 @@ window.PocuContextMenu = (() => {
       close(); openDrawer('info', track);
     } else if (action === 'goto-artist') {
       close();
-      const parts = window.PocuArtists.splitArtists(track.artist);
+      const parts = window.PocuArtists?.splitTrackArtists?.(track) || [track.artist];
       const name = parts[0] || track.artist;
       if (name) window.PocuArtistUI?.openArtist?.(name);
     } else if (action === 'goto-track') {
@@ -434,7 +434,7 @@ window.PocuContextMenu = (() => {
   function openDrawer(type, track) {
     if (type === 'info') {
       $drawerTitle.textContent = 'О треке';
-      const artistsStr = (window.PocuArtists?.splitArtists?.(track.artist) || [track.artist]).join(', ');
+      const artistsStr = (window.PocuArtists?.splitTrackArtists?.(track) || [track.artist]).join(', ');
       $drawerBody.innerHTML = `
         <div class="track-drawer-track">
           <div class="track-drawer-track-title">${escapeHtml(track.title || '—')}</div>

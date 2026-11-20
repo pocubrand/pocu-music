@@ -57,7 +57,7 @@ window.PocuSearch = (() => {
     // Собираем всех уникальных артистов из библиотеки
     const artistMap = new Map();
     lib.forEach(t => {
-      const parts = window.PocuArtists.splitArtists(t.artist);
+      const parts = window.PocuArtists.splitTrackArtists(t);
       parts.forEach(name => {
         if (!artistMap.has(name)) artistMap.set(name, []);
         artistMap.get(name).push(t);

@@ -65,6 +65,7 @@ window.PocuPulse = (() => {
     const skipStats  = window.PocuStore.skipStats;
 
     const splitA = (s) => window.PocuArtists?.splitArtists?.(s) || [s];
+  const splitTrackA = (t) => window.PocuArtists?.splitTrackArtists?.(t) || splitA(t?.artist);
 
     const genreW = new Map(), artistW = new Map();
     const add = (m, k, w) => { if (!k) return; m.set(k, (m.get(k) || 0) + w); };
@@ -72,14 +73,14 @@ window.PocuPulse = (() => {
     for (const id of favorites) {
       const t = map.get(id); if (!t) continue;
       add(genreW, t.genre, 3);
-      for (const a of splitA(t.artist)) add(artistW, a, 3);
+      for (const a of splitTrackA(t)) add(artistW, a, 3);
     }
     const now = Date.now();
     for (const r of recent) {
       const t = map.get(r.id); if (!t) continue;
       const w = Math.max(0.2, 1 - (now - r.t) / 86400000 / 30);
       add(genreW, t.genre, w);
-      for (const a of splitA(t.artist)) add(artistW, a, w);
+      for (const a of splitTrackA(t)) add(artistW, a, w);
     }
     for (const g of prefs.genres)  add(genreW, g, 5);
     // prefs.artists могут храниться как id — попробуем подтянуть имя через PocuArtists
@@ -149,7 +150,7 @@ window.PocuPulse = (() => {
     const history = st.queue.slice(start, st.queueIndex + 1);
     for (const t of history) {
       if (!t?.artist) continue;
-      for (const a of (window.PocuArtists?.splitArtists?.(t.artist) || [t.artist])) {
+      for (const a of (window.PocuArtists?.splitTrackArtists?.(t) || [t.artist])) {
         counts.set(a, (counts.get(a) || 0) + 1);
       }
     }
@@ -169,7 +170,7 @@ window.PocuPulse = (() => {
       if (profile.preferredGenres.has(track.genre)) score += 5;
     }
     if (track.artist) {
-      const artists = window.PocuArtists?.splitArtists?.(track.artist) || [track.artist];
+      const artists = window.PocuArtists?.splitTrackArtists?.(track) || [track.artist];
       let hasPreferredArtist = false;
       for (const a of artists) {
         score += (profile.artistW.get(a) || 0) * 0.9 * mods.artistBoost;
@@ -272,7 +273,7 @@ window.PocuPulse = (() => {
     while (picked.length < count && poolIdx < pool.length) {
       const cand = pool[poolIdx].track;
       if (picked.some(p => p.id === cand.id)) { poolIdx++; continue; }
-      const candArtists = window.PocuArtists?.splitArtists?.(cand.artist) || [cand.artist];
+      for (const a of (window.PocuArtists?.splitTrackArtists?.(t) || [t.artist])) {
       const lastTwo = lastArtists.slice(-2);
       if (candArtists.some(a => lastTwo.includes(a))) { poolIdx++; continue; }
       picked.push(cand);
