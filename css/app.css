@@ -5798,6 +5798,8 @@ body.genre-open .topbar {
   opacity: 0;
   transition: opacity .4s ease;
   pointer-events: none;
+  align-items: flex-start;   /* было: унаследовано center → теперь сверху */
+  padding-top: 8vh;          /* сдвигает всю страницу «Добро пожаловать» ниже */
 }
 .welcome.visible {
   opacity: 1;
@@ -5960,7 +5962,7 @@ body.genre-open .topbar {
 /* ===== WELCOME form-mode: шапка + форма одним потоком ===== */
 .welcome.form-mode {
   align-items: flex-start;
-  padding-top: 6vh;
+  padding-top: 12vh;   /* было 6vh → ещё ниже */
   overflow-y: auto;
 }
 .welcome.form-mode .welcome-content {
@@ -5978,7 +5980,7 @@ body.genre-open .topbar {
 }
 .welcome.form-mode .welcome-sub {
   font-size: 15px;
-  margin-bottom: 24px;    /* ← единственный зазор между шапкой и формой */
+  margin-bottom: 44px;   /* было 24px → почти вдвое больше воздуха */
 }
 
 /* Форма становится обычным потоковым блоком внутри welcome-content.
@@ -6015,10 +6017,11 @@ body.genre-open .topbar {
 }
 
 @media (max-width: 480px) {
-  .welcome.form-mode { padding-top: 4vh; }
+  .welcome { padding-top: 6vh; }
+  .welcome.form-mode { padding-top: 9vh; }
   .welcome.form-mode .welcome-logo { width: 110px; margin-bottom: 14px; }
   .welcome.form-mode .welcome-title { font-size: 26px; }
-  .welcome.form-mode .welcome-sub { font-size: 13px; margin-bottom: 20px; }
+  .welcome.form-mode .welcome-sub { font-size: 13px; margin-bottom: 32px; }
 }
 
 /* ===== BOOT: скрываем приложение пока идёт загрузка / welcome ===== */
