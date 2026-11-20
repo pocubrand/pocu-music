@@ -67,7 +67,8 @@ window.PocuSearch = (() => {
     // Матчим: имя артиста ИЛИ любой трек этого артиста содержит запрос
     const matches = [];
     for (const [name, tracks] of artistMap.entries()) {
-      const nameMatch  = name.includes(lower);
+      const nameLow    = name.toLowerCase();
+      const nameMatch  = nameLow.includes(lower);
       const trackMatch = tracks.some(t => t.title.toLowerCase().includes(lower));
       if (!nameMatch && !trackMatch) continue;
 

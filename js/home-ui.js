@@ -730,7 +730,7 @@ window.PocuHomeUI = (() => {
 
     const artist = document.createElement('div');
     artist.className = 'home-tile-artist';
-    artist.textContent = track.artist;
+    window.PocuArtists.renderInline(artist, track);
 
     text.append(name, artist);
 
@@ -750,13 +750,6 @@ window.PocuHomeUI = (() => {
     name.addEventListener('click', e => {
       e.stopPropagation();
       window.PocuTrackCard.openTarget(track);
-    });
-
-    artist.addEventListener('click', e => {
-      e.stopPropagation();
-      const parts = window.PocuArtists.splitTrackArtists(track);
-      const n = parts[0] || track.artist;
-      if (n) window.PocuArtistUI?.openArtist?.(n);
     });
 
     el.append(artWrap, info);

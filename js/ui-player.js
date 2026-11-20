@@ -57,7 +57,8 @@ window.PocuUI = (() => {
       if (miniSuppressClick) return;
       if (e.target.closest('.mp-btn') ||
           e.target.closest('.mp-heart') ||
-          e.target.closest('.mp-volume')) return;
+          e.target.closest('.mp-volume') ||
+          e.target.closest('.mp-artist')) return;
       openNowPlaying();
     });
 
@@ -76,11 +77,7 @@ window.PocuUI = (() => {
       openCurrentArtist();
     });
 
-    // Клик по имени артиста в now-playing
-    els.npArtist?.addEventListener('click', e => {
-      e.stopPropagation();
-      openCurrentArtist();
-    });
+    // Клики по артистам в now-playing навешивает PocuArtists.renderInline
 
     setupScrubber();
     setupDragToClose();
@@ -159,7 +156,7 @@ window.PocuUI = (() => {
     /* now playing meta */
     if (track) {
       els.npTitle.textContent  = track.title;
-      els.npArtist.textContent = (window.PocuArtists?.splitTrackArtists?.(track) || [track.artist]).join(', ');
+      window.PocuArtists.renderInline(els.npArtist, track);
 
       if (track.artwork) {
         if (els.npArt.getAttribute('src') !== track.artwork) {
