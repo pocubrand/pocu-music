@@ -62,12 +62,13 @@ window.PocuArtists = (() => {
   function featured() { return artists.filter(a => a.featured); }
   function get(id)    { return byId.get(String(id)) || null; }
 
-  /* ---------- разбор строки артиста трека ---------- */
+  /* ---------- разбор строки артиста трека ----------
+     Возвращает имена в ОРИГИНАЛЬНОМ регистре (как в track.artist). */
   function splitArtists(artistField) {
     if (!artistField) return [];
     return String(artistField)
       .split(COLLAB_SPLIT)
-      .map(s => s.trim().toLowerCase())
+      .map(s => s.trim())
       .filter(Boolean);
   }
 
@@ -91,7 +92,7 @@ window.PocuArtists = (() => {
 
     // 3. Разбор коллабов
     for (const p of splitArtists(trackArtistLow)) {
-      if (artistNames.has(p)) return true;
+      if (artistNames.has(p.toLowerCase())) return true;
     }
 
     return false;
@@ -107,7 +108,8 @@ window.PocuArtists = (() => {
     if (!low) return null;
     if (byName.has(low)) return byName.get(low);
     for (const p of splitArtists(low)) {
-      if (byName.has(p)) return byName.get(p);
+      const key = p.toLowerCase();
+      if (byName.has(key)) return byName.get(key);
     }
     return null;
   }
@@ -119,17 +121,25 @@ window.PocuArtists = (() => {
     return window.PocuLibrary.all().filter(t => trackMatchesArtist(t, artist));
   }
 
-  /* Возвращает [основной артист, ...фиты] для трека.
-     Учитывает и track.artist (через splitArtists), и track.featArtists. */
+  /* Возвращает [основной артист, ...фиты] для трека, в оригинальном регистре.
+     Учитывает и track.artist (через splitArtists), и track.featArtists.
+     Дедупликация — по lowercase (PHARAOH и pharaoh не задвоятся). */
   function splitTrackArtists(track) {
     if (!track) return [];
-    const set = new Set();
-    const main = splitArtists(track.artist || '');
-    main.forEach(a => a && set.add(a));
-    if (Array.isArray(track.featArtists)) {
-      track.featArtists.forEach(a => a && set.add(a));
-    }
-    return [...set];
+    const seen = new Set();
+    const out = [];
+    const add = (name) => {
+      if (!name) return;
+      const trimmed = String(name).trim();
+      if (!trimmed) return;
+      const key = trimmed.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key);
+      out.push(trimmed);
+    };
+    splitArtists(track.artist || '').forEach(add);
+    if (Array.isArray(track.featArtists)) track.featArtists.forEach(add);
+    return out;
   }
 
   /* Рендерит в container кликабельные имена артистов через запятую.
