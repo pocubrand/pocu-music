@@ -5397,6 +5397,95 @@ body.genre-open .topbar {
   }
 }
 
+/* ============ КОНТЕКСТНОЕ МЕНЮ ============ */
+.context-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0,0,0,.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+.context-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.context-menu {
+  position: absolute;
+  min-width: 220px;
+  max-width: 280px;
+  background: rgba(36,36,46,.95);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  padding: 8px 0;
+  overflow: hidden;
+}
+
+.context-header {
+  padding: 12px 16px 10px;
+}
+.context-title {
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.context-artist {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.context-divider {
+  height: 1px;
+  background: rgba(255,255,255,.08);
+  margin: 4px 0;
+}
+.context-subheader {
+  padding: 8px 16px 4px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.context-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s;
+}
+.context-item:active { background: rgba(255,255,255,.08); }
+.context-count {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.context-empty {
+  padding: 8px 16px 12px;
+  font-size: 13px;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
 /* ===== CONTEXT MENU 2.0 ===== */
 .context-menu {
   max-height: calc(100vh - 32px);
