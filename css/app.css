@@ -5817,24 +5817,24 @@ body.genre-open .topbar {
 }
 
 .welcome-logo {
-  width: 160px;
-  max-width: 50vw;
-  margin-bottom: 24px;
+  width: 220px;
+  max-width: 60vw;
+  margin-bottom: 28px;
   filter: drop-shadow(0 0 30px rgba(124, 92, 255, 0.5));
 }
 
 .welcome-title {
-  font-size: 28px;
+  font-size: 36px;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: #fff;
-  margin: 0 0 8px;
+  margin: 0 0 10px;
 }
 
 .welcome-sub {
-  font-size: 15px;
+  font-size: 17px;
   color: rgba(255, 255, 255, 0.6);
-  margin: 0 0 32px;
+  margin: 0 0 36px;
 }
 
 .welcome-btn {
@@ -5877,9 +5877,9 @@ body.genre-open .topbar {
 /* Мобилка — чуть компактнее */
 @media (max-width: 480px) {
   .splash-logo  { width: 180px; }
-  .welcome-logo { width: 130px; }
-  .welcome-title { font-size: 24px; }
-  .welcome-sub   { font-size: 14px; margin-bottom: 24px; }
+  .welcome-logo { width: 170px; }
+  .welcome-title { font-size: 30px; }
+  .welcome-sub   { font-size: 15px; margin-bottom: 28px; }
   .welcome-btn   { padding: 14px 20px; font-size: 14px; }
   .splash-aurora { width: 480px; height: 480px; }
   .splash-blob-1 { width: 220px; height: 220px; }
@@ -5957,46 +5957,68 @@ body.genre-open .topbar {
   border-color: rgba(255,255,255,.12);
 }
 
-/* ===== WELCOME form-mode: шапка сверху, форма ПОД шапкой ===== */
+/* ===== WELCOME form-mode: шапка + форма одним потоком ===== */
 .welcome.form-mode {
   align-items: flex-start;
-  padding-top: 5vh;
+  padding-top: 6vh;
+  overflow-y: auto;
 }
 .welcome.form-mode .welcome-content {
-  padding: 0 24px;
+  padding: 0 24px 32px;
+  width: 100%;
+  max-width: 440px;
 }
 .welcome.form-mode .welcome-logo {
-  width: 90px;
-  margin-bottom: 10px;
+  width: 150px;
+  margin-bottom: 18px;
 }
 .welcome.form-mode .welcome-title {
-  font-size: 20px;
-  margin-bottom: 4px;
+  font-size: 30px;
+  margin-bottom: 6px;
 }
 .welcome.form-mode .welcome-sub {
-  font-size: 12px;
-  margin-bottom: 0;
+  font-size: 15px;
+  margin-bottom: 24px;    /* ← единственный зазор между шапкой и формой */
 }
 
-/* Форма — не в центре и не внизу, а сразу под шапкой.
-   padding-top = 5vh (отступ сверху welcome) + ~150px (шапка) + 24px (зазор). */
+/* Форма становится обычным потоковым блоком внутри welcome-content.
+   Никакой fixed-позиции, никакого пустого промежутка по центру. */
 .sheet-overlay#sheet-auth.welcome-mode {
-  align-items: flex-start;
-  padding: calc(5vh + 150px) 24px 24px;
+  position: static !important;
+  inset: auto !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  display: block !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  z-index: auto !important;
+  animation: none !important;
+}
+.sheet-overlay#sheet-auth.welcome-mode .sheet-panel {
+  position: static !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  color: #fff;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  transform: none !important;
+  animation: none !important;
 }
 
 @media (max-width: 480px) {
-  .welcome.form-mode { padding-top: 3vh; }
-  .welcome.form-mode .welcome-logo { width: 70px; margin-bottom: 8px; }
-  .welcome.form-mode .welcome-title { font-size: 18px; }
-  .welcome.form-mode .welcome-sub { display: none; }
-  .sheet-overlay#sheet-auth.welcome-mode {
-    padding: calc(3vh + 110px) 20px calc(20px + env(safe-area-inset-bottom));
-  }
-  .sheet-overlay#sheet-auth.welcome-mode .sheet-panel {
-    max-height: calc(100vh - 3vh - 130px - 20px);
-    overflow-y: auto;
-  }
+  .welcome.form-mode { padding-top: 4vh; }
+  .welcome.form-mode .welcome-logo { width: 110px; margin-bottom: 14px; }
+  .welcome.form-mode .welcome-title { font-size: 26px; }
+  .welcome.form-mode .welcome-sub { font-size: 13px; margin-bottom: 20px; }
 }
 
 /* ===== BOOT: скрываем приложение пока идёт загрузка / welcome ===== */
@@ -6014,8 +6036,8 @@ body.genre-open .topbar {
 }
 
 /* Все оверлеи — полностью из DOM-потока, пока boot != app.
-   display:none (а не visibility) — чтобы не было placeholder'ов от <img> внутри. */
-[data-boot="splash"] .sheet-overlay,
+   Исключение: #sheet-auth.welcome-mode — это часть welcome-экрана. */
+[data-boot="splash"] .sheet-overlay:not(#sheet-auth.welcome-mode),
 [data-boot="splash"] .now-playing,
 [data-boot="splash"] .playlist-overlay,
 [data-boot="splash"] .artist-overlay,
@@ -6024,7 +6046,7 @@ body.genre-open .topbar {
 [data-boot="splash"] .context-menu,
 [data-boot="splash"] .context-submenu,
 [data-boot="splash"] .track-drawer-overlay,
-[data-boot="welcome"] .sheet-overlay,
+[data-boot="welcome"] .sheet-overlay:not(#sheet-auth.welcome-mode),
 [data-boot="welcome"] .now-playing,
 [data-boot="welcome"] .playlist-overlay,
 [data-boot="welcome"] .artist-overlay,

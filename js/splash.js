@@ -132,10 +132,30 @@ window.PocuSplash = (() => {
     const welcomeEl = document.getElementById('welcomeScreen');
     const sheet = document.getElementById('sheet-auth');
 
+    function enterFormMode() {
+      if (!welcomeEl || !sheet) return;
+      const content = welcomeEl.querySelector('.welcome-content');
+
+      welcomeEl.classList.add('form-mode');
+      document.querySelectorAll('.welcome-btn').forEach(b => b.style.display = 'none');
+
+      // Переносим sheet-auth внутрь welcome-content — теперь это потоковый блок
+      if (content && sheet.parentElement !== content) {
+        content.appendChild(sheet);
+      }
+      sheet.classList.add('welcome-mode');
+      sheet.classList.add('open');
+    }
+
     function exitFormMode() {
       if (!welcomeEl || !sheet) return;
       welcomeEl.classList.remove('form-mode');
       document.querySelectorAll('.welcome-btn').forEach(b => b.style.display = '');
+
+      // Возвращаем sheet-auth обратно в body — он снова обычный оверлей
+      if (sheet.parentElement !== document.body) {
+        document.body.appendChild(sheet);
+      }
       sheet.classList.remove('welcome-mode');
     }
 
@@ -144,13 +164,7 @@ window.PocuSplash = (() => {
       closeWelcome();
     });
 
-    loginBtn?.addEventListener('click', () => {
-      if (!welcomeEl || !sheet) return;
-      welcomeEl.classList.add('form-mode');
-      document.querySelectorAll('.welcome-btn').forEach(b => b.style.display = 'none');
-      sheet.classList.add('welcome-mode');
-      sheet.classList.add('open');
-    });
+    loginBtn?.addEventListener('click', enterFormMode);
 
     if (sheet) {
       const observer = new MutationObserver(() => {
