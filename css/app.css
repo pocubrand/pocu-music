@@ -5711,10 +5711,11 @@ body.genre-open .topbar {
 }
 
 .splash {
-  animation: splashOut .6s ease 1.8s forwards;
+     Синхронизировано с SPLASH_MS=3200 в js/splash.js */
+  animation: splashOut .6s ease 2.6s forwards;
   pointer-events: none;
 }
-.splash.gone { animation: none; opacity: 0; }
+.splash.gone { display: none; }
 
 @keyframes splashOut {
   to { opacity: 0; }
@@ -5996,4 +5997,18 @@ body.genre-open .topbar {
     max-height: calc(100vh - 180px);
     overflow-y: auto;
   }
+}
+
+/* ===== BOOT: скрываем приложение пока идёт загрузка / welcome ===== */
+[data-boot="splash"] .topbar,
+[data-boot="splash"] #main,
+[data-boot="splash"] .tabbar,
+[data-boot="splash"] .miniplayer,
+[data-boot="welcome"] .topbar,
+[data-boot="welcome"] #main,
+[data-boot="welcome"] .tabbar,
+[data-boot="welcome"] .miniplayer {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }

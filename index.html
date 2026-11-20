@@ -30,14 +30,42 @@
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.content = resolved === 'light' ? '#f2f2f5' : '#08080c';
 
-    // Splash: если явно выключен — скрываем сразу, до первого рендера
+    // Splash: если выключен — сразу показываем app (никакого boot-скрытия).
+    // Если включён — ставим boot='splash', main/topbar/tabbar/miniplayer
+    // будут скрыты до конца загрузочного экрана.
     const splashSetting = st.settings && 'splashEnabled' in st.settings
       ? st.settings.splashEnabled
       : true;
-    if (!splashSetting) document.documentElement.dataset.splash = 'off';
-  } catch (_) {}
+    if (!splashSetting) {
+      document.documentElement.dataset.splash = 'off';
+      document.documentElement.dataset.boot = 'app';
+    } else {
+      document.documentElement.dataset.boot = 'splash';
+    }
+  } catch (_) {
+    document.documentElement.dataset.boot = 'app';
+  }
 })();
 </script>
+
+<noscript>
+  <style>
+    [data-boot="splash"] .topbar,
+    [data-boot="splash"] #main,
+    [data-boot="splash"] .tabbar,
+    [data-boot="splash"] .miniplayer,
+    [data-boot="welcome"] .topbar,
+    [data-boot="welcome"] #main,
+    [data-boot="welcome"] .tabbar,
+    [data-boot="welcome"] .miniplayer {
+      visibility: visible !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    .splash, .welcome { display: none !important; }
+  </style>
+</noscript>
+
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
@@ -47,7 +75,6 @@
 </head>
 
 <body>
-
 <div class="splash" id="splashScreen" aria-hidden="true">
   <div class="splash-aurora">
     <div class="splash-blob splash-blob-1"></div>
