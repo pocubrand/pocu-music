@@ -43,7 +43,15 @@ window.PocuLibrary = (() => {
       preview:     raw.preview || '',
       duration:    Number(raw.duration) || 0,
       genre:       raw.genre || '',
-      artistId:    raw.artistId || ''
+      artistId:    raw.artistId || '',
+
+      // --- расширенные метаданные (заполняются enrich.js / backfill.js / вручную) ---
+      featArtists:     Array.isArray(raw.featArtists) ? raw.featArtists.map(String) : [],
+      musicBy:         String(raw.musicBy         || ''),
+      lyricsBy:        String(raw.lyricsBy        || ''),
+      label:           String(raw.label           || ''),
+      phonogramSource: String(raw.phonogramSource || ''),
+      lyrics:          String(raw.lyrics          || '')
     };
   }
 
@@ -88,7 +96,8 @@ window.PocuLibrary = (() => {
     return tracks.filter(t =>
       t.title.toLowerCase().includes(s) ||
       t.artist.toLowerCase().includes(s) ||
-      t.album.toLowerCase().includes(s)
+      t.album.toLowerCase().includes(s) ||
+      (t.featArtists && t.featArtists.some(a => a.toLowerCase().includes(s)))
     );
   }
 
