@@ -209,6 +209,18 @@ window.PocuPulse = (() => {
     window.PocuPlayer.playQueue(queue, 0);
     notify();
   }
+
+  function startFromTrack(track) {
+    if (!track || !track.preview) return;
+    let base = generateQueue(QUEUE_SIZE);
+    base = base.filter(t => t.id !== track.id);
+    base.unshift(track);
+    queue = base.slice(0, QUEUE_SIZE);
+    active = true;
+    window.PocuPlayer.playQueue(queue, 0);
+    notify();
+  }
+
   function stop() { active = false; queue = []; notify(); }
 
   function ensureQueue() {
@@ -516,7 +528,7 @@ window.PocuPulse = (() => {
   }
 
   return {
-    init, start, stop, refresh,
+    init, start, startFromTrack, stop, refresh,
     preview(count = 10) { return generateQueue(count); },
     getInsight, getAllInsights, getStats, getIconSvg,
     get active() { return active; },

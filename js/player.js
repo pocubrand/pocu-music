@@ -443,6 +443,31 @@ window.PocuPlayer = (() => {
     notify();
   }
 
+  function appendTrack(track) {
+    if (!track || !track.preview) return;
+    if (!current) { play(track); return; }
+    if (current.id === track.id) return;
+
+    for (let i = queue.length - 1; i >= 0; i--) {
+      if (queue[i].id === track.id && i !== queueIndex) {
+        queue.splice(i, 1);
+        if (i < queueIndex) queueIndex--;
+        if (shuffledOrder) {
+          const soIdx = shuffledOrder.indexOf(i);
+          if (soIdx >= 0) shuffledOrder.splice(soIdx, 1);
+          for (let k = 0; k < shuffledOrder.length; k++) {
+            if (shuffledOrder[k] > i) shuffledOrder[k]--;
+          }
+        }
+      }
+    }
+
+    const pos = queue.length;
+    queue.push(track);
+    if (shuffle && shuffledOrder) shuffledOrder.push(pos);
+    notify();
+  }
+
   function next(_guard = 0) {
     if (!queue.length) return;
     if (_guard > queue.length) return;
@@ -665,6 +690,7 @@ window.PocuPlayer = (() => {
       if (shuffle && shuffledOrder) for (let i = 0; i < tracks.length; i++) shuffledOrder.push(startIdx + i);
       notify();
     },
+    appendTrack,
     play, playQueue, insertNext, next, prev, togglePlay, seek,
     toggleShuffle, cycleRepeat, setShuffle, setRepeat,
     setVolume, toggleMute,

@@ -635,3 +635,40 @@ html { transition: background-color .3s ease; }
   color: #0a0a0f;
   box-shadow: 0 8px 24px rgba(0,0,0,.12);
 }
+
+/* ===== CONTEXT MENU / SUBMENU / DRAWER — light theme ===== */
+[data-theme="light"] .context-menu,
+[data-theme="light"] .context-submenu {
+  background: rgba(255,255,255,.97);
+  border-color: rgba(0,0,0,.08);
+  color: #0a0a0f;
+}
+[data-theme="light"] .context-item { color: #0a0a0f; }
+[data-theme="light"] .context-item .context-icon { color: rgba(0,0,0,.6); }
+[data-theme="light"] .context-divider { background: rgba(0,0,0,.08); }
+[data-theme="light"] .context-subheader { color: rgba(0,0,0,.5); }
+[data-theme="light"] .context-count { color: rgba(0,0,0,.5); }
+[data-theme="light"] .context-empty { color: rgba(0,0,0,.5); }
+
+[data-theme="light"] .track-drawer {
+  background: rgba(255,255,255,.98);
+  color: #0a0a0f;
+  border-left-color: rgba(0,0,0,.08);
+}
+[data-theme="light"] .track-drawer-header { border-bottom-color: rgba(0,0,0,.06); }
+[data-theme="light"] .track-drawer-close {
+  background: rgba(0,0,0,.06);
+  color: #0a0a0f;
+}
+[data-theme="light"] .track-drawer-track-artist { color: rgba(0,0,0,.55); }
+[data-theme="light"] .track-drawer-info-row { border-bottom-color: rgba(0,0,0,.05); }
+[data-theme="light"] .track-drawer-info-row .label { color: rgba(0,0,0,.55); }
+[data-theme="light"] .track-drawer-info-row .value { color: #0a0a0f; }
+[data-theme="light"] .track-drawer-lyrics { color: rgba(0,0,0,.85); }
+[data-theme="light"] .track-drawer-empty  { color: rgba(0,0,0,.4); }
+
+[data-theme="light"] .report-option {
+  background: rgba(0,0,0,.03);
+  border-color: rgba(0,0,0,.06);
+  color: #0a0a0f;
+}
