@@ -118,10 +118,17 @@ window.PocuSupabase = (() => {
     catch (e) { console.warn('[fetch] favorites:', e.message); }
 
     try {
-      const { data } = await client.from('playlists').select('id, name, created_at, playlist_tracks(track_id, position)');
+      const { data } = await client.from('playlists')
+        .select('id, name, created_at, is_public, description, cover_url, playlist_tracks(track_id, position)');
       if (data) out.playlists = data.map(p => ({
-        id: p.id, name: p.name, createdAt: new Date(p.created_at).getTime(),
-        trackIds: p.playlist_tracks ? p.playlist_tracks.sort((a,b)=>a.position-b.position).map(t => t.track_id) : []
+        id: p.id, name: p.name,
+        createdAt: new Date(p.created_at).getTime(),
+        isPublic: !!p.is_public,
+        description: p.description || '',
+        coverUrl: p.cover_url || '',
+        trackIds: p.playlist_tracks
+          ? p.playlist_tracks.sort((a,b)=>a.position-b.position).map(t => t.track_id)
+          : []
       }));
     } catch (e) { console.warn('[fetch] playlists:', e.message); }
 
@@ -186,7 +193,13 @@ window.PocuSupabase = (() => {
       );
     }
     for (const pl of local.playlists) {
-      const { data: newPl } = await client.from('playlists').insert({ user_id: currentUser.id, name: pl.name }).select().single();
+      const { data: newPl } = await client.from('playlists').insert({
+        user_id: currentUser.id,
+        name: pl.name,
+        is_public: !!pl.isPublic,
+        description: pl.description || '',
+        cover_url: pl.coverUrl || ''
+      }).select().single();
       if (newPl && pl.trackIds.length) {
         const tracks = pl.trackIds.map((tid, idx) => ({ playlist_id: newPl.id, track_id: tid, position: idx }));
         await client.from('playlist_tracks').insert(tracks);
