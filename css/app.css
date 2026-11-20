@@ -5957,44 +5957,44 @@ body.genre-open .topbar {
   border-color: rgba(255,255,255,.12);
 }
 
-/* ===== WELCOME form-mode: header наверх, форма снизу ===== */
+/* ===== WELCOME form-mode: шапка сверху, форма ПОД шапкой ===== */
 .welcome.form-mode {
   align-items: flex-start;
-  padding-top: 8vh;
+  padding-top: 5vh;
 }
 .welcome.form-mode .welcome-content {
   padding: 0 24px;
 }
 .welcome.form-mode .welcome-logo {
-  width: 120px;
-  margin-bottom: 16px;
+  width: 90px;
+  margin-bottom: 10px;
 }
 .welcome.form-mode .welcome-title {
-  font-size: 22px;
+  font-size: 20px;
   margin-bottom: 4px;
 }
 .welcome.form-mode .welcome-sub {
-  font-size: 13px;
+  font-size: 12px;
   margin-bottom: 0;
 }
 
-/* Форма прилипает к низу экрана */
+/* Форма — не в центре и не внизу, а сразу под шапкой.
+   padding-top = 5vh (отступ сверху welcome) + ~150px (шапка) + 24px (зазор). */
 .sheet-overlay#sheet-auth.welcome-mode {
-  align-items: flex-end;
-  padding: 0 24px calc(24px + env(safe-area-inset-bottom));
+  align-items: flex-start;
+  padding: calc(5vh + 150px) 24px 24px;
 }
 
-/* На маленьких экранах — ужимаем ещё сильнее */
 @media (max-width: 480px) {
-  .welcome.form-mode { padding-top: 4vh; }
-  .welcome.form-mode .welcome-logo { width: 90px; margin-bottom: 10px; }
-  .welcome.form-mode .welcome-title { font-size: 20px; }
+  .welcome.form-mode { padding-top: 3vh; }
+  .welcome.form-mode .welcome-logo { width: 70px; margin-bottom: 8px; }
+  .welcome.form-mode .welcome-title { font-size: 18px; }
   .welcome.form-mode .welcome-sub { display: none; }
   .sheet-overlay#sheet-auth.welcome-mode {
-    padding: 0 20px calc(20px + env(safe-area-inset-bottom));
+    padding: calc(3vh + 110px) 20px calc(20px + env(safe-area-inset-bottom));
   }
   .sheet-overlay#sheet-auth.welcome-mode .sheet-panel {
-    max-height: calc(100vh - 180px);
+    max-height: calc(100vh - 3vh - 130px - 20px);
     overflow-y: auto;
   }
 }
@@ -6011,4 +6011,43 @@ body.genre-open .topbar {
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
+}
+
+/* Все оверлеи — полностью из DOM-потока, пока boot != app.
+   display:none (а не visibility) — чтобы не было placeholder'ов от <img> внутри. */
+[data-boot="splash"] .sheet-overlay,
+[data-boot="splash"] .now-playing,
+[data-boot="splash"] .playlist-overlay,
+[data-boot="splash"] .artist-overlay,
+[data-boot="splash"] .track-overlay,
+[data-boot="splash"] .context-overlay,
+[data-boot="splash"] .context-menu,
+[data-boot="splash"] .context-submenu,
+[data-boot="splash"] .track-drawer-overlay,
+[data-boot="welcome"] .sheet-overlay,
+[data-boot="welcome"] .now-playing,
+[data-boot="welcome"] .playlist-overlay,
+[data-boot="welcome"] .artist-overlay,
+[data-boot="welcome"] .track-overlay,
+[data-boot="welcome"] .context-overlay,
+[data-boot="welcome"] .context-menu,
+[data-boot="welcome"] .context-submenu,
+[data-boot="welcome"] .track-drawer-overlay {
+  display: none !important;
+}
+
+/* <img> без src (или с пустым src) показываем как прозрачный placeholder,
+   иначе браузер рисует серый прямоугольник до загрузки файла. */
+img[src=""],
+img:not([src]) {
+  visibility: hidden;
+}
+
+/* Закрытые sheet'ы — невидимы, пока не получат .open.
+   Защита на случай, если .sheet-overlay:not(.open) не имеет opacity:0. */
+.sheet-overlay:not(.open) {
+  visibility: hidden;
+}
+.sheet-overlay.open {
+  visibility: visible;
 }
