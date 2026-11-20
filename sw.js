@@ -1,5 +1,5 @@
 /* Pocu Music — Service Worker */
-const VERSION = 'v142';
+const VERSION = 'v143';
 const SHELL_CACHE = `pocu-shell-${VERSION}`;
 const MEDIA_CACHE = `pocu-media-${VERSION}`;
 
@@ -9,6 +9,7 @@ const SHELL = [
   './manifest.json',
   './css/app.css',
   './css/theme.css',
+  'js/splash.js'
   './js/layers.js',
   './js/store.js',
   './js/library.js',

@@ -31,6 +31,16 @@
     "artistId": "bluefish"
   },
   {
+    "id": "pharaoh-boulevard-depo-5-minut-nazad",
+    "title": "5 минут назад",
+    "artist": "PHARAOH; Boulevard Depo",
+    "album": "Плакшери",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-boulevard-depo-5-minut-nazad.jpg",
+    "preview": "audio/pharaoh-boulevard-depo-5-minut-nazad.m4a",
+    "duration": 222
+  },
+  {
     "id": "re-presa-aleha-gavai",
     "title": "Алеха гаваи",
     "artist": "рэ.прэса",
@@ -51,6 +61,16 @@
     "duration": 178
   },
   {
+    "id": "pharaoh-begi-ot-menya",
+    "title": "Беги от меня",
+    "artist": "PHARAOH",
+    "album": "DOLOR",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-begi-ot-menya.jpg",
+    "preview": "audio/pharaoh-begi-ot-menya.m4a",
+    "duration": 177
+  },
+  {
     "id": "nurminskiy-belyy-500",
     "title": "Белый 500",
     "artist": "Нурминский",
@@ -69,6 +89,16 @@
     "artwork": "audio/covers/haski-bog-voyny.jpg",
     "preview": "audio/haski-bog-voyny.m4a",
     "duration": 222
+  },
+  {
+    "id": "pharaoh-ca-xttx-boysbend",
+    "title": "Бойсбэнд",
+    "artist": "PHARAOH; Ca$$xttx",
+    "album": "PHLORA",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-ca-xttx-boysbend.jpg",
+    "preview": "audio/pharaoh-ca-xttx-boysbend.m4a",
+    "duration": 179
   },
   {
     "id": "pyrokinesis-v-nebo-koza-emoe",
@@ -132,6 +162,16 @@
     "duration": 144
   },
   {
+    "id": "pharaoh-diko-naprimer",
+    "title": "Дико, например",
+    "artist": "PHARAOH",
+    "album": "Дико, например",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-diko-naprimer.jpg",
+    "preview": "audio/pharaoh-diko-naprimer.m4a",
+    "duration": 168
+  },
+  {
     "id": "villian-madk1d-dinastiya",
     "title": "ДИНАСТИЯ",
     "artist": "VILLIAN; madk1d",
@@ -192,6 +232,16 @@
     "duration": 176
   },
   {
+    "id": "pharaoh-klyukva",
+    "title": "Клюква",
+    "artist": "PHARAOH",
+    "album": "PHOSPHOR",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-klyukva.jpg",
+    "preview": "audio/pharaoh-klyukva.m4a",
+    "duration": 217
+  },
+  {
     "id": "pussykiller-eksi-kontakt-prod-by-concentracia",
     "title": "Контакт (prod. by CONCENTRACIA)",
     "artist": "PUSSYKILLER; Экси",
@@ -230,6 +280,16 @@
     "artwork": "audio/covers/luchnadezhdy-kusay-moi-guby.jpg",
     "preview": "audio/luchnadezhdy-kusay-moi-guby.m4a",
     "duration": 151
+  },
+  {
+    "id": "pharaoh-lallipap",
+    "title": "Лаллипап",
+    "artist": "PHARAOH",
+    "album": "Pink Phloyd",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-lallipap.jpg",
+    "preview": "audio/pharaoh-lallipap.m4a",
+    "duration": 163
   },
   {
     "id": "n1nt3nd0-lambada",
@@ -283,6 +343,16 @@
     "duration": 207
   },
   {
+    "id": "pharaoh-moy-kayf",
+    "title": "Мой кайф",
+    "artist": "PHARAOH",
+    "album": "PHUNERAL",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-moy-kayf.jpg",
+    "preview": "audio/pharaoh-moy-kayf.m4a",
+    "duration": 162
+  },
+  {
     "id": "jamik-molili-nebesa",
     "title": "Молили небеса",
     "artist": "Jamik",
@@ -313,6 +383,16 @@
     "duration": 243
   },
   {
+    "id": "pharaoh-na-lune",
+    "title": "На Луне",
+    "artist": "PHARAOH",
+    "album": "На Луне",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-na-lune.jpg",
+    "preview": "audio/pharaoh-na-lune.m4a",
+    "duration": 166
+  },
+  {
     "id": "jubilee-na-odin-smysl-menshe",
     "title": "На один смысл меньше",
     "artist": "Jubilee",
@@ -321,6 +401,16 @@
     "artwork": "audio/covers/jubilee-na-odin-smysl-menshe.jpg",
     "preview": "audio/jubilee-na-odin-smysl-menshe.m4a",
     "duration": 256
+  },
+  {
+    "id": "pharaoh-nadeyus-u-tebya-net-allergii-na-klubniku",
+    "title": "Надеюсь у тебя нет аллергии на клубнику",
+    "artist": "PHARAOH",
+    "album": "PHOSPHOR",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-nadeyus-u-tebya-net-allergii-na-klubniku.jpg",
+    "preview": "audio/pharaoh-nadeyus-u-tebya-net-allergii-na-klubniku.m4a",
+    "duration": 136
   },
   {
     "id": "kamill-fo-narod-zadyhalsya-ot-boli",
@@ -343,6 +433,16 @@
     "duration": 130
   },
   {
+    "id": "pharaoh-ne-po-puti",
+    "title": "Не по пути",
+    "artist": "PHARAOH",
+    "album": "Не по пути",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-ne-po-puti.jpg",
+    "preview": "audio/pharaoh-ne-po-puti.m4a",
+    "duration": 157
+  },
+  {
     "id": "maks-korzh-ne-tvoy",
     "title": "Не твой",
     "artist": "Макс Корж",
@@ -351,6 +451,16 @@
     "artwork": "audio/covers/maks-korzh-ne-tvoy.jpg",
     "preview": "audio/maks-korzh-ne-tvoy.m4a",
     "duration": 175
+  },
+  {
+    "id": "pharaoh-lsp-neon",
+    "title": "Неон",
+    "artist": "PHARAOH; ЛСП",
+    "album": "Кондитерская",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-lsp-neon.jpg",
+    "preview": "audio/pharaoh-lsp-neon.m4a",
+    "duration": 233
   },
   {
     "id": "santiz-nimfomanka",
@@ -371,6 +481,16 @@
     "artwork": "audio/covers/whole-lotta-swag-obnyal-potseloval.jpg",
     "preview": "audio/whole-lotta-swag-obnyal-potseloval.m4a",
     "duration": 158
+  },
+  {
+    "id": "pharaoh-odnim-tselym",
+    "title": "Одним целым",
+    "artist": "PHARAOH",
+    "album": "Pink Phloyd",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-odnim-tselym.jpg",
+    "preview": "audio/pharaoh-odnim-tselym.m4a",
+    "duration": 166
   },
   {
     "id": "pyrokinesis-oko",
@@ -413,6 +533,16 @@
     "duration": 217
   },
   {
+    "id": "pharaoh-plombir-bonus",
+    "title": "Пломбир (Bonus)",
+    "artist": "PHARAOH",
+    "album": "PHUNERAL",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-plombir-bonus.jpg",
+    "preview": "audio/pharaoh-plombir-bonus.m4a",
+    "duration": 163
+  },
+  {
     "id": "kriminalnyy-bit-po-state",
     "title": "По статье",
     "artist": "Криминальный бит",
@@ -431,6 +561,26 @@
     "artwork": "audio/covers/mosovich-batrai-polyarnaya-zvezda.jpg",
     "preview": "audio/mosovich-batrai-polyarnaya-zvezda.m4a",
     "duration": 143
+  },
+  {
+    "id": "pharaoh-lsp-pornozvezda",
+    "title": "Порнозвезда",
+    "artist": "PHARAOH; ЛСП",
+    "album": "Кондитерская",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-lsp-pornozvezda.jpg",
+    "preview": "audio/pharaoh-lsp-pornozvezda.m4a",
+    "duration": 275
+  },
+  {
+    "id": "pharaoh-noa-pornozvezda-bonus-track-remix",
+    "title": "Порнозвезда (Bonus Track; Remix)",
+    "artist": "PHARAOH; Noa",
+    "album": "Pink Phloyd",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-noa-pornozvezda-bonus-track-remix.jpg",
+    "preview": "audio/pharaoh-noa-pornozvezda-bonus-track-remix.m4a",
+    "duration": 264
   },
   {
     "id": "jxhnyhell-prizrak",
@@ -836,6 +986,16 @@
     "artistId": "dazzlingbless"
   },
   {
+    "id": "pharaoh-black-siemens",
+    "title": "Black Siemens",
+    "artist": "PHARAOH",
+    "album": "Black Siemens",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-black-siemens.jpg",
+    "preview": "audio/pharaoh-black-siemens.m4a",
+    "duration": 190
+  },
+  {
     "id": "obladaet-blind-zone",
     "title": "BLIND ZONE",
     "artist": "OBLADAET",
@@ -875,6 +1035,16 @@
     "artwork": "audio/covers/big-baby-tape-broke-day-www-muzoff-net.jpg",
     "preview": "audio/big-baby-tape-broke-day-www-muzoff-net.m4a",
     "duration": 246
+  },
+  {
+    "id": "pharaoh-caramel",
+    "title": "Caramel",
+    "artist": "PHARAOH",
+    "album": "Caramel",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-caramel.jpg",
+    "preview": "audio/pharaoh-caramel.m4a",
+    "duration": 159
   },
   {
     "id": "dazzlingbless-censorship-mastering",
@@ -1355,6 +1525,16 @@
     "duration": 171
   },
   {
+    "id": "pharaoh-boulevard-depo-tearz",
+    "title": "Tearz",
+    "artist": "PHARAOH; Boulevard Depo",
+    "album": "Paywall",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-boulevard-depo-tearz.jpg",
+    "preview": "audio/pharaoh-boulevard-depo-tearz.m4a",
+    "duration": 283
+  },
+  {
     "id": "oxxxymiron-the-story-of-alisher",
     "title": "The Story Of Alisher",
     "artist": "Oxxxymiron",
@@ -1388,6 +1568,16 @@
     "duration": 146
   },
   {
+    "id": "pharaoh-white-punk-unplugged-2-love-kills",
+    "title": "Unplugged 2: Love Kills",
+    "artist": "PHARAOH; White Punk",
+    "album": "Unplugged 2: Love Kills",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-white-punk-unplugged-2-love-kills.jpg",
+    "preview": "audio/pharaoh-white-punk-unplugged-2-love-kills.m4a",
+    "duration": 149
+  },
+  {
     "id": "billie-eilish-when-the-partys-over",
     "title": "when the party's over",
     "artist": "Billie Eilish",
@@ -1419,5 +1609,15 @@
     "artwork": "audio/covers/bluefish-4-20-censored.jpg",
     "preview": "audio/bluefish-4-20-censored.m4a",
     "duration": 145
+  },
+  {
+    "id": "pharaoh-boulevard-depo-zatoichi",
+    "title": "Zatoichi",
+    "artist": "PHARAOH; Boulevard Depo",
+    "album": "Paywall",
+    "genre": "rusrap",
+    "artwork": "audio/covers/pharaoh-boulevard-depo-zatoichi.jpg",
+    "preview": "audio/pharaoh-boulevard-depo-zatoichi.m4a",
+    "duration": 196
   }
 ]

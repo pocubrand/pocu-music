@@ -24,6 +24,7 @@ window.PocuSettingsUI = (() => {
       logoutBtn:       document.getElementById('settingsLogoutBtn'),
       changePassBtn:   document.getElementById('settingsChangePassBtn'),
       toggleSmooth:    document.getElementById('settingsToggleSmooth'),
+      toggleSplash:    document.getElementById('settingsToggleSplash'),
       eqBtn:           document.getElementById('settingsEqBtn'),
       prefsBtn:        document.getElementById('settingsPrefsBtn'),
       themePicker:     document.getElementById('settingsThemePicker'),
@@ -56,6 +57,14 @@ window.PocuSettingsUI = (() => {
       const v = els.toggleSmooth.checked;
       window.PocuStore.settings.set('smoothTransitions', v);
       document.body.classList.toggle('no-smooth', !v);
+    });
+
+    els.toggleSplash?.addEventListener('change', () => {
+      const v = els.toggleSplash.checked;
+      window.PocuStore.settings.set('splashEnabled', v);
+      if (!v) document.documentElement.dataset.splash = 'off';
+      else     delete document.documentElement.dataset.splash;
+      showToast(v ? 'Загрузочный экран включён' : 'Загрузочный экран выключен');
     });
 
     els.eqBtn?.addEventListener('click', () => window.PocuEquilizerUI?.open?.());
@@ -222,6 +231,8 @@ window.PocuSettingsUI = (() => {
     const smooth = window.PocuStore.settings.get('smoothTransitions', true);
     if (els.toggleSmooth) els.toggleSmooth.checked = smooth;
     document.body.classList.toggle('no-smooth', !smooth);
+    const splashOn = window.PocuStore.settings.get('splashEnabled', true);
+    if (els.toggleSplash) els.toggleSplash.checked = splashOn;
   }
 
   function compressImage(file) {

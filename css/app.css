@@ -5695,3 +5695,196 @@ body.genre-open .topbar {
   background: rgba(255,255,255,.14);
   transform: scale(.98);
 }
+
+/* ===== SPLASH + WELCOME ===== */
+.splash,
+.welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 30% 20%, #14121e 0%, #08080c 55%, #08080c 100%);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.splash {
+  animation: splashOut .6s ease 1.8s forwards;
+  pointer-events: none;
+}
+.splash.gone { animation: none; opacity: 0; }
+
+@keyframes splashOut {
+  to { opacity: 0; }
+}
+
+.splash-aurora {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 620px;
+  height: 620px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.splash-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  mix-blend-mode: plus-lighter;
+  opacity: 0.75;
+  will-change: transform;
+}
+.splash-blob-1 {
+  width: 300px; height: 300px;
+  background: #7c5cff;
+  top: 30px; left: 40px;
+  animation: splashDrift1 8s ease-in-out infinite alternate;
+}
+.splash-blob-2 {
+  width: 320px; height: 320px;
+  background: #ff409e;
+  top: 220px; left: 240px;
+  animation: splashDrift2 10s ease-in-out infinite alternate;
+}
+.splash-blob-3 {
+  width: 280px; height: 280px;
+  background: #3884ff;
+  top: 260px; left: 60px;
+  animation: splashDrift3 9s ease-in-out infinite alternate;
+}
+
+@keyframes splashDrift1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(40px, -30px) scale(1.1); }
+  100% { transform: translate(-30px, 40px) scale(0.95); }
+}
+@keyframes splashDrift2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-50px, 30px) scale(1.08); }
+  100% { transform: translate(30px, -40px) scale(0.96); }
+}
+@keyframes splashDrift3 {
+  0%   { transform: translate(0, 0) scale(0.95); }
+  50%  { transform: translate(60px, 20px) scale(1.1); }
+  100% { transform: translate(-40px, -20px) scale(1); }
+}
+
+.splash-logo {
+  position: relative;
+  z-index: 1;
+  width: 220px;
+  max-width: 60vw;
+  filter: drop-shadow(0 0 40px rgba(124, 92, 255, 0.6))
+          drop-shadow(0 0 80px rgba(255, 64, 158, 0.35));
+  animation: splashLogoIn .9s cubic-bezier(.22,1.15,.36,1) both;
+}
+
+@keyframes splashLogoIn {
+  from { opacity: 0; transform: scale(.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* --- WELCOME --- */
+.welcome {
+  opacity: 0;
+  transition: opacity .4s ease;
+  pointer-events: none;
+}
+.welcome.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.welcome-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 32px 24px;
+  max-width: 420px;
+  width: 100%;
+}
+
+.welcome-logo {
+  width: 160px;
+  max-width: 50vw;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 0 30px rgba(124, 92, 255, 0.5));
+}
+
+.welcome-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.welcome-sub {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 32px;
+}
+
+.welcome-btn {
+  width: 100%;
+  padding: 15px 24px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  border: 0;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+  font-family: inherit;
+}
+.welcome-btn:active { transform: scale(.98); }
+
+.welcome-btn-primary {
+  background: linear-gradient(135deg, #7c5cff, #ff409e);
+  color: #fff;
+  box-shadow: 0 12px 32px rgba(124, 92, 255, 0.35),
+              0 4px 16px rgba(255, 64, 158, 0.25);
+  margin-bottom: 12px;
+}
+.welcome-btn-primary:hover {
+  box-shadow: 0 16px 40px rgba(124, 92, 255, 0.45),
+              0 6px 20px rgba(255, 64, 158, 0.35);
+}
+
+.welcome-btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.welcome-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Мобилка — чуть компактнее */
+@media (max-width: 480px) {
+  .splash-logo  { width: 180px; }
+  .welcome-logo { width: 130px; }
+  .welcome-title { font-size: 24px; }
+  .welcome-sub   { font-size: 14px; margin-bottom: 24px; }
+  .welcome-btn   { padding: 14px 20px; font-size: 14px; }
+  .splash-aurora { width: 480px; height: 480px; }
+  .splash-blob-1 { width: 220px; height: 220px; }
+  .splash-blob-2 { width: 240px; height: 240px; }
+  .splash-blob-3 { width: 200px; height: 200px; }
+}
+
+/* ===== SPLASH toggle: скрываем до первого рендера, если выключено ===== */
+[data-splash="off"] .splash,
+[data-splash="off"] .welcome {
+  display: none !important;
+}

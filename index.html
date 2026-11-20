@@ -29,6 +29,12 @@
     document.documentElement.dataset.theme = resolved;
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.content = resolved === 'light' ? '#f2f2f5' : '#08080c';
+
+    // Splash: если явно выключен — скрываем сразу, до первого рендера
+    const splashSetting = st.settings && 'splashEnabled' in st.settings
+      ? st.settings.splashEnabled
+      : true;
+    if (!splashSetting) document.documentElement.dataset.splash = 'off';
   } catch (_) {}
 })();
 </script>
@@ -41,6 +47,35 @@
 </head>
 
 <body>
+
+<div class="splash" id="splashScreen" aria-hidden="true">
+  <div class="splash-aurora">
+    <div class="splash-blob splash-blob-1"></div>
+    <div class="splash-blob splash-blob-2"></div>
+    <div class="splash-blob splash-blob-3"></div>
+  </div>
+  <img class="splash-logo" src="icons/logo-full.png" alt="Pocu Music">
+</div>
+
+<div class="welcome" id="welcomeScreen" hidden>
+  <div class="splash-aurora">
+    <div class="splash-blob splash-blob-1"></div>
+    <div class="splash-blob splash-blob-2"></div>
+    <div class="splash-blob splash-blob-3"></div>
+  </div>
+  <div class="welcome-content">
+    <img class="welcome-logo" src="icons/logo-full.png" alt="Pocu Music">
+    <h1 class="welcome-title">Добро пожаловать</h1>
+    <p class="welcome-sub">Музыка всегда с тобой</p>
+    <button class="welcome-btn welcome-btn-primary" id="welcomeLoginBtn" type="button">
+      Войти или зарегистрироваться
+    </button>
+    <button class="welcome-btn welcome-btn-ghost" id="welcomeGuestBtn" type="button">
+      Зайти как гость
+    </button>
+  </div>
+</div>
+
 <div class="bg"></div>
 
 <header class="topbar">
@@ -323,6 +358,10 @@
       <label class="settings-btn settings-toggle-row">
         <span>Плавная анимация</span>
         <input type="checkbox" id="settingsToggleSmooth" class="settings-toggle">
+      </label>
+      <label class="settings-btn settings-toggle-row">
+        <span>Загрузочный экран</span>
+        <input type="checkbox" id="settingsToggleSplash" class="settings-toggle">
       </label>
       <button class="settings-btn" id="settingsEqBtn">Эквалайзер</button>
       <button class="settings-btn" id="settingsPrefsBtn">Уточнить предпочтения</button>
@@ -651,6 +690,7 @@
 <script src="js/genre-ui.js"></script>
 <script src="js/eq-ui.js"></script>
 <script src="js/preferences-ui.js"></script>
+<script src="js/splash.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
