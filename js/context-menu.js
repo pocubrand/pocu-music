@@ -402,17 +402,34 @@ window.PocuContextMenu = (() => {
     });
 
     $submenu.querySelector('[data-action="create-new"]')?.addEventListener('click', () => {
-      const name = prompt('Название плейлиста:');
-      if (name && name.trim()) {
-        const pl = window.PocuStore.playlists.create(name.trim());
-        window.PocuSupabase?.syncPlaylistCreate?.(pl);
-        if (activeTrack) {
-          window.PocuStore.playlists.addTrack(pl.id, activeTrack.id);
-          window.PocuSupabase?.syncPlaylistTrackAdd?.(pl.id, activeTrack.id);
-          showToast('Плейлист создан');
+      const track = activeTrack;
+      if (!track) { closeAll(); return; }
+
+      const trackName = (track.title || 'Новый плейлист').trim();
+      const existing = window.PocuStore.playlists.all().find(p => p.name === trackName);
+
+      let pl;
+      if (existing) {
+        // Плейлист с таким названием уже есть — добавляем трек в него
+        pl = existing;
+        if (!pl.trackIds.includes(track.id)) {
+          window.PocuStore.playlists.addTrack(pl.id, track.id);
+          window.PocuSupabase?.syncPlaylistTrackAdd?.(pl.id, track.id);
         }
+      } else {
+        // Создаём новый плейлист с названием трека и сразу кладём туда трек
+        pl = window.PocuStore.playlists.create(trackName);
+        window.PocuSupabase?.syncPlaylistCreate?.(pl);
+        window.PocuStore.playlists.addTrack(pl.id, track.id);
+        window.PocuSupabase?.syncPlaylistTrackAdd?.(pl.id, track.id);
       }
+
       closeAll();
+
+      // Даём меню закрыться и открываем страницу плейлиста
+      requestAnimationFrame(() => {
+        window.PocuPlaylistsUI?.openPlaylistScreen?.(pl.id);
+      });
     });
   }
 
