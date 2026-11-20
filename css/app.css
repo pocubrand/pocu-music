@@ -5955,3 +5955,45 @@ body.genre-open .topbar {
   color: rgba(255,255,255,.85);
   border-color: rgba(255,255,255,.12);
 }
+
+/* ===== WELCOME form-mode: header наверх, форма снизу ===== */
+.welcome.form-mode {
+  align-items: flex-start;
+  padding-top: 8vh;
+}
+.welcome.form-mode .welcome-content {
+  padding: 0 24px;
+}
+.welcome.form-mode .welcome-logo {
+  width: 120px;
+  margin-bottom: 16px;
+}
+.welcome.form-mode .welcome-title {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+.welcome.form-mode .welcome-sub {
+  font-size: 13px;
+  margin-bottom: 0;
+}
+
+/* Форма прилипает к низу экрана */
+.sheet-overlay#sheet-auth.welcome-mode {
+  align-items: flex-end;
+  padding: 0 24px calc(24px + env(safe-area-inset-bottom));
+}
+
+/* На маленьких экранах — ужимаем ещё сильнее */
+@media (max-width: 480px) {
+  .welcome.form-mode { padding-top: 4vh; }
+  .welcome.form-mode .welcome-logo { width: 90px; margin-bottom: 10px; }
+  .welcome.form-mode .welcome-title { font-size: 20px; }
+  .welcome.form-mode .welcome-sub { display: none; }
+  .sheet-overlay#sheet-auth.welcome-mode {
+    padding: 0 20px calc(20px + env(safe-area-inset-bottom));
+  }
+  .sheet-overlay#sheet-auth.welcome-mode .sheet-panel {
+    max-height: calc(100vh - 180px);
+    overflow-y: auto;
+  }
+}

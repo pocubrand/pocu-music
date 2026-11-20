@@ -90,7 +90,7 @@ window.PocuSplash = (() => {
   function closeWelcome() {
     const el = document.getElementById('welcomeScreen');
     if (!el) return;
-    el.classList.remove('visible');
+    el.classList.remove('visible', 'form-mode');
     setTimeout(() => { el.hidden = true; }, 450);
   }
 
@@ -104,33 +104,38 @@ window.PocuSplash = (() => {
 
   function bindButtons() {
     const guestBtn = document.getElementById('welcomeGuestBtn');
-    if (guestBtn) {
-      guestBtn.addEventListener('click', () => {
-        setGuest();
-        closeWelcome();
-      });
-    }
-
     const loginBtn = document.getElementById('welcomeLoginBtn');
-    if (loginBtn) {
-      loginBtn.addEventListener('click', () => {
-        const sheet = document.getElementById('sheet-auth');
-        if (!sheet) return;
-        // Прячем кнопки welcome — на их месте появится форма
-        document.querySelectorAll('.welcome-btn').forEach(b => b.style.display = 'none');
-        sheet.classList.add('welcome-mode');
-        sheet.classList.add('open');
-      });
+    const welcomeEl = document.getElementById('welcomeScreen');
+    const sheet = document.getElementById('sheet-auth');
+
+    function enterFormMode() {
+      if (!welcomeEl || !sheet) return;
+      welcomeEl.classList.add('form-mode');
+      document.querySelectorAll('.welcome-btn').forEach(b => b.style.display = 'none');
+      sheet.classList.add('welcome-mode');
+      sheet.classList.add('open');
     }
 
-    // При любом закрытии sheet-auth (Отмена, backdrop, submit) —
-    // возвращаем кнопки welcome и убираем welcome-mode
-    const sheet = document.getElementById('sheet-auth');
+    function exitFormMode() {
+      if (!welcomeEl || !sheet) return;
+      welcomeEl.classList.remove('form-mode');
+      document.querySelectorAll('.welcome-btn').forEach(b => b.style.display = '');
+      sheet.classList.remove('welcome-mode');
+    }
+
+    guestBtn?.addEventListener('click', () => {
+      setGuest();
+      closeWelcome();
+    });
+
+    loginBtn?.addEventListener('click', enterFormMode);
+
+    // При любом закрытии sheet-auth (Отмена / успешный вход / backdrop)
+    // — возвращаем кнопки и выходим из form-mode
     if (sheet) {
       const observer = new MutationObserver(() => {
         if (sheet.classList.contains('welcome-mode') && !sheet.classList.contains('open')) {
-          sheet.classList.remove('welcome-mode');
-          document.querySelectorAll('.welcome-btn').forEach(b => b.style.display = '');
+          exitFormMode();
         }
       });
       observer.observe(sheet, { attributes: true, attributeFilter: ['class'] });
