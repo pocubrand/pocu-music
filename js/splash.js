@@ -40,9 +40,15 @@ window.PocuSplash = (() => {
     authResolved = true;
     currentUser = (e.detail && e.detail.user) || null;
 
-    // Если пользователь залогинился — сбрасываем флаг гостя
     if (currentUser) {
       try { localStorage.removeItem(GUEST_KEY); } catch {}
+      // Успешный вход: закрываем welcome и убираем режим welcome-mode у sheet-auth
+      closeWelcome();
+      const sheet = document.getElementById('sheet-auth');
+      if (sheet) {
+        sheet.classList.remove('welcome-mode');
+        sheet.classList.remove('open');
+      }
     }
     maybeShowWelcome();
   }
@@ -108,11 +114,26 @@ window.PocuSplash = (() => {
     const loginBtn = document.getElementById('welcomeLoginBtn');
     if (loginBtn) {
       loginBtn.addEventListener('click', () => {
-        closeWelcome();
-        // Открываем существующий sheet-auth (в нём уже логика из auth-ui.js)
         const sheet = document.getElementById('sheet-auth');
-        if (sheet) sheet.classList.add('open');
+        if (!sheet) return;
+        // Прячем кнопки welcome — на их месте появится форма
+        document.querySelectorAll('.welcome-btn').forEach(b => b.style.display = 'none');
+        sheet.classList.add('welcome-mode');
+        sheet.classList.add('open');
       });
+    }
+
+    // При любом закрытии sheet-auth (Отмена, backdrop, submit) —
+    // возвращаем кнопки welcome и убираем welcome-mode
+    const sheet = document.getElementById('sheet-auth');
+    if (sheet) {
+      const observer = new MutationObserver(() => {
+        if (sheet.classList.contains('welcome-mode') && !sheet.classList.contains('open')) {
+          sheet.classList.remove('welcome-mode');
+          document.querySelectorAll('.welcome-btn').forEach(b => b.style.display = '');
+        }
+      });
+      observer.observe(sheet, { attributes: true, attributeFilter: ['class'] });
     }
   }
 

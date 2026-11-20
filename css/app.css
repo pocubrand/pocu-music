@@ -5779,7 +5779,10 @@ body.genre-open .topbar {
   z-index: 1;
   width: 220px;
   max-width: 60vw;
-  filter: drop-shadow(0 0 40px rgba(124, 92, 255, 0.6))
+  /* brightness(0) + invert(1) = чистый белый силуэт.
+     drop-shadow-ы накладываются сверху — цветное свечение сохраняется. */
+  filter: brightness(0) invert(1)
+          drop-shadow(0 0 40px rgba(124, 92, 255, 0.6))
           drop-shadow(0 0 80px rgba(255, 64, 158, 0.35));
   animation: splashLogoIn .9s cubic-bezier(.22,1.15,.36,1) both;
 }
@@ -5887,4 +5890,68 @@ body.genre-open .topbar {
 [data-splash="off"] .splash,
 [data-splash="off"] .welcome {
   display: none !important;
+}
+
+/* ===== AUTH sheet в режиме welcome: форма "встроена" в загрузочный экран ===== */
+.sheet-overlay#sheet-auth.welcome-mode {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  z-index: 9100;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.sheet-overlay#sheet-auth.welcome-mode .sheet-panel {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  border: none;
+  max-width: 400px;
+  width: 100%;
+  color: #fff;
+  animation: none !important;
+  transform: none !important;
+  padding: 0;
+}
+.sheet-overlay#sheet-auth.welcome-mode .sheet-header {
+  padding: 0 0 16px;
+}
+.sheet-overlay#sheet-auth.welcome-mode .sheet-header h2 {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+.sheet-overlay#sheet-auth.welcome-mode .sheet-body {
+  padding: 0;
+}
+.sheet-overlay#sheet-auth.welcome-mode input {
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+}
+.sheet-overlay#sheet-auth.welcome-mode input::placeholder {
+  color: rgba(255,255,255,.45) !important;
+}
+.sheet-overlay#sheet-auth.welcome-mode .auth-switch {
+  color: rgba(255,255,255,.6);
+}
+.sheet-overlay#sheet-auth.welcome-mode .auth-switch button {
+  color: #7c5cff;
+}
+.sheet-overlay#sheet-auth.welcome-mode .auth-forgot-btn {
+  color: rgba(255,255,255,.55);
+}
+.sheet-overlay#sheet-auth.welcome-mode .sheet-actions {
+  padding: 16px 0 0;
+  gap: 10px;
+}
+.sheet-overlay#sheet-auth.welcome-mode .btn-secondary {
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.85);
+  border-color: rgba(255,255,255,.12);
 }
