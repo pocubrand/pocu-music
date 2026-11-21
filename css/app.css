@@ -6310,15 +6310,14 @@ img:not([src]) {
     display: grid;
     grid-template-columns: 300px 1fr;
     grid-template-rows: auto;
-    align-items: end;
+    align-items: start;          /* было end — мета начинается с обложкой */
     text-align: left;
-    column-gap: 40px;
+    column-gap: 56px;            /* было 40px — чуть отодвинули */
     row-gap: 0;
-    padding-top: 90px;      /* воздух над hero */
+    padding-top: 90px;
     margin-bottom: 48px;
   }
   .entity-back {
-    /* back остаётся в потоке скролла, но absolute внутри header */
     position: absolute;
     top: 0;
     left: 0;
@@ -6336,7 +6335,8 @@ img:not([src]) {
   .entity-meta {
     grid-column: 2;
     grid-row: 1;
-    padding-bottom: 4px;
+    padding-top: 4px;            /* лёгкий сдвиг, чтобы не липнуть к верху */
+    padding-bottom: 0;
   }
   .entity-type { font-size: 12px; margin-bottom: 10px; }
   .entity-title { font-size: 42px; margin-bottom: 12px; }
@@ -6360,7 +6360,9 @@ img:not([src]) {
   }
 
   .entity-tracks {
-    max-width: 1200px;
+    /* без max-width — список тянется до правого края контента */
+    display: flex;
+    flex-direction: column;
     gap: 10px;
   }
 }
