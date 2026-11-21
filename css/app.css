@@ -6291,8 +6291,9 @@ img:not([src]) {
   /* Фикс: контент оверлеев не должен уезжать под сайдбар */
   .track-overlay-inner,
   .album-overlay-inner,
-  .playlist-overlay-inner {
-    max-width: none;
+  .playlist-overlay-inner,
+  .artist-overlay-inner {              /* ← Добавили сюда */
+    max-width: none;                   /* Растягиваем на всю ширину */
     margin: 0;
     padding-left: 300px;
     padding-right: 40px;
@@ -6300,9 +6301,11 @@ img:not([src]) {
     padding-bottom: calc(140px + env(safe-area-inset-bottom));
     transition: padding-left .25s ease-out;
   }
+  
   body.sidebar-collapsed .track-overlay-inner,
   body.sidebar-collapsed .album-overlay-inner,
-  body.sidebar-collapsed .playlist-overlay-inner {
+  body.sidebar-collapsed .playlist-overlay-inner,
+  body.sidebar-collapsed .artist-overlay-inner {   /* ← И сюда */
     padding-left: 116px;
   }
 
