@@ -6163,30 +6163,30 @@ img:not([src]) {
    ENTITY PAGES v1 — единый шаблон для трека / альбома / плейлиста
    ================================================================ */
 
-/* ---- Базово (мобилка): центрированная колонка ---- */
-.entity-page {
-  /* ничего, работает из родителя */
-}
-
+/* ---- Мобилка: центрированная колонка, воздух сверху ---- */
 .entity-header {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  padding-top: 56px;       /* воздух над hero; back вынесен выше */
 }
 
 .entity-back {
-  align-self: flex-start;
-  margin-bottom: 12px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
 }
 
 .entity-cover-wrap {
-  width: min(72vw, 280px);
-  height: min(72vw, 280px);
+  width: min(78vw, 300px);
+  height: min(78vw, 300px);
   border-radius: 22px;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
   background: linear-gradient(135deg,
     rgba(124,92,255,.55),
     rgba(255,64,158,.34) 55%,
@@ -6211,49 +6211,51 @@ img:not([src]) {
 }
 
 .entity-type {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .entity-title {
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 700;
   letter-spacing: -.03em;
-  line-height: 1.15;
-  margin: 0 0 8px;
+  line-height: 1.12;
+  margin: 0 0 10px;
   color: var(--text);
   word-break: break-word;
 }
 
 .entity-sub {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text-dim);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   line-height: 1.4;
 }
 
 .entity-info {
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--text-dim);
-  opacity: .8;
-  margin-bottom: 18px;
+  opacity: .85;
+  margin-bottom: 22px;
   line-height: 1.5;
 }
 
 .entity-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
   align-items: center;
 }
 .entity-actions .btn {
   flex: 1 1 auto;
   min-width: 120px;
+  padding: 13px 22px;
+  font-size: 15px;
 }
 
 .entity-menu {
@@ -6294,7 +6296,7 @@ img:not([src]) {
     margin: 0;
     padding-left: 300px;
     padding-right: 40px;
-    padding-top: calc(env(safe-area-inset-top) + 32px);
+    padding-top: calc(env(safe-area-inset-top) + 24px);
     padding-bottom: calc(140px + env(safe-area-inset-bottom));
     transition: padding-left .25s ease-out;
   }
@@ -6306,48 +6308,59 @@ img:not([src]) {
 
   .entity-header {
     display: grid;
-    grid-template-columns: 232px 1fr;
-    grid-template-rows: auto auto;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: auto;
     align-items: end;
     text-align: left;
-    column-gap: 32px;
+    column-gap: 40px;
     row-gap: 0;
-    margin-bottom: 40px;
+    padding-top: 90px;      /* воздух над hero */
+    margin-bottom: 48px;
   }
   .entity-back {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    align-self: start;
-    justify-self: start;
-    margin-bottom: 16px;
+    /* back остаётся в потоке скролла, но absolute внутри header */
+    position: absolute;
+    top: 0;
+    left: 0;
+    align-self: auto;
+    justify-self: auto;
   }
   .entity-cover-wrap {
     grid-column: 1;
-    grid-row: 2;
-    width: 232px;
-    height: 232px;
+    grid-row: 1;
+    width: 300px;
+    height: 300px;
     margin-bottom: 0;
-    border-radius: 16px;
+    border-radius: 18px;
   }
   .entity-meta {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
     padding-bottom: 4px;
   }
-  .entity-title { font-size: 34px; margin-bottom: 10px; }
-  .entity-sub   { font-size: 16px; margin-bottom: 6px; }
-  .entity-info  { font-size: 13.5px; margin-bottom: 22px; }
+  .entity-type { font-size: 12px; margin-bottom: 10px; }
+  .entity-title { font-size: 42px; margin-bottom: 12px; }
+  .entity-sub   { font-size: 18px; margin-bottom: 8px; }
+  .entity-info  { font-size: 14px; margin-bottom: 28px; }
 
   .entity-actions {
     justify-content: flex-start;
     flex-wrap: wrap;
+    gap: 12px;
   }
   .entity-actions .btn {
     flex: 0 0 auto;
-    min-width: 140px;
+    min-width: 150px;
+    padding: 14px 26px;
+    font-size: 16px;
+  }
+  .entity-menu {
+    width: 52px;
+    height: 52px;
   }
 
   .entity-tracks {
     max-width: 1200px;
+    gap: 10px;
   }
 }

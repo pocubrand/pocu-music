@@ -3,6 +3,7 @@ window.PocuTrackUI = (() => {
   let els = {};
   let initialized = false;
   let currentTrackId = null;
+  let currentTracks = [];      // треки, отрисованные в списке
 
   function init() {
     if (initialized) return;
@@ -15,7 +16,8 @@ window.PocuTrackUI = (() => {
       title:   document.getElementById('trackPageTitle'),
       artist:  document.getElementById('trackPageArtist'),
       info:    document.getElementById('trackPageInfo'),
-      actions: document.getElementById('trackPageActions')
+      actions: document.getElementById('trackPageActions'),
+      tracks:  document.getElementById('trackPageTracks')
     };
 
     if (!els.screen) return;
@@ -26,12 +28,16 @@ window.PocuTrackUI = (() => {
       if (e.key === 'Escape' && currentTrackId) close();
     });
 
-    window.PocuPlayer.subscribe(() => {
-      if (currentTrackId) updatePlayButton();
+    window.PocuPlayer.subscribe(state => {
+      if (!currentTrackId) return;
+      if (els.tracks) PocuTrackCard.syncPlaying(els.tracks, state);
+      updatePlayButton();
     });
 
-    window.PocuStore.subscribe(() => {
-      if (currentTrackId) updatePlayButton();
+    window.PocuStore.subscribe(state => {
+      if (!currentTrackId) return;
+      if (els.tracks) PocuTrackCard.syncHearts(els.tracks, state.favorites);
+      updatePlayButton();
     });
   }
 
@@ -79,6 +85,7 @@ window.PocuTrackUI = (() => {
     });
 
     renderActions(track);
+    renderTracks(track);
 
     window.PocuLayers?.front?.(els.screen);
 
@@ -91,6 +98,7 @@ window.PocuTrackUI = (() => {
   function close() {
     if (!els.screen) return;
     currentTrackId = null;
+    currentTracks = [];
     window.PocuRouter?.clearHash?.();
     window.PocuLayers?.reset?.(els.screen);
     els.screen.classList.remove('open');
@@ -160,6 +168,36 @@ window.PocuTrackUI = (() => {
     });
 
     updatePlayButton();
+  }
+
+  function renderTracks(track) {
+    if (!els.tracks) return;
+    els.tracks.replaceChildren();
+
+    /* Логика: если у трека есть альбом с несколькими треками — показываем альбом.
+       Иначе — только сам трек одной строкой (как в Яндекс.Музыке для сингла). */
+    let list = [];
+    if (track.album) {
+      const albumTracks = window.PocuLibrary.tracksForAlbum?.(track.artist, track.album) || [];
+      if (albumTracks.length > 1) list = albumTracks;
+    }
+    if (!list.length) list = [track];
+    if (!list.find(t => t.id === track.id)) list.unshift(track);
+
+    currentTracks = list;
+
+    const frag = document.createDocumentFragment();
+    list.forEach((t, i) => {
+      frag.appendChild(PocuTrackCard.create(t, {
+        index: i,
+        disableOpen: true,
+        onPlay: () => window.PocuPlayer.playQueue(list, i)
+      }));
+    });
+    els.tracks.appendChild(frag);
+
+    PocuTrackCard.syncPlaying(els.tracks, window.PocuPlayer.getState());
+    PocuTrackCard.syncHearts(els.tracks, window.PocuStore.favorites.all());
   }
 
   function updatePlayButton() {
