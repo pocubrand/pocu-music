@@ -58,8 +58,10 @@ window.PocuTrackUI = (() => {
       els.art.removeAttribute('src');
     }
 
-    /* метаданные: кликабельный альбом · жанр · длительность */
+    /* метаданные: кликабельный альбом • жанр • длительность */
     els.info.replaceChildren();
+    const parts = [];
+
     if (track.album) {
       const albumLink = document.createElement('span');
       albumLink.className = 'track-page-album';
@@ -67,16 +69,19 @@ window.PocuTrackUI = (() => {
       albumLink.addEventListener('click', () => {
         window.PocuAlbumUI?.open?.(track.artist, track.album);
       });
-      els.info.appendChild(albumLink);
+      parts.push(albumLink);
     }
-    if (track.genre) {
-      if (els.info.children.length) els.info.appendChild(document.createTextNode(' · '));
-      els.info.appendChild(document.createTextNode(track.genre));
-    }
-    if (track.duration) {
-      if (els.info.children.length) els.info.appendChild(document.createTextNode(' · '));
-      els.info.appendChild(document.createTextNode(formatDuration(track.duration)));
-    }
+    if (track.genre) parts.push(track.genre);
+    if (track.duration) parts.push(formatDuration(track.duration));
+
+    parts.forEach((part, i) => {
+      if (i > 0) els.info.appendChild(document.createTextNode(' • '));
+      if (typeof part === 'string') {
+        els.info.appendChild(document.createTextNode(part));
+      } else {
+        els.info.appendChild(part);
+      }
+    });
 
     renderActions(track);
     renderSimilar(track);
