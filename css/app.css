@@ -6335,15 +6335,20 @@ img:not([src]) {
   .entity-meta {
     grid-column: 2;
     grid-row: 1;
-    padding-top: 4px;            /* лёгкий сдвиг, чтобы не липнуть к верху */
-    padding-bottom: 0;
+    align-self: stretch;         /* растягиваем на всю высоту обложки */
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;           /* = высота обложки */
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
   .entity-type { font-size: 12px; margin-bottom: 10px; }
   .entity-title { font-size: 42px; margin-bottom: 12px; }
   .entity-sub   { font-size: 18px; margin-bottom: 8px; }
-  .entity-info  { font-size: 14px; margin-bottom: 28px; }
+  .entity-info  { font-size: 14px; margin-bottom: 0; }   /* убираем нижний отступ, его заменяет margin-top:auto у кнопок */
 
   .entity-actions {
+    margin-top: auto;            /* ← прижимает кнопки к нижнему краю обложки */
     justify-content: flex-start;
     flex-wrap: wrap;
     gap: 12px;
