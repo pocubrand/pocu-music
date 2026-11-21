@@ -6533,3 +6533,146 @@ img:not([src]) {
   line-height: 1.5;
   font-family: inherit;
 }
+
+/* =========================================================
+   ARTIST ENTITY PAGE
+   ========================================================= */
+
+/* Общий контейнер */
+.artist-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 32px;
+  padding-top: 56px;
+}
+
+/* Фото артиста */
+.artist-photo-wrap {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.5);
+  flex: none;
+}
+.artist-photo {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Мета */
+.artist-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.artist-meta .entity-title {
+  font-size: 32px;
+  margin: 0 0 8px;
+}
+.artist-meta .entity-info {
+  margin-bottom: 20px;
+}
+.artist-meta .entity-actions {
+  justify-content: center;
+}
+
+/* Сетка контента */
+.artist-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+/* Карточка нового релиза */
+.new-release-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,.03);
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid var(--glass-brd);
+  cursor: pointer;
+  transition: background .2s;
+}
+.new-release-card:hover {
+  background: rgba(255,255,255,.06);
+}
+.new-release-cover {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 16px;
+  background-color: rgba(255,255,255,.05);
+}
+.new-release-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.new-release-sub {
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+/* Дискография */
+.artist-discography {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ПК версия */
+@media (min-width: 900px) {
+  .artist-header {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    align-items: end;
+    text-align: left;
+    gap: 40px;
+    padding-top: 90px;
+    margin-bottom: 48px;
+  }
+  .artist-photo-wrap {
+    width: 240px;
+    height: 240px;
+    margin-bottom: 0;
+  }
+  .artist-meta {
+    align-items: flex-start;
+    padding-bottom: 10px;
+  }
+  .artist-meta .entity-title {
+    font-size: 56px;
+    letter-spacing: -.03em;
+  }
+  .artist-meta .entity-actions {
+    justify-content: flex-start;
+  }
+
+  .artist-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 48px;
+    align-items: start;
+  }
+  
+  .artist-show-all {
+    margin-top: 20px;
+  }
+}
