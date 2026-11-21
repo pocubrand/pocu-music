@@ -6373,10 +6373,10 @@ img:not([src]) {
 }
 
 /* =========================================================
-   PLAYLIST ENTITY — inline edit affordances (v2)
+   PLAYLIST ENTITY — inline edit affordances (v3)
    ========================================================= */
 
-/* Обложка — фикс «большого» фона и кликабельности */
+/* Обложка — фикс размера фона + кликабельность */
 .entity-cover:not(img) {
   display: flex;
   align-items: center;
@@ -6391,7 +6391,7 @@ img:not([src]) {
   user-select: none;
 }
 
-/* Карандаш на обложке (правый верхний угол) */
+/* Карандаш на обложке */
 .cover-edit-btn {
   position: absolute;
   top: 10px;
@@ -6428,13 +6428,13 @@ img:not([src]) {
   color: var(--text-dim);
   cursor: pointer;
   vertical-align: middle;
-  transition: background .2s, color .2s, transform .25s var(--spring);
   flex: none;
+  transition: background .2s, color .2s, transform .25s var(--spring);
 }
 .inline-edit-btn:hover  { background: rgba(255,255,255,.08); color: var(--text); }
 .inline-edit-btn:active { transform: scale(.9); }
 
-/* Заголовок плейлиста — flex, чтобы карандаш был рядом с текстом */
+/* Заголовок плейлиста — flex, чтобы карандаш и input корректно уживались */
 #playlistTitle {
   display: flex;
   align-items: center;
@@ -6462,4 +6462,36 @@ img:not([src]) {
   color: var(--text-dim);
   opacity: .65;
   font-style: italic;
+}
+
+/* === Инлайн-инпуты === */
+.inline-edit-input {
+  font: inherit;
+  color: var(--text);
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--glass-brd, rgba(255,255,255,.18));
+  border-radius: 12px;
+  padding: 6px 12px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.inline-edit-input:focus {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px rgba(124,92,255,.22);
+  background: rgba(255,255,255,.09);
+}
+.inline-edit-input--title {
+  flex: 1 1 100%;
+  width: 100%;
+  min-width: 0;
+}
+.inline-edit-input--desc {
+  flex: 1 1 100%;
+  width: 100%;
+  min-width: 0;
+  min-height: 72px;
+  resize: none;
+  line-height: 1.5;
+  font-family: inherit;
 }
