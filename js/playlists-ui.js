@@ -312,8 +312,8 @@ window.PocuPlaylistsUI = (() => {
       els.author.style.display = 'none';
       els.info.innerHTML = '<div class="shimmer" style="height:14px;width:60%"></div>';
       els.desc.style.display = 'none';
-      els.cover.style.backgroundImage = '';
       els.cover.style.background = '';
+      els.cover.style.backgroundImage = '';
       els.cover.textContent = '';
       els.coverEdit.style.display = 'none';
       els.titleEdit.style.display = 'none';
@@ -332,8 +332,8 @@ window.PocuPlaylistsUI = (() => {
         ? 'Возможно, он был удалён или стал приватным'
         : 'Публичные плейлисты недоступны офлайн';
       els.desc.style.display = 'none';
-      els.cover.style.backgroundImage = '';
       els.cover.style.background = '';
+      els.cover.style.backgroundImage = '';
       els.cover.textContent = '?';
       els.coverEdit.style.display = 'none';
       els.titleEdit.style.display = 'none';
@@ -353,12 +353,12 @@ window.PocuPlaylistsUI = (() => {
       if (first?.artwork) coverSrc = first.artwork;
     }
     if (coverSrc) {
-      els.cover.style.backgroundImage = `url("${coverSrc}")`;
       els.cover.style.background = '';
+      els.cover.style.backgroundImage = `url("${coverSrc}")`;
       els.cover.textContent = '';
     } else {
-      els.cover.style.backgroundImage = '';
-      els.cover.style.background = 'linear-gradient(135deg, #7c5cff, #ff409e)';
+      els.cover.style.background = '';
+      els.cover.style.backgroundImage = 'linear-gradient(135deg, #7c5cff, #ff409e)';
       els.cover.textContent = (pl.name || '?').slice(0, 1).toUpperCase();
     }
 
@@ -579,7 +579,6 @@ window.PocuPlaylistsUI = (() => {
     els.desc.appendChild(ta);
     requestAnimationFrame(() => {
       ta.focus();
-      autosizeTextarea(ta);
       ta.setSelectionRange(ta.value.length, ta.value.length);
     });
 
@@ -599,7 +598,6 @@ window.PocuPlaylistsUI = (() => {
       if (current && current.id === id) renderScreen();
     };
 
-    ta.addEventListener('input', () => autosizeTextarea(ta));
     ta.addEventListener('keydown', e => {
       if (e.key === 'Escape') { e.preventDefault(); finish(false); return; }
       if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
@@ -608,11 +606,6 @@ window.PocuPlaylistsUI = (() => {
       }
     });
     ta.addEventListener('blur', () => finish(true));
-  }
-
-  function autosizeTextarea(ta) {
-    ta.style.height = 'auto';
-    ta.style.height = Math.max(72, ta.scrollHeight) + 'px';
   }
 
   /* ============ Публичность ============ */

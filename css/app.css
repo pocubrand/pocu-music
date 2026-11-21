@@ -6376,7 +6376,7 @@ img:not([src]) {
    PLAYLIST ENTITY — inline edit affordances (v3)
    ========================================================= */
 
-/* Обложка — фикс размера фона + кликабельность */
+/* Обложка — фикс «большого» фона и кликабельности */
 .entity-cover:not(img) {
   display: flex;
   align-items: center;
@@ -6391,7 +6391,7 @@ img:not([src]) {
   user-select: none;
 }
 
-/* Карандаш на обложке */
+/* Карандаш на обложке (правый верхний угол) */
 .cover-edit-btn {
   position: absolute;
   top: 10px;
@@ -6490,7 +6490,9 @@ img:not([src]) {
   flex: 1 1 100%;
   width: 100%;
   min-width: 0;
-  min-height: 72px;
+  min-height: 96px;
+  max-height: 180px;     /* ← не даёт раздуваться */
+  overflow-y: auto;      /* ← внутренний скролл при переполнении */
   resize: none;
   line-height: 1.5;
   font-family: inherit;
