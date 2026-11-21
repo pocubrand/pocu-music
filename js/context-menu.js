@@ -202,7 +202,7 @@ window.PocuContextMenu = (() => {
     $reportSheet?.classList.remove('open');
   }
 
-  function open(track, x, y) {
+  function open(track, x, y, options = {}) {
     activeTrack = track;
     closeSubmenu();
 
@@ -255,6 +255,14 @@ window.PocuContextMenu = (() => {
         <span class="context-label">Сообщить о проблеме</span>
       </button>
     `;
+
+    /* Фильтр скрытых пунктов (опция hidden) */
+    const hiddenSet = new Set(options.hidden || []);
+    if (hiddenSet.size) {
+      $menu.querySelectorAll('[data-action]').forEach(el => {
+        if (hiddenSet.has(el.dataset.action)) el.remove();
+      });
+    }
 
     $menu.querySelectorAll('[data-action]').forEach(btn => {
       btn.addEventListener('click', () => handleAction(btn.dataset.action, track, btn));
@@ -536,7 +544,7 @@ window.PocuContextMenu = (() => {
   return {
     init,
     close: closeAll,
-    openAt: (track, x, y) => open(track, x, y),
+    openAt: (track, x, y, options) => open(track, x, y, options),
     isSuppressingClick: () => suppressTileClick
   };
 })();

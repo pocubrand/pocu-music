@@ -484,21 +484,22 @@
   </section>
 
   <section class="track-overlay" id="trackScreen" aria-hidden="true">
-    <div class="track-overlay-inner">
-      <button class="back-btn" id="trackBackBtn" aria-label="Назад">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        <span>Назад</span>
-      </button>
-      <div class="track-page-art-wrap"><img class="track-page-art" id="trackPageArt" alt=""></div>
-      <div class="track-page-meta">
-        <h1 class="track-page-title" id="trackPageTitle">—</h1>
-        <div class="track-page-artist" id="trackPageArtist">—</div>
-        <div class="track-page-info" id="trackPageInfo"></div>
-      </div>
-      <div class="track-page-actions" id="trackPageActions"></div>
-      <div id="trackSimilar" hidden>
-        <div class="section-head"><h2>Похожие треки</h2></div>
-        <div id="trackSimilarList" class="results"></div>
+    <div class="track-overlay-inner entity-page">
+      <div class="entity-header">
+        <button class="back-btn entity-back" id="trackBackBtn" aria-label="Назад">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          <span>Назад</span>
+        </button>
+        <div class="entity-cover-wrap">
+          <img class="entity-cover" id="trackPageArt" alt="">
+        </div>
+        <div class="entity-meta">
+          <div class="entity-type">Трек</div>
+          <h1 class="entity-title" id="trackPageTitle">—</h1>
+          <div class="entity-sub" id="trackPageArtist">—</div>
+          <div class="entity-info" id="trackPageInfo"></div>
+          <div class="entity-actions" id="trackPageActions"></div>
+        </div>
       </div>
     </div>
   </section>

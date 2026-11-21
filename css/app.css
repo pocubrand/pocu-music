@@ -6158,3 +6158,196 @@ img:not([src]) {
   .playlist-banner-cover { width: 100px; height: 100px; }
   .playlist-banner-name { font-size: 22px; }
 }
+
+/* ================================================================
+   ENTITY PAGES v1 — единый шаблон для трека / альбома / плейлиста
+   ================================================================ */
+
+/* ---- Базово (мобилка): центрированная колонка ---- */
+.entity-page {
+  /* ничего, работает из родителя */
+}
+
+.entity-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.entity-back {
+  align-self: flex-start;
+  margin-bottom: 12px;
+}
+
+.entity-cover-wrap {
+  width: min(72vw, 280px);
+  height: min(72vw, 280px);
+  border-radius: 22px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg,
+    rgba(124,92,255,.55),
+    rgba(255,64,158,.34) 55%,
+    rgba(56,132,255,.45));
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.55),
+    0 8px 24px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(255,255,255,.10);
+  position: relative;
+  flex: none;
+}
+.entity-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.entity-meta {
+  width: 100%;
+  min-width: 0;
+}
+
+.entity-type {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.entity-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1.15;
+  margin: 0 0 8px;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.entity-sub {
+  font-size: 15px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.entity-info {
+  font-size: 13px;
+  color: var(--text-dim);
+  opacity: .8;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+.entity-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+.entity-actions .btn {
+  flex: 1 1 auto;
+  min-width: 120px;
+}
+
+.entity-menu {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-brd);
+  background: rgba(255,255,255,.08);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform .35s var(--spring), background .2s;
+}
+.entity-menu:active {
+  transform: scale(.9);
+  background: rgba(255,255,255,.14);
+}
+.entity-menu svg { width: 20px; height: 20px; }
+
+.entity-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---- ПК: hero-грид + фикс под сайдбар ---- */
+@media (min-width: 900px) {
+
+  /* Фикс: контент оверлеев не должен уезжать под сайдбар */
+  .track-overlay-inner,
+  .album-overlay-inner,
+  .playlist-overlay-inner {
+    max-width: none;
+    margin: 0;
+    padding-left: 300px;
+    padding-right: 40px;
+    padding-top: calc(env(safe-area-inset-top) + 32px);
+    padding-bottom: calc(140px + env(safe-area-inset-bottom));
+    transition: padding-left .25s ease-out;
+  }
+  body.sidebar-collapsed .track-overlay-inner,
+  body.sidebar-collapsed .album-overlay-inner,
+  body.sidebar-collapsed .playlist-overlay-inner {
+    padding-left: 116px;
+  }
+
+  .entity-header {
+    display: grid;
+    grid-template-columns: 232px 1fr;
+    grid-template-rows: auto auto;
+    align-items: end;
+    text-align: left;
+    column-gap: 32px;
+    row-gap: 0;
+    margin-bottom: 40px;
+  }
+  .entity-back {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    align-self: start;
+    justify-self: start;
+    margin-bottom: 16px;
+  }
+  .entity-cover-wrap {
+    grid-column: 1;
+    grid-row: 2;
+    width: 232px;
+    height: 232px;
+    margin-bottom: 0;
+    border-radius: 16px;
+  }
+  .entity-meta {
+    grid-column: 2;
+    grid-row: 2;
+    padding-bottom: 4px;
+  }
+  .entity-title { font-size: 34px; margin-bottom: 10px; }
+  .entity-sub   { font-size: 16px; margin-bottom: 6px; }
+  .entity-info  { font-size: 13.5px; margin-bottom: 22px; }
+
+  .entity-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .entity-actions .btn {
+    flex: 0 0 auto;
+    min-width: 140px;
+  }
+
+  .entity-tracks {
+    max-width: 1200px;
+  }
+}

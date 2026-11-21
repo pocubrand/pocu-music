@@ -1,4 +1,4 @@
-/* Pocu Music — страница трека */
+/* Pocu Music — страница трека (entity layout) */
 window.PocuTrackUI = (() => {
   let els = {};
   let initialized = false;
@@ -9,15 +9,13 @@ window.PocuTrackUI = (() => {
     initialized = true;
 
     els = {
-      screen:      document.getElementById('trackScreen'),
-      back:        document.getElementById('trackBackBtn'),
-      art:         document.getElementById('trackPageArt'),
-      title:       document.getElementById('trackPageTitle'),
-      artist:      document.getElementById('trackPageArtist'),
-      info:        document.getElementById('trackPageInfo'),
-      actions:     document.getElementById('trackPageActions'),
-      similar:     document.getElementById('trackSimilar'),
-      similarList: document.getElementById('trackSimilarList')
+      screen:  document.getElementById('trackScreen'),
+      back:    document.getElementById('trackBackBtn'),
+      art:     document.getElementById('trackPageArt'),
+      title:   document.getElementById('trackPageTitle'),
+      artist:  document.getElementById('trackPageArtist'),
+      info:    document.getElementById('trackPageInfo'),
+      actions: document.getElementById('trackPageActions')
     };
 
     if (!els.screen) return;
@@ -28,16 +26,12 @@ window.PocuTrackUI = (() => {
       if (e.key === 'Escape' && currentTrackId) close();
     });
 
-    window.PocuPlayer.subscribe(state => {
-      if (!currentTrackId) return;
-      PocuTrackCard.syncPlaying(els.similarList, state);
-      updatePlayButton();
+    window.PocuPlayer.subscribe(() => {
+      if (currentTrackId) updatePlayButton();
     });
 
-    window.PocuStore.subscribe(state => {
-      if (!currentTrackId) return;
-      PocuTrackCard.syncHearts(els.similarList, state.favorites);
-      updatePlayButton();
+    window.PocuStore.subscribe(() => {
+      if (currentTrackId) updatePlayButton();
     });
   }
 
@@ -56,9 +50,10 @@ window.PocuTrackUI = (() => {
       els.art.style.visibility = '';
     } else {
       els.art.removeAttribute('src');
+      els.art.style.visibility = 'hidden';
     }
 
-    /* метаданные: кликабельный альбом • жанр • длительность */
+    /* мета: кликабельный альбом • жанр • длительность */
     els.info.replaceChildren();
     const parts = [];
 
@@ -84,7 +79,6 @@ window.PocuTrackUI = (() => {
     });
 
     renderActions(track);
-    renderSimilar(track);
 
     window.PocuLayers?.front?.(els.screen);
 
@@ -107,16 +101,13 @@ window.PocuTrackUI = (() => {
   function renderActions(track) {
     els.actions.replaceChildren();
 
+    /* 1. Play / Пауза */
     const playBtn = document.createElement('button');
     playBtn.className = 'btn btn-primary';
     playBtn.id = 'tpPlay';
     els.actions.appendChild(playBtn);
 
-    const plBtn = document.createElement('button');
-    plBtn.className = 'btn btn-secondary';
-    plBtn.textContent = 'В плейлист';
-    els.actions.appendChild(plBtn);
-
+    /* 2. Сердечко */
     const heart = document.createElement('button');
     heart.type = 'button';
     heart.className = 'fav-heart';
@@ -127,6 +118,19 @@ window.PocuTrackUI = (() => {
         <path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/>
       </svg>`;
     els.actions.appendChild(heart);
+
+    /* 3. Троеточие — контекст-меню */
+    const menuBtn = document.createElement('button');
+    menuBtn.type = 'button';
+    menuBtn.className = 'entity-menu';
+    menuBtn.setAttribute('aria-label', 'Ещё');
+    menuBtn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="6" cy="12" r="2"/>
+        <circle cx="12" cy="12" r="2"/>
+        <circle cx="18" cy="12" r="2"/>
+      </svg>`;
+    els.actions.appendChild(menuBtn);
 
     playBtn.addEventListener('click', () => {
       if (window.PocuPlayer.current?.id === track.id) {
@@ -147,9 +151,12 @@ window.PocuTrackUI = (() => {
       updatePlayButton();
     });
 
-    plBtn.addEventListener('click', () => {
-      const r = plBtn.getBoundingClientRect();
-      window.PocuContextMenu?.openAt?.(track, r.right, r.top);
+    menuBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const r = menuBtn.getBoundingClientRect();
+      window.PocuContextMenu?.openAt?.(track, r.right, r.top, {
+        hidden: ['goto-track']
+      });
     });
 
     updatePlayButton();
@@ -165,38 +172,13 @@ window.PocuTrackUI = (() => {
 
     btn.textContent = isCurrent
       ? (playing ? 'Пауза' : 'Продолжить')
-      : 'Играть';
+      : 'Слушать';
 
     if (favBtn) {
       const isFav = window.PocuStore.favorites.has(currentTrackId);
       favBtn.classList.toggle('active', isFav);
       favBtn.setAttribute('aria-label', isFav ? 'Убрать из избранного' : 'В избранное');
     }
-  }
-
-  function renderSimilar(track) {
-    if (!track.genre) {
-      els.similar.hidden = true;
-      return;
-    }
-    const all = window.PocuLibrary.all().filter(t => t.preview && t.id !== track.id);
-    const similar = all.filter(t => t.genre === track.genre).slice(0, 8);
-    if (!similar.length) {
-      els.similar.hidden = true;
-      return;
-    }
-    els.similar.hidden = false;
-    els.similarList.replaceChildren();
-
-    similar.forEach((t, i) => {
-      els.similarList.appendChild(PocuTrackCard.create(t, {
-        index: i,
-        showHeart: false,
-        onPlay: () => window.PocuPlayer.playQueue(similar, i)
-      }));
-    });
-
-    PocuTrackCard.syncPlaying(els.similarList, window.PocuPlayer.getState());
   }
 
   function formatDuration(sec) {
