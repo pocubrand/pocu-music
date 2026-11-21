@@ -6460,10 +6460,11 @@ img:not([src]) {
 .inline-edit-btn:hover  { background: rgba(255,255,255,.08); color: var(--text); }
 .inline-edit-btn:active { transform: scale(.9); }
 
-/* Заголовок плейлиста — flex, чтобы карандаш и input корректно уживались */
+/* Заголовок плейлиста */
 #playlistTitle {
   display: flex;
   align-items: center;
+  justify-content: center;   /* ← мобилка: по центру */
   flex-wrap: wrap;
   gap: 4px;
 }
@@ -6472,10 +6473,11 @@ img:not([src]) {
   min-width: 0;
 }
 
-/* Описание — тоже flex */
+/* Описание */
 .entity-info--desc {
   display: flex;
   align-items: center;
+  justify-content: center;   /* ← мобилка: по центру */
   flex-wrap: wrap;
   gap: 4px;
 }
@@ -6488,6 +6490,14 @@ img:not([src]) {
   color: var(--text-dim);
   opacity: .65;
   font-style: italic;
+}
+
+/* ПК: возвращаем к левому краю (там .entity-header grid, text-align: left) */
+@media (min-width: 900px) {
+  #playlistTitle,
+  .entity-info--desc {
+    justify-content: flex-start;
+  }
 }
 
 /* === Инлайн-инпуты === */
