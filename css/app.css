@@ -6414,6 +6414,32 @@ img:not([src]) {
 .cover-edit-btn:hover  { opacity: 1; background: rgba(0,0,0,.65); }
 .cover-edit-btn:active { transform: scale(.9); }
 
+/* Корзина — левый верхний угол обложки */
+.cover-trash-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  color: #ff8ab4;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 2;
+  opacity: .9;
+  transition: opacity .2s, transform .25s var(--spring), background .2s, color .2s;
+}
+.cover-trash-btn:hover  { opacity: 1; background: rgba(180,20,70,.55); color: #fff; }
+.cover-trash-btn:active { transform: scale(.9); }
+
+/* Обложка: убираем pointer у самого .entity-cover (клик не нужен) */
+.entity-cover:not(img) { cursor: default; }
+
 /* Inline-карандаш у названия / описания */
 .inline-edit-btn {
   display: inline-flex;
