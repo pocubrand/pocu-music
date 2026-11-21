@@ -1,15 +1,20 @@
-/* Pocu Music — UI плейлистов (entity layout) */
+/* Pocu Music — UI плейлистов (entity layout v2) */
 window.PocuPlaylistsUI = (() => {
   let els = {};
   let initialized = false;
-  let current = null;        // { id, mode: 'own'|'public', data, loading? }
+  let current = null;           // { id, mode: 'own'|'public', data, loading? }
   let descSheetEl = null;
+  let plMenuOverlay = null;
+  let plMenu = null;
+
+  const ICON_EDIT = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
+  const ICON_MORE = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="18" cy="12" r="2"/></svg>';
 
   function init() {
     if (initialized) return;
     initialized = true;
 
-    /* --- Экран: используем существующий #playlistScreen или создаём --- */
+    /* --- Экран --- */
     let screen = document.getElementById('playlistScreen');
     if (!screen) {
       screen = document.createElement('div');
@@ -29,15 +34,22 @@ window.PocuPlaylistsUI = (() => {
             </svg>
             <span>Назад</span>
           </button>
-          <div class="entity-cover-wrap">
+          <div class="entity-cover-wrap" id="playlistCoverWrap">
             <div class="entity-cover" id="playlistCover"></div>
+            <button class="cover-edit-btn" id="playlistCoverEdit" type="button" aria-label="Сменить обложку">${ICON_EDIT}</button>
           </div>
           <div class="entity-meta">
             <div class="entity-type" id="playlistType">Плейлист</div>
-            <h1 class="entity-title" id="playlistTitle">—</h1>
+            <h1 class="entity-title" id="playlistTitle">
+              <span class="entity-title-text" id="playlistTitleText">—</span>
+              <button class="inline-edit-btn" id="playlistTitleEdit" type="button" aria-label="Переименовать">${ICON_EDIT}</button>
+            </h1>
             <div class="entity-sub" id="playlistAuthor"></div>
             <div class="entity-info" id="playlistInfo"></div>
-            <div class="entity-info" id="playlistDesc" style="display:none"></div>
+            <div class="entity-info entity-info--desc" id="playlistDesc">
+              <span class="entity-desc-text" id="playlistDescText"></span>
+              <button class="inline-edit-btn" id="playlistDescEdit" type="button" aria-label="Изменить описание">${ICON_EDIT}</button>
+            </div>
             <div class="entity-actions" id="playlistActions"></div>
           </div>
         </div>
@@ -53,12 +65,18 @@ window.PocuPlaylistsUI = (() => {
       sheetCancelBtn: document.getElementById('sheetCancelBtn'),
       screen:         screen,
       back:           screen.querySelector('#playlistBackBtn'),
+      coverWrap:      screen.querySelector('#playlistCoverWrap'),
       cover:          screen.querySelector('#playlistCover'),
+      coverEdit:      screen.querySelector('#playlistCoverEdit'),
       type:           screen.querySelector('#playlistType'),
       title:          screen.querySelector('#playlistTitle'),
+      titleText:      screen.querySelector('#playlistTitleText'),
+      titleEdit:      screen.querySelector('#playlistTitleEdit'),
       author:         screen.querySelector('#playlistAuthor'),
       info:           screen.querySelector('#playlistInfo'),
       desc:           screen.querySelector('#playlistDesc'),
+      descText:       screen.querySelector('#playlistDescText'),
+      descEdit:       screen.querySelector('#playlistDescEdit'),
       actions:        screen.querySelector('#playlistActions'),
       tracks:         screen.querySelector('#playlistTracks')
     };
@@ -69,8 +87,41 @@ window.PocuPlaylistsUI = (() => {
     els.sheet?.addEventListener('click', e => { if (e.target === els.sheet) closeSheet(); });
     els.back.addEventListener('click', closeScreen);
 
+    /* --- Inline edit: обложка --- */
+    els.cover.addEventListener('click', () => {
+      if (current?.mode === 'own') pickCover();
+    });
+    els.coverEdit.addEventListener('click', e => {
+      e.stopPropagation();
+      if (current?.mode === 'own') pickCover();
+    });
+
+    /* --- Inline edit: название --- */
+    els.titleEdit.addEventListener('click', e => {
+      e.stopPropagation();
+      if (current?.mode === 'own') renamePrompt();
+    });
+    els.title.addEventListener('click', e => {
+      if (current?.mode !== 'own') return;
+      if (els.titleEdit.contains(e.target)) return;
+      renamePrompt();
+    });
+
+    /* --- Inline edit: описание --- */
+    els.descEdit.addEventListener('click', e => {
+      e.stopPropagation();
+      if (current?.mode === 'own') openDescEditor();
+    });
+    els.desc.addEventListener('click', e => {
+      if (current?.mode !== 'own') return;
+      if (els.descEdit.contains(e.target)) return;
+      openDescEditor();
+    });
+
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && current) closeScreen();
+      if (e.key !== 'Escape') return;
+      if (plMenuOverlay?.classList.contains('open')) { closePlaylistMenu(); return; }
+      if (current) closeScreen();
     });
 
     window.PocuStore.subscribe(state => {
@@ -87,7 +138,7 @@ window.PocuPlaylistsUI = (() => {
       PocuTrackCard.syncPlaying(els.tracks, state);
     });
 
-    window.addEventListener('online', () => { if (current?.mode === 'public') refreshPublic(); });
+    window.addEventListener('online',  () => { if (current?.mode === 'public') refreshPublic(); });
     window.addEventListener('offline', () => { if (current?.mode === 'public') renderScreen(); });
 
     ensureDescSheet();
@@ -255,13 +306,17 @@ window.PocuPlaylistsUI = (() => {
 
     if (current.loading) {
       els.type.textContent = 'Плейлист';
-      els.title.textContent = '—';
+      els.titleText.textContent = '—';
       els.author.textContent = '';
       els.author.style.display = 'none';
       els.info.innerHTML = '<div class="shimmer" style="height:14px;width:60%"></div>';
       els.desc.style.display = 'none';
       els.cover.style.backgroundImage = '';
-      els.cover.textContent = '?';
+      els.cover.style.background = '';
+      els.cover.textContent = '';
+      els.coverEdit.style.display = 'none';
+      els.titleEdit.style.display = 'none';
+      els.descEdit.style.display = 'none';
       els.actions.innerHTML = '';
       els.tracks.innerHTML = '';
       return;
@@ -269,7 +324,7 @@ window.PocuPlaylistsUI = (() => {
 
     if (!current.data) {
       els.type.textContent = 'Плейлист';
-      els.title.textContent = navigator.onLine ? 'Плейлист не найден' : 'Нет соединения';
+      els.titleText.textContent = navigator.onLine ? 'Плейлист не найден' : 'Нет соединения';
       els.author.textContent = '';
       els.author.style.display = 'none';
       els.info.textContent = navigator.onLine
@@ -277,7 +332,11 @@ window.PocuPlaylistsUI = (() => {
         : 'Публичные плейлисты недоступны офлайн';
       els.desc.style.display = 'none';
       els.cover.style.backgroundImage = '';
+      els.cover.style.background = '';
       els.cover.textContent = '?';
+      els.coverEdit.style.display = 'none';
+      els.titleEdit.style.display = 'none';
+      els.descEdit.style.display = 'none';
       els.actions.innerHTML = '';
       els.tracks.innerHTML = '';
       return;
@@ -294,15 +353,18 @@ window.PocuPlaylistsUI = (() => {
     }
     if (coverSrc) {
       els.cover.style.backgroundImage = `url("${coverSrc}")`;
+      els.cover.style.background = '';
+      els.cover.style.backgroundImage = `url("${coverSrc}")`;
       els.cover.textContent = '';
     } else {
       els.cover.style.backgroundImage = '';
+      els.cover.style.background = 'linear-gradient(135deg, #7c5cff, #ff409e)';
       els.cover.textContent = (pl.name || '?').slice(0, 1).toUpperCase();
     }
 
-    /* --- тип / заголовок / автор --- */
+    /* --- тип / название / автор --- */
     els.type.textContent = isOwn ? 'Мой плейлист' : 'Плейлист';
-    els.title.textContent = pl.name || 'Без названия';
+    els.titleText.textContent = pl.name || 'Без названия';
 
     if (!isOwn) {
       els.author.textContent = pl.authorName || 'Аноним';
@@ -312,7 +374,7 @@ window.PocuPlaylistsUI = (() => {
       els.author.style.display = 'none';
     }
 
-    /* --- инфо: N треков • M мин. • Публичный/Приватный --- */
+    /* --- инфо --- */
     const ordered = resolveOrderedTracks(pl);
     const totalSec = ordered.reduce((s, t) => s + (t.duration || 0), 0);
     const totalMin = Math.round(totalSec / 60);
@@ -323,11 +385,24 @@ window.PocuPlaylistsUI = (() => {
 
     /* --- описание --- */
     if (pl.description) {
-      els.desc.textContent = pl.description;
+      els.descText.textContent = pl.description;
+      els.descText.classList.remove('is-empty');
+      els.desc.style.display = '';
+    } else if (isOwn) {
+      els.descText.textContent = 'Добавить описание';
+      els.descText.classList.add('is-empty');
       els.desc.style.display = '';
     } else {
       els.desc.style.display = 'none';
     }
+
+    /* --- inline-кнопки только у владельца --- */
+    els.coverEdit.style.display = isOwn ? '' : 'none';
+    els.titleEdit.style.display = isOwn ? '' : 'none';
+    els.descEdit.style.display  = isOwn ? '' : 'none';
+    els.cover.style.cursor     = isOwn ? 'pointer' : '';
+    els.titleText.style.cursor = isOwn ? 'pointer' : '';
+    els.descText.style.cursor  = isOwn ? 'pointer' : '';
 
     renderActions(pl, ordered, isOwn);
     renderTracks(pl, ordered);
@@ -344,18 +419,16 @@ window.PocuPlaylistsUI = (() => {
     els.actions.replaceChildren();
     const user = window.PocuSupabase?.getUser?.();
 
-    /* 1. Играть всё */
+    /* Play all */
     if (ordered.length) {
       const playBtn = document.createElement('button');
       playBtn.className = 'btn btn-primary';
-      playBtn.id = 'plPlayAll';
       playBtn.textContent = 'Играть всё';
       playBtn.addEventListener('click', () => {
         if (ordered.length) window.PocuPlayer.playQueue(ordered, 0);
       });
       els.actions.appendChild(playBtn);
 
-      /* 2. Перемешать */
       const shuffleBtn = document.createElement('button');
       shuffleBtn.className = 'btn btn-secondary';
       shuffleBtn.textContent = 'Перемешать';
@@ -366,73 +439,20 @@ window.PocuPlaylistsUI = (() => {
       els.actions.appendChild(shuffleBtn);
     }
 
-    /* 3. Поделиться */
-    const shareBtn = document.createElement('button');
-    shareBtn.className = 'btn btn-secondary';
-    shareBtn.textContent = 'Поделиться';
-    shareBtn.addEventListener('click', () => {
-      const url = window.PocuRouter?.build?.('playlist', pl.id) || location.href;
-      const text = `Плейлист «${pl.name}» в Pocu Music`;
-      if (window.PocuShare?.share) window.PocuShare.share(url, pl.name, text);
-      else if (navigator.share) navigator.share({ title: pl.name, text, url }).catch(()=>{});
+    /* [...] — контекстное меню */
+    const moreBtn = document.createElement('button');
+    moreBtn.type = 'button';
+    moreBtn.className = 'entity-menu';
+    moreBtn.setAttribute('aria-label', 'Ещё');
+    moreBtn.innerHTML = ICON_MORE;
+    moreBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      openPlaylistMenu(moreBtn, pl, isOwn, user);
     });
-    els.actions.appendChild(shareBtn);
+    els.actions.appendChild(moreBtn);
 
-    if (isOwn) {
-      /* --- владелец: доп. кнопки --- */
-      const coverBtn = document.createElement('button');
-      coverBtn.className = 'btn btn-secondary';
-      coverBtn.textContent = 'Обложка';
-      coverBtn.addEventListener('click', pickCover);
-      els.actions.appendChild(coverBtn);
-
-      const descBtn = document.createElement('button');
-      descBtn.className = 'btn btn-secondary';
-      descBtn.textContent = 'Описание';
-      descBtn.addEventListener('click', openDescEditor);
-      els.actions.appendChild(descBtn);
-
-      const pubBtn = document.createElement('button');
-      pubBtn.className = 'btn btn-secondary';
-      pubBtn.textContent = pl.isPublic ? 'Скрыть' : 'Опубликовать';
-      pubBtn.addEventListener('click', () => togglePublic(pl, user));
-      els.actions.appendChild(pubBtn);
-
-      const renameBtn = document.createElement('button');
-      renameBtn.className = 'btn btn-secondary';
-      renameBtn.textContent = 'Переименовать';
-      renameBtn.addEventListener('click', () => {
-        const n = prompt('Новое имя:', pl.name);
-        if (n && n.trim()) {
-          window.PocuStore.playlists.rename(pl.id, n.trim());
-          window.PocuSupabase?.syncPlaylistRename(pl.id, n.trim());
-          current.data = window.PocuStore.playlists.get(pl.id);
-          renderScreen();
-        }
-      });
-      els.actions.appendChild(renameBtn);
-
-      const delBtn = document.createElement('button');
-      delBtn.className = 'btn btn-secondary';
-      delBtn.textContent = 'Удалить';
-      delBtn.style.color = '#ff4d8d';
-      delBtn.addEventListener('click', () => {
-        ensureConfirmSheet();
-        const sh = document.getElementById('sheetConfirmDelete');
-        const t = sh.querySelector('#confirmDeleteText');
-        const ok = sh.querySelector('#confirmDeleteOk');
-        t.textContent = `Плейлист «${pl.name}» будет удалён безвозвратно.`;
-        ok.onclick = () => {
-          sh.classList.remove('open');
-          window.PocuStore.playlists.delete(pl.id);
-          window.PocuSupabase?.syncPlaylistDelete(pl.id);
-          closeScreen();
-        };
-        sh.classList.add('open');
-      });
-      els.actions.appendChild(delBtn);
-    } else {
-      /* --- чужой: fav-heart --- */
+    /* Лайк — только для чужого */
+    if (!isOwn) {
       const isLiked = window.PocuStore.favoritePlaylists.has(pl.id);
       const heart = document.createElement('button');
       heart.type = 'button';
@@ -446,8 +466,8 @@ window.PocuPlaylistsUI = (() => {
         </svg>`;
       heart.addEventListener('click', () => {
         if (!user) { toast('Войдите, чтобы сохранять плейлисты'); return; }
-        const now = window.PocuStore.favoritePlaylists.has(pl.id);
-        if (now) {
+        const wasLiked = window.PocuStore.favoritePlaylists.has(pl.id);
+        if (wasLiked) {
           window.PocuStore.favoritePlaylists.remove(pl.id);
           window.PocuSupabase?.syncFavoritePlaylist(pl.id, false);
           heart.classList.remove('active');
@@ -501,14 +521,26 @@ window.PocuPlaylistsUI = (() => {
     PocuTrackCard.syncHearts(els.tracks, window.PocuStore.favorites.all());
   }
 
+  /* ============ Inline edit: переименование ============ */
+  function renamePrompt() {
+    if (!current || current.mode !== 'own' || !current.data) return;
+    const n = prompt('Новое имя:', current.data.name || '');
+    if (!n) return;
+    const v = n.trim();
+    if (!v || v === current.data.name) return;
+    window.PocuStore.playlists.rename(current.id, v);
+    window.PocuSupabase?.syncPlaylistRename(current.id, v);
+    current.data = window.PocuStore.playlists.get(current.id);
+    renderScreen();
+  }
+
   /* ============ Публичность ============ */
   function togglePublic(pl, user) {
     if (!user) {
       toast('Войдите, чтобы публиковать плейлисты');
       return;
     }
-    /* ВАЖНО (бэкап 21.11): nextValue вычисляем ДО update,
-       иначе store мутирует ссылку — инверсия даст старое значение. */
+    /* ВАЖНО: nextValue вычисляем ДО update (store мутирует ссылку) */
     const nextValue = !pl.isPublic;
     if (nextValue && !pl.coverUrl && !pl.description) {
       const ok = confirm('Плейлист будет виден всем в поиске. Продолжить?');
@@ -572,7 +604,7 @@ window.PocuPlaylistsUI = (() => {
   }
 
   function openDescEditor() {
-    if (!current || current.mode !== 'own') return;
+    if (!current || current.mode !== 'own' || !current.data) return;
     ensureDescSheet();
     const ta = descSheetEl.querySelector('#playlistDescInput');
     ta.value = current.data.description || '';
@@ -609,12 +641,118 @@ window.PocuPlaylistsUI = (() => {
     s.querySelector('#confirmDeleteCancel').addEventListener('click', () => s.classList.remove('open'));
   }
 
+  /* ============ Контекст-меню [...] ============ */
+  function ensurePlaylistMenu() {
+    if (document.getElementById('playlistContextOverlay')) return;
+    plMenuOverlay = document.createElement('div');
+    plMenuOverlay.className = 'context-overlay';
+    plMenuOverlay.id = 'playlistContextOverlay';
+    plMenu = document.createElement('div');
+    plMenu.className = 'context-menu';
+    plMenu.id = 'playlistContextMenu';
+    plMenu.setAttribute('role', 'menu');
+    plMenuOverlay.appendChild(plMenu);
+    document.body.appendChild(plMenuOverlay);
+
+    plMenuOverlay.addEventListener('click', e => {
+      if (e.target === plMenuOverlay) closePlaylistMenu();
+    });
+  }
+
+  function openPlaylistMenu(anchor, pl, isOwn, user) {
+    ensurePlaylistMenu();
+
+    const items = [];
+    if (isOwn) {
+      items.push({ action: 'toggle-public', label: pl.isPublic ? 'Скрыть из поиска' : 'Опубликовать' });
+    }
+    items.push({ action: 'share', label: 'Поделиться' });
+    if (isOwn) {
+      items.push({ action: 'delete', label: 'Удалить плейлист', danger: true });
+    }
+
+    plMenu.innerHTML = items.map(it => `
+      <button class="context-item" data-action="${it.action}">
+        <span class="context-label"${it.danger ? ' style="color:#ff4d8d"' : ''}>${escapeHtml(it.label)}</span>
+      </button>
+    `).join('');
+
+    plMenu.querySelectorAll('[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const a = btn.dataset.action;
+        closePlaylistMenu();
+        if (a === 'toggle-public') togglePublic(pl, user);
+        else if (a === 'share')    sharePlaylist(pl);
+        else if (a === 'delete')   confirmDeletePlaylist(pl);
+      });
+    });
+
+    plMenuOverlay.classList.add('open');
+    positionPlaylistMenu(anchor);
+  }
+
+  function positionPlaylistMenu(anchor) {
+    const m = 16, vw = window.innerWidth, vh = window.innerHeight;
+
+    plMenu.style.left = '0px';
+    plMenu.style.top = '0px';
+    plMenu.style.maxHeight = '';
+    plMenu.style.overflowY = '';
+
+    const r1 = plMenu.getBoundingClientRect();
+    if (r1.height > vh - 2 * m) {
+      plMenu.style.maxHeight = (vh - 2 * m) + 'px';
+      plMenu.style.overflowY = 'auto';
+    }
+
+    const rect = plMenu.getBoundingClientRect();
+    const a = anchor.getBoundingClientRect();
+
+    let left = a.right - rect.width;
+    if (left < m) left = m;
+    if (left + rect.width > vw - m) left = vw - rect.width - m;
+
+    let top = a.bottom + 6;
+    if (top + rect.height > vh - m) {
+      top = a.top - rect.height - 6;
+      if (top < m) top = m;
+    }
+
+    plMenu.style.left = left + 'px';
+    plMenu.style.top  = top + 'px';
+  }
+
+  function closePlaylistMenu() {
+    plMenuOverlay?.classList.remove('open');
+  }
+
+  function sharePlaylist(pl) {
+    const url = window.PocuRouter?.build?.('playlist', pl.id) || location.href;
+    const text = `Плейлист «${pl.name}» в Pocu Music`;
+    if (window.PocuShare?.share) window.PocuShare.share(url, pl.name, text);
+    else if (navigator.share) navigator.share({ title: pl.name, text, url }).catch(() => {});
+  }
+
+  function confirmDeletePlaylist(pl) {
+    ensureConfirmSheet();
+    const sh = document.getElementById('sheetConfirmDelete');
+    const t = sh.querySelector('#confirmDeleteText');
+    const ok = sh.querySelector('#confirmDeleteOk');
+    t.textContent = `Плейлист «${pl.name}» будет удалён безвозвратно.`;
+    ok.onclick = () => {
+      sh.classList.remove('open');
+      window.PocuStore.playlists.delete(pl.id);
+      window.PocuSupabase?.syncPlaylistDelete(pl.id);
+      closeScreen();
+    };
+    sh.classList.add('open');
+  }
+
   /* ============ helpers ============ */
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
       ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
   }
-  function escapeAttr(s) { return String(s == null ? '' : s).replace(/"/g, '&quot;'); }
   function toast(t) {
     let el = document.getElementById('pocuToast');
     if (!el) {
