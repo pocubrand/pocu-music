@@ -366,86 +366,130 @@
     </button>
     <h1 class="title">Настройки</h1>
 
-    <div class="section-head"><h2>Аккаунт</h2></div>
+    <!-- Аккаунт -->
+    <div class="settings-group">
+      <div class="settings-group-title">Аккаунт</div>
+      <div class="settings-card">
+        <div id="settingsGuestBlock">
+          <div class="settings-account-inner">
+            <div class="account-state">
+              <div class="account-text">
+                <div class="account-title">Локальный режим</div>
+                <div class="account-sub">Войди, чтобы сохранять музыку в облаке</div>
+              </div>
+            </div>
+            <button class="btn btn-primary settings-btn--block" id="settingsLoginBtn">Войти</button>
+          </div>
+        </div>
 
-    <div id="settingsGuestBlock" class="settings-account">
-      <div class="account-state">
-        <div class="account-text">
-          <div class="account-title">Локальный режим</div>
-          <div class="account-sub">Войди, чтобы сохранять музыку в облаке</div>
+        <div id="settingsUserBlock" hidden>
+          <div class="settings-account-inner">
+            <div class="profile-hero-small">
+              <div class="profile-avatar profile-avatar--sm" id="settingsAvatar">?</div>
+              <button class="btn-text" id="settingsAvatarBtn" type="button">Сменить фото</button>
+              <input type="file" id="settingsAvatarInput" accept="image/*" style="display:none">
+            </div>
+            <div class="profile-name-row">
+              <input type="text" id="settingsNameInput" placeholder="Имя" class="profile-name-input" autocomplete="off">
+              <button class="btn btn-primary" id="settingsSaveName" type="button">Сохранить</button>
+            </div>
+            <div class="settings-info">
+              <div class="settings-info-row"><span>Email</span><span class="settings-dim" id="settingsUserEmail">—</span></div>
+            </div>
+          </div>
+          <button class="settings-row" id="settingsChangePassBtn" type="button">
+            <span>Сменить пароль</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.4"><path d="m9 6 6 6-6 6"/></svg>
+          </button>
         </div>
       </div>
-      <button class="btn btn-primary" id="settingsLoginBtn" style="width:100%;margin-top:16px;">Войти</button>
     </div>
 
-    <div id="settingsUserBlock" hidden>
-      <div class="settings-account">
-        <div class="profile-hero-small">
-          <div class="profile-avatar profile-avatar--sm" id="settingsAvatar">?</div>
-          <button class="btn-text" id="settingsAvatarBtn" type="button">Сменить фото</button>
-          <input type="file" id="settingsAvatarInput" accept="image/*" style="display:none">
-        </div>
-        <div class="profile-name-row">
-          <input type="text" id="settingsNameInput" placeholder="Имя" class="profile-name-input" autocomplete="off">
-          <button class="btn btn-primary" id="settingsSaveName" type="button">Сохранить</button>
-        </div>
-        <div class="settings-info" style="margin-top:16px">
-          <div class="settings-info-row"><span>Email</span><span class="settings-dim" id="settingsUserEmail">—</span></div>
+    <!-- Приложение -->
+    <div class="settings-group">
+      <div class="settings-group-title">Приложение</div>
+      <div class="settings-card">
+        <label class="settings-row settings-toggle-row">
+          <span>Плавная анимация</span>
+          <input type="checkbox" id="settingsToggleSmooth" class="settings-toggle">
+        </label>
+        <label class="settings-row settings-toggle-row">
+          <span>Загрузочный экран</span>
+          <input type="checkbox" id="settingsToggleSplash" class="settings-toggle">
+        </label>
+        <button class="settings-row" id="settingsEqBtn" type="button">
+          <span>Эквалайзер</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.4"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+        <button class="settings-row" id="settingsPrefsBtn" type="button">
+          <span>Уточнить предпочтения</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.4"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Тема -->
+    <div class="settings-group">
+      <div class="settings-group-title">Тема</div>
+      <div class="settings-card settings-card--pad">
+        <div class="settings-theme-picker" id="settingsThemePicker" role="radiogroup" aria-label="Тема интерфейса">
+          <button type="button" class="settings-theme-option" data-theme-choice="dark"  role="radio" aria-checked="false">Тёмная</button>
+          <button type="button" class="settings-theme-option" data-theme-choice="light" role="radio" aria-checked="false">Светлая</button>
+          <button type="button" class="settings-theme-option" data-theme-choice="auto"  role="radio" aria-checked="false">Системная</button>
         </div>
       </div>
-      <div class="settings-actions" style="margin-top:8px">
-        <button class="settings-btn" id="settingsChangePassBtn">Сменить пароль</button>
+    </div>
+
+    <!-- Crossfade -->
+    <div class="settings-group">
+      <div class="settings-group-title">Crossfade</div>
+      <div class="settings-card settings-card--pad">
+        <div class="settings-theme-picker" id="settingsCrossfadePicker" role="radiogroup" aria-label="Длительность crossfade">
+          <button type="button" class="settings-theme-option" data-crossfade-choice="0"  role="radio" aria-checked="false">Выкл</button>
+          <button type="button" class="settings-theme-option" data-crossfade-choice="3"  role="radio" aria-checked="false">3 сек</button>
+          <button type="button" class="settings-theme-option" data-crossfade-choice="5"  role="radio" aria-checked="false">5 сек</button>
+          <button type="button" class="settings-theme-option" data-crossfade-choice="10" role="radio" aria-checked="false">10 сек</button>
+        </div>
       </div>
     </div>
 
-    <div class="section-head"><h2>Приложение</h2></div>
-    <div class="settings-actions">
-      <label class="settings-btn settings-toggle-row">
-        <span>Плавная анимация</span>
-        <input type="checkbox" id="settingsToggleSmooth" class="settings-toggle">
-      </label>
-      <label class="settings-btn settings-toggle-row">
-        <span>Загрузочный экран</span>
-        <input type="checkbox" id="settingsToggleSplash" class="settings-toggle">
-      </label>
-      <button class="settings-btn" id="settingsEqBtn">Эквалайзер</button>
-      <button class="settings-btn" id="settingsPrefsBtn">Уточнить предпочтения</button>
+    <!-- Инфо -->
+    <div class="settings-group">
+      <div class="settings-group-title">Инфо</div>
+      <div class="settings-card settings-card--pad">
+        <div class="settings-info">
+          <div class="settings-info-row"><span>Pocu Music</span><span class="settings-dim">v3.0.0</span></div>
+          <div class="settings-info-row"><span>Треков в библиотеке</span><span class="settings-dim" id="settingsTracksCount">—</span></div>
+          <div class="settings-info-row"><span>Избранных треков</span><span class="settings-dim" id="settingsFavCount">—</span></div>
+          <div class="settings-info-row"><span>Избранных альбомов</span><span class="settings-dim" id="settingsAlbumsCount">—</span></div>
+          <div class="settings-info-row"><span>Избранных артистов</span><span class="settings-dim" id="settingsArtistsCount">—</span></div>
+          <div class="settings-info-row"><span>Плейлистов</span><span class="settings-dim" id="settingsPlCount">—</span></div>
+        </div>
+      </div>
     </div>
 
-    <div class="section-head"><h2>Тема</h2></div>
-    <div class="settings-theme-picker" id="settingsThemePicker" role="radiogroup" aria-label="Тема интерфейса">
-      <button type="button" class="settings-theme-option" data-theme-choice="dark"  role="radio" aria-checked="false">Тёмная</button>
-      <button type="button" class="settings-theme-option" data-theme-choice="light" role="radio" aria-checked="false">Светлая</button>
-      <button type="button" class="settings-theme-option" data-theme-choice="auto"  role="radio" aria-checked="false">Системная</button>
+    <!-- Очистка -->
+    <div class="settings-group">
+      <div class="settings-group-title">Очистка</div>
+      <div class="settings-card">
+        <button class="settings-row" id="settingsClearRecent" type="button">
+          <span>Очистить недавние</span>
+        </button>
+        <button class="settings-row" id="settingsClearPulse" type="button">
+          <span>Сбросить статистику Pulse</span>
+        </button>
+        <button class="settings-row settings-row-danger" id="settingsClearAll" type="button">
+          <span>Очистить всё</span>
+        </button>
+      </div>
     </div>
 
-    <div class="section-head"><h2>Crossfade</h2></div>
-    <div class="settings-theme-picker" id="settingsCrossfadePicker" role="radiogroup" aria-label="Длительность crossfade">
-      <button type="button" class="settings-theme-option" data-crossfade-choice="0"  role="radio" aria-checked="false">Выкл</button>
-      <button type="button" class="settings-theme-option" data-crossfade-choice="3"  role="radio" aria-checked="false">3 сек</button>
-      <button type="button" class="settings-theme-option" data-crossfade-choice="5"  role="radio" aria-checked="false">5 сек</button>
-      <button type="button" class="settings-theme-option" data-crossfade-choice="10" role="radio" aria-checked="false">10 сек</button>
-    </div>
-
-    <div class="section-head"><h2>Инфо</h2></div>
-    <div class="settings-info">
-<div class="settings-info-row"><span>Pocu Music</span><span class="settings-dim">v3.0.0</span></div>
-      <div class="settings-info-row"><span>Треков в библиотеке</span><span class="settings-dim" id="settingsTracksCount">—</span></div>
-      <div class="settings-info-row"><span>Избранных треков</span><span class="settings-dim" id="settingsFavCount">—</span></div>
-      <div class="settings-info-row"><span>Избранных альбомов</span><span class="settings-dim" id="settingsAlbumsCount">—</span></div>
-      <div class="settings-info-row"><span>Избранных артистов</span><span class="settings-dim" id="settingsArtistsCount">—</span></div>
-      <div class="settings-info-row"><span>Плейлистов</span><span class="settings-dim" id="settingsPlCount">—</span></div>
-    </div>
-
-    <div class="section-head"><h2>Очистка</h2></div>
-    <div class="settings-actions">
-      <button class="settings-btn" id="settingsClearRecent">Очистить недавние</button>
-      <button class="settings-btn" id="settingsClearPulse">Сбросить статистику Pulse</button>
-      <button class="settings-btn settings-btn-danger" id="settingsClearAll">Очистить всё</button>
-    </div>
-
-    <div id="settingsLogoutWrap" hidden style="margin-top:40px">
-      <button class="settings-btn settings-btn-danger" id="settingsLogoutBtn">Выйти из аккаунта</button>
+    <div id="settingsLogoutWrap" hidden class="settings-group">
+      <div class="settings-card">
+        <button class="settings-row settings-row-danger" id="settingsLogoutBtn" type="button">
+          <span>Выйти из аккаунта</span>
+        </button>
+      </div>
     </div>
   </section>
 

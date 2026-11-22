@@ -6868,3 +6868,137 @@ img:not([src]) {
   background-position: center;
   background-repeat: no-repeat;
 }
+
+/* =========================================================
+   SETTINGS PAGE v2 — iOS-style groups + cards
+   ========================================================= */
+
+.settings-group {
+  margin-bottom: 24px;
+}
+
+.settings-group-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 4px 10px;
+}
+
+.settings-card {
+  border-radius: 20px;
+  background: var(--glass);
+  border: 1px solid var(--glass-brd);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  overflow: hidden;
+  box-shadow:
+    0 8px 24px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.04);
+}
+[data-theme="light"] .settings-card {
+  box-shadow:
+    0 4px 16px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.60);
+}
+
+.settings-card--pad {
+  padding: 16px;
+}
+
+/* Универсальная строка внутри карточки */
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+  padding: 16px 20px;
+  border: 0;
+  border-bottom: 1px solid var(--ui-line, rgba(255,255,255,.06));
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s;
+}
+.settings-row:last-child { border-bottom: 0; }
+.settings-row > span { flex: 1; min-width: 0; }
+@media (hover: hover) and (pointer: fine) {
+  .settings-row:hover  { background: var(--ui-hi,   rgba(255,255,255,.04)); }
+}
+.settings-row:active     { background: var(--ui-hi-2, rgba(255,255,255,.10)); }
+
+.settings-row-danger { color: #ff4d8d; }
+[data-theme="light"] .settings-row-danger { color: #e02570; }
+@media (hover: hover) and (pointer: fine) {
+  .settings-row-danger:hover { background: rgba(255,77,141,.08); }
+}
+
+/* Контейнер аккаунта внутри карточки */
+.settings-account-inner { padding: 20px; }
+.settings-account-inner + .settings-row {
+  border-top: 1px solid var(--ui-line, rgba(255,255,255,.06));
+}
+
+.settings-btn--block {
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* Обнуляем legacy-обводку у .settings-account внутри карточки */
+.settings-card .settings-account {
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Toggle-row внутри карточки */
+.settings-card .settings-toggle-row {
+  border-radius: 0;
+  background: transparent;
+  border-bottom: 1px solid var(--ui-line, rgba(255,255,255,.06));
+  padding: 16px 20px;
+  font-size: 15px;
+  font-weight: 500;
+}
+.settings-card .settings-toggle-row:last-child { border-bottom: 0; }
+.settings-card .settings-toggle-row:active {
+  background: var(--ui-hi-2, rgba(255,255,255,.10));
+}
+
+/* .settings-info внутри карточки — без рамки и внешнего фона */
+.settings-card .settings-info {
+  margin-bottom: 0;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+.settings-card .settings-info-row {
+  padding: 12px 0;
+  font-size: 15px;
+}
+.settings-card .settings-info-row:first-child { padding-top: 0; }
+.settings-card .settings-info-row:last-child  { padding-bottom: 0; border-bottom: 0; }
+
+/* .settings-theme-picker внутри карточки — без фона */
+.settings-card .settings-theme-picker {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+/* Аватар в настройках */
+.settings-account-inner .profile-hero-small { margin-bottom: 16px; }
+
+/* ============ ФИКС КАЧЕСТВА АВАТАРА ============ */
+/* Было background-size: 130% !important — растягивало и мылило */
+.profile-avatar {
+  background-size: cover !important;
+  background-repeat: no-repeat;
+}
