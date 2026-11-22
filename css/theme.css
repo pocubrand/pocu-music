@@ -700,3 +700,15 @@ html { transition: background-color .3s ease; }
   border-color: var(--glass-brd);
   color: var(--text);
 }
+
+[data-theme="light"] .settings-card {
+  box-shadow:
+    0 4px 16px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.60);
+}
+
+[data-theme="light"] .settings-row-danger { color: #e02570; }
+
+[data-theme="light"] .settings-account-inner .settings-info {
+  border-top-color: rgba(0,0,0,.06);
+}

@@ -6897,11 +6897,6 @@ img:not([src]) {
     0 8px 24px rgba(0,0,0,.18),
     inset 0 1px 0 rgba(255,255,255,.04);
 }
-[data-theme="light"] .settings-card {
-  box-shadow:
-    0 4px 16px rgba(0,0,0,.06),
-    inset 0 1px 0 rgba(255,255,255,.60);
-}
 
 .settings-card--pad {
   padding: 16px;
@@ -6934,7 +6929,6 @@ img:not([src]) {
 .settings-row:active     { background: var(--ui-hi-2, rgba(255,255,255,.10)); }
 
 .settings-row-danger { color: #ff4d8d; }
-[data-theme="light"] .settings-row-danger { color: #e02570; }
 @media (hover: hover) and (pointer: fine) {
   .settings-row-danger:hover { background: rgba(255,77,141,.08); }
 }
@@ -7001,4 +6995,15 @@ img:not([src]) {
 .profile-avatar {
   background-size: cover !important;
   background-repeat: no-repeat;
+}
+
+/* =========================================================
+   SETTINGS — дыхание между именем и email
+   ========================================================= */
+.settings-account-inner .profile-name-row {
+  margin-bottom: 20px;
+}
+.settings-account-inner .settings-info {
+  padding-top: 16px;
+  border-top: 1px solid var(--ui-line, rgba(255,255,255,.06));
 }
