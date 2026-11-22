@@ -418,10 +418,6 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .btn-secondary       { background: var(--glass); }
 
 /* ============ НАСТРОЙКИ / ПРОФИЛЬ ============ */
-[data-theme="light"] .settings-info,
-[data-theme="light"] .settings-account {
-  background: var(--glass);
-}
 [data-theme="light"] .settings-info-row {
   border-bottom-color: var(--ui-line);
 }
@@ -708,3 +704,7 @@ html { transition: background-color .3s ease; }
 }
 
 [data-theme="light"] .settings-row-danger { color: #e02570; }
+
+[data-theme="light"] .settings-account-inner .settings-info {
+  border-top-color: rgba(0,0,0,.06);
+}
