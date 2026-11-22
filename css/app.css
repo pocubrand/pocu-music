@@ -297,7 +297,7 @@ main::-webkit-scrollbar{display:none;}
 
 .bubble{
   position:absolute;top:50%;left:0;
-  width:58px;height:42px;border-radius:999px;
+  width:64px;height:42px;border-radius:999px;
   transform:translate3d(0,-50%,0);
   pointer-events:none;z-index:1;will-change:transform;
   background:rgba(255,255,255,.10);

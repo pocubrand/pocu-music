@@ -708,7 +708,3 @@ html { transition: background-color .3s ease; }
 }
 
 [data-theme="light"] .settings-row-danger { color: #e02570; }
-
-[data-theme="light"] .settings-account-inner .settings-info {
-  border-top-color: rgba(0,0,0,.06);
-}
