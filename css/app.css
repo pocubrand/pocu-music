@@ -6714,3 +6714,24 @@ img:not([src]) {
     padding-top: 20px;
   }
 }
+
+/* =========================================================
+   ARTIST PAGE FIXES (v2) — meta gap + more right pad
+   ========================================================= */
+
+/* 1. Убираем min-height: 300px у meta в «Показать все» — это и есть «воздух» */
+@media (min-width: 900px) {
+  #artistAllTracksScreen .entity-meta {
+    min-height: 0;
+    display: block;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+/* 2. Больше воздуха справа: «Новый релиз» и весь контент артиста */
+@media (min-width: 900px) {
+  .artist-overlay-inner {
+    padding-right: 90px; /* было 60 */
+  }
+}

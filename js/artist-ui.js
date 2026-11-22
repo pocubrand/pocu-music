@@ -146,6 +146,20 @@ window.PocuArtistUI = (() => {
     ensureArtistMenu();
     safe(renderHomeSection);
     safe(renderLibSection);
+    /* Закрываем оверлеи артиста при клике на табы сайдбара (capture = до app.js) */
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.tab-item, #sidebarSettingsBtn, #sidebarToggle')) return;
+
+      if (els.allScreen?.classList.contains('open')) {
+        window.PocuLayers?.reset?.(els.allScreen);
+        els.allScreen.classList.remove('open');
+        els.allScreen.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('playlist-open');
+      }
+      if (currentArtistId) {
+        closeArtist();
+      }
+    }, true); // ← capture phase: срабатывает ДО основного обработчика таба
   }
 
   function safe(fn) { try { fn(); } catch (e) { console.warn('[artist-ui]', fn.name, e.message); } }
