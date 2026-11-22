@@ -1,4 +1,4 @@
-/* Pocu Music — экран жанра (подборка) */
+/* Pocu Music — экран жанра (подборка, entity layout) */
 window.PocuGenreUI = (() => {
   let els = {};
   let initialized = false;
@@ -32,30 +32,39 @@ window.PocuGenreUI = (() => {
     screen.id = 'genreScreen';
     screen.setAttribute('aria-hidden', 'true');
     screen.innerHTML = `
-      <div class="genre-overlay-inner">
-        <button class="back-btn" id="genreBackBtn" aria-label="Назад">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="m15 18-6-6 6-6"/>
-          </svg>
-          <span>Назад</span>
-        </button>
-        <div class="genre-hero" id="genreHero">
-          <div class="genre-hero-name" id="genreHeroName"></div>
-          <div class="genre-hero-sub" id="genreHeroSub"></div>
+      <div class="genre-overlay-inner entity-page">
+        <div class="entity-header">
+          <button class="back-btn entity-back" id="genreBackBtn" aria-label="Назад">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+            <span>Назад</span>
+          </button>
+          <div class="entity-cover-wrap">
+            <div class="entity-cover" id="genreCover"></div>
+          </div>
+          <div class="entity-meta">
+            <div class="entity-type">Подборка</div>
+            <h1 class="entity-title" id="genreName">—</h1>
+            <div class="entity-sub" id="genreSub"></div>
+            <div class="entity-info" id="genreInfo"></div>
+            <div class="entity-actions" id="genreActions"></div>
+          </div>
         </div>
-        <div class="playlist-actions" id="genreActions"></div>
-        <div class="genre-tracks" id="genreTracks"></div>
+        <div class="entity-tracks" id="genreTracks"></div>
       </div>
     `;
     document.body.appendChild(screen);
 
     els = {
-      screen, back: screen.querySelector('#genreBackBtn'),
-      hero: screen.querySelector('#genreHero'),
-      name: screen.querySelector('#genreHeroName'),
-      sub:  screen.querySelector('#genreHeroSub'),
+      screen:  screen,
+      back:    screen.querySelector('#genreBackBtn'),
+      cover:   screen.querySelector('#genreCover'),
+      name:    screen.querySelector('#genreName'),
+      sub:     screen.querySelector('#genreSub'),
+      info:    screen.querySelector('#genreInfo'),
       actions: screen.querySelector('#genreActions'),
       tracks:  screen.querySelector('#genreTracks')
     };
@@ -73,6 +82,12 @@ window.PocuGenreUI = (() => {
     window.PocuStore.subscribe(state => {
       if (currentGenre) PocuTrackCard.syncHearts(els.tracks, state.favorites);
     });
+
+    /* Закрываем оверлей при клике на табы сайдбара (capture = до app.js) */
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.tab-item, #sidebarSettingsBtn')) return;
+      if (currentGenre) close();
+    }, true);
   }
 
   function open(genre) {
@@ -84,10 +99,21 @@ window.PocuGenreUI = (() => {
 
     currentGenre = genre;
 
-    els.hero.style.background = genreGradient(genre);
+    /* Обложка — градиент + инициал */
+    els.cover.style.background = genreGradient(genre);
+    els.cover.textContent = (genre || '?').slice(0, 1).toUpperCase();
+
+    /* Заголовок / подпись / инфо */
     els.name.textContent = genre;
     els.sub.textContent = `${tracks.length} ${plural(tracks.length)}`;
 
+    const totalSec = tracks.reduce((s, t) => s + (t.duration || 0), 0);
+    const totalMin = Math.round(totalSec / 60);
+    const infoParts = [];
+    if (totalMin > 0) infoParts.push(`${totalMin} мин.`);
+    els.info.textContent = infoParts.join(' • ');
+
+    /* Кнопки */
     els.actions.replaceChildren();
     const playAll = document.createElement('button');
     playAll.className = 'btn btn-primary';
@@ -104,6 +130,7 @@ window.PocuGenreUI = (() => {
 
     els.actions.append(playAll, shuffleBtn);
 
+    /* Треки */
     els.tracks.replaceChildren();
     const frag = document.createDocumentFragment();
     tracks.forEach((t, i) => {
@@ -114,13 +141,16 @@ window.PocuGenreUI = (() => {
     });
     els.tracks.appendChild(frag);
 
-    // Поднимаем на верхний слой (PocuLayers сам считает, какой z-index назначить)
     window.PocuLayers?.front?.(els.screen);
 
     els.screen.classList.add('open');
     els.screen.setAttribute('aria-hidden', 'false');
     document.body.classList.add('genre-open');
-    requestAnimationFrame(() => { els.screen.scrollTop = 0; });
+
+    requestAnimationFrame(() => {
+      const inner = els.screen.querySelector('.genre-overlay-inner');
+      if (inner) inner.scrollTop = 0;
+    });
 
     PocuTrackCard.syncPlaying(els.tracks, window.PocuPlayer.getState());
     PocuTrackCard.syncHearts(els.tracks, window.PocuStore.favorites.all());

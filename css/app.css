@@ -6735,3 +6735,36 @@ img:not([src]) {
     padding-right: 90px; /* было 60 */
   }
 }
+
+/* =========================================================
+   GENRE PAGE (подборки) — entity fixes
+   ========================================================= */
+
+/* Обложка-градиент: центрируем инициал */
+.genre-overlay .entity-cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(72px, 12vw, 120px);
+  font-weight: 800;
+  color: rgba(255,255,255,.92);
+  letter-spacing: -.03em;
+  text-shadow: 0 4px 24px rgba(0,0,0,.30);
+  user-select: none;
+}
+
+/* ПК: padding под сайдбар + воздух справа */
+@media (min-width: 900px) {
+  .genre-overlay-inner {
+    max-width: none;
+    margin: 0;
+    padding-left: 300px;
+    padding-right: 60px;
+    padding-top: calc(env(safe-area-inset-top) + 24px);
+    padding-bottom: calc(140px + env(safe-area-inset-bottom));
+    transition: padding-left .25s ease-out;
+  }
+  body.sidebar-collapsed .genre-overlay-inner {
+    padding-left: 116px;
+  }
+}
