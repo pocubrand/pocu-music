@@ -6822,7 +6822,7 @@ img:not([src]) {
 /* Сетка статистики */
 .profile-stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;      /* было: repeat(2, 1fr) */
   gap: 10px;
   margin-bottom: 24px;
 }
@@ -6860,4 +6860,11 @@ img:not([src]) {
   color: var(--text-dim);
   font-weight: 500;
   line-height: 1.3;
+}
+
+/* Фикс рендера обложек-фонов (аватар, плейлист, жанр) */
+.entity-cover {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
