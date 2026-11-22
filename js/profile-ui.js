@@ -1,4 +1,4 @@
-/* Pocu Music — экран «Профиль» (только просмотр) */
+/* Pocu Music — экран «Профиль» (entity layout v2) */
 window.PocuProfileUI = (() => {
   let els = {};
   let initialized = false;
@@ -14,6 +14,8 @@ window.PocuProfileUI = (() => {
       avatar:      document.getElementById('profileAvatar'),
       displayName: document.getElementById('profileDisplayName'),
       email:       document.getElementById('profileEmail'),
+      info:        document.getElementById('profileInfo'),
+      actions:     document.getElementById('profileActions'),
       stats:       document.getElementById('profileStats'),
       favArtist:   document.getElementById('profileFavArtist'),
       favGenre:    document.getElementById('profileFavGenre')
@@ -35,9 +37,11 @@ window.PocuProfileUI = (() => {
     if (!loggedIn) return;
 
     const prof = window.PocuStore.profile.get();
+    els.displayName.textContent = prof.displayName
+      || (user.email ? user.email.split('@')[0] : 'Без имени');
     els.email.textContent = user.email || '';
-    els.displayName.textContent = prof.displayName || (user.email ? user.email.split('@')[0] : 'Без имени');
 
+    /* --- аватар --- */
     if (prof.avatarUrl) {
       els.avatar.style.backgroundImage = `url("${prof.avatarUrl}")`;
       els.avatar.textContent = '';
@@ -46,7 +50,7 @@ window.PocuProfileUI = (() => {
       els.avatar.textContent = (prof.displayName || user.email || '?').slice(0, 1).toUpperCase();
     }
 
-    // Статистика
+    /* --- счётчики --- */
     const favCount    = window.PocuStore.favorites.all().length;
     const albumCount  = window.PocuStore.favoriteAlbums.all().length;
     const artistCount = window.PocuStore.favoriteArtists.all().length;
@@ -71,14 +75,56 @@ window.PocuProfileUI = (() => {
     const topArtist = [...byArtist.entries()].sort((a, b) => b[1] - a[1])[0];
     const topGenre  = [...byGenre.entries()].sort((a, b) => b[1] - a[1])[0];
 
+    /* --- инфо-строка --- */
+    if (els.info) {
+      if (user.created_at) {
+        const year = new Date(user.created_at).getFullYear();
+        els.info.textContent = `В Pocu Music с ${year}`;
+      } else {
+        els.info.textContent = '';
+      }
+    }
+
+    /* --- кнопка «Настройки» --- */
+    if (els.actions) {
+      els.actions.innerHTML = '';
+      const settingsBtn = document.createElement('button');
+      settingsBtn.type = 'button';
+      settingsBtn.className = 'btn btn-secondary';
+      settingsBtn.textContent = 'Настройки профиля';
+      settingsBtn.addEventListener('click', () => {
+        const trigger = document.getElementById('settingsBtn')
+                     || document.getElementById('sidebarSettingsBtn');
+        trigger?.click();
+      });
+      els.actions.appendChild(settingsBtn);
+    }
+
+    /* --- сетка статистики --- */
     els.stats.innerHTML = `
-      <div class="profile-stat-row"><span>Треков в избранном</span><span>${favCount}</span></div>
-      <div class="profile-stat-row"><span>Альбомов</span><span>${albumCount}</span></div>
-      <div class="profile-stat-row"><span>Артистов</span><span>${artistCount}</span></div>
-      <div class="profile-stat-row"><span>Плейлистов</span><span>${plCount}</span></div>
-      <div class="profile-stat-row"><span>Всего прослушано</span><span>${totalPlays}</span></div>
+      <div class="profile-stat-card">
+        <div class="profile-stat-value">${favCount}</div>
+        <div class="profile-stat-label">Треков в избранном</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="profile-stat-value">${albumCount}</div>
+        <div class="profile-stat-label">Альбомов</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="profile-stat-value">${artistCount}</div>
+        <div class="profile-stat-label">Артистов</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="profile-stat-value">${plCount}</div>
+        <div class="profile-stat-label">Плейлистов</div>
+      </div>
+      <div class="profile-stat-card">
+        <div class="profile-stat-value">${totalPlays}</div>
+        <div class="profile-stat-label">Прослушано</div>
+      </div>
     `;
 
+    /* --- вкусы --- */
     els.favArtist.textContent = topArtist ? `${topArtist[0]} · ${topArtist[1]} прослуш.` : '—';
     els.favGenre.textContent  = topGenre  ? `${topGenre[0]} · ${topGenre[1]} прослуш.` : '—';
   }

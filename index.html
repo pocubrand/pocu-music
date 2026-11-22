@@ -333,15 +333,22 @@
       <button class="btn btn-primary" id="profileLoginBtn" style="width:100%;max-width:320px;margin:0 auto;display:block;">Войти</button>
     </div>
 
-    <div id="profileContent" hidden>
-      <div class="profile-hero">
-        <div class="profile-avatar" id="profileAvatar">?</div>
-        <h2 class="profile-display-name" id="profileDisplayName">—</h2>
-        <div class="profile-email" id="profileEmail"></div>
+    <div id="profileContent" class="entity-page" hidden>
+      <div class="entity-header entity-header--profile">
+        <div class="entity-cover-wrap entity-cover-wrap--round">
+          <div class="entity-cover" id="profileAvatar">?</div>
+        </div>
+        <div class="entity-meta">
+          <div class="entity-type">Профиль</div>
+          <h1 class="entity-title" id="profileDisplayName">—</h1>
+          <div class="entity-sub" id="profileEmail"></div>
+          <div class="entity-info" id="profileInfo"></div>
+          <div class="entity-actions" id="profileActions"></div>
+        </div>
       </div>
 
       <div class="section-head"><h2>Статистика</h2></div>
-      <div class="settings-info" id="profileStats"></div>
+      <div class="profile-stats-grid" id="profileStats"></div>
 
       <div class="section-head"><h2>Вкусы</h2></div>
       <div class="settings-info">

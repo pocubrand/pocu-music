@@ -6768,3 +6768,96 @@ img:not([src]) {
     padding-left: 116px;
   }
 }
+
+/* =========================================================
+   PROFILE PAGE — entity layout + stat cards
+   ========================================================= */
+
+.entity-header.entity-header--profile {
+  padding-top: 0;
+}
+
+.entity-header--profile .entity-sub {
+  overflow-wrap: anywhere;
+}
+
+/* Круглый аватар */
+.entity-cover-wrap--round {
+  width: min(60vw, 200px) !important;
+  height: min(60vw, 200px) !important;
+  border-radius: 50% !important;
+}
+
+.entity-cover-wrap--round .entity-cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(56px, 10vw, 110px);
+  font-weight: 800;
+  color: rgba(255,255,255,.92);
+  letter-spacing: -.03em;
+  user-select: none;
+}
+
+@media (min-width: 900px) {
+  .entity-cover-wrap--round {
+    width: 240px !important;
+    height: 240px !important;
+  }
+  .entity-header.entity-header--profile {
+    grid-template-columns: 240px 1fr;
+  }
+  .entity-header--profile .entity-meta {
+    min-height: 240px;
+  }
+}
+
+/* Кнопки в шапке профиля — слева */
+.entity-header--profile .entity-actions {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Сетка статистики */
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+@media (min-width: 900px) {
+  .profile-stats-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+.profile-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--glass);
+  border: 1px solid var(--glass-brd);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  min-width: 0;
+}
+
+.profile-stat-value {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.profile-stat-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 500;
+  line-height: 1.3;
+}
