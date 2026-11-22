@@ -148,7 +148,7 @@ window.PocuArtistUI = (() => {
     safe(renderLibSection);
     /* Закрываем оверлеи артиста при клике на табы сайдбара (capture = до app.js) */
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.tab-item, #sidebarSettingsBtn, #sidebarToggle')) return;
+      if (!e.target.closest('.tab-item, #sidebarSettingsBtn')) return;
 
       if (els.allScreen?.classList.contains('open')) {
         window.PocuLayers?.reset?.(els.allScreen);
