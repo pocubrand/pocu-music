@@ -21,7 +21,7 @@
   const items   = [...tabbar.querySelectorAll('.tab-item[data-tab]')];
   const screens = [...document.querySelectorAll('.screen')];
 
-  const BUBBLE = 46;
+  let BUBBLE = 58;
   const LENS   = 74;
   const tabNames = items.map(i => i.dataset.tab);
 
@@ -30,6 +30,11 @@
   function measure() {
     items.forEach(it => it.style.transform = '');
     const barRect = tabbar.getBoundingClientRect();
+    /* читаем актуальную ширину капсулы из CSS */
+    if (bubble) {
+      const bw = bubble.getBoundingClientRect().width;
+      if (bw > 0) BUBBLE = bw;
+    }
     centers = items.map(it => {
       const r = it.getBoundingClientRect();
       return r.left - barRect.left + r.width / 2;
