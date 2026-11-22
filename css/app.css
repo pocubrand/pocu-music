@@ -6679,3 +6679,38 @@ img:not([src]) {
     margin-top: 20px;
   }
 }
+
+/* =========================================================
+   ARTIST PAGE FIXES (v1) — back, all-tracks, right padding
+   ========================================================= */
+
+/* 1. Back кнопка — в потоке, видна и на мобилке, и на ПК */
+.artist-overlay .entity-back,
+#artistAllTracksScreen .entity-back {
+  position: static;
+  margin: 0 0 20px;
+}
+
+/* 2. Убираем «воздух» сверху hero — back уже даёт отступ */
+.artist-overlay .artist-header {
+  padding-top: 20px;
+}
+
+/* 3. ПК: inner артиста — padding под сайдбар + воздух справа */
+@media (min-width: 900px) {
+  .artist-overlay-inner {
+    max-width: none;
+    margin: 0;
+    padding-left: 300px;
+    padding-right: 60px;
+    padding-top: calc(env(safe-area-inset-top) + 24px);
+    padding-bottom: calc(140px + env(safe-area-inset-bottom));
+    transition: padding-left .25s ease-out;
+  }
+  body.sidebar-collapsed .artist-overlay-inner {
+    padding-left: 116px;
+  }
+  .artist-overlay .artist-header {
+    padding-top: 20px;
+  }
+}
