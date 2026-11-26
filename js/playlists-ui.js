@@ -150,14 +150,21 @@ window.PocuPlaylistsUI = (() => {
   }
 
   /* ============ Список плейлистов в «Избранном» ============ */
-  function renderPlaylists(playlists) {
+  function renderPlaylists(ownPlaylists) {
     if (!els.libPlaylists) return;
     els.libPlaylists.replaceChildren();
-    if (!playlists.length) {
+
+    const liked = window.PocuStore.favoritePlaylists.all();
+    const items = [
+      ...ownPlaylists.map(pl => ({ pl, mode: 'own' })),
+      ...liked.map(pl => ({ pl, mode: 'public' }))
+    ];
+
+    if (!items.length) {
       els.libPlaylists.innerHTML = '<p class="hint">У тебя пока нет плейлистов</p>';
       return;
     }
-    playlists.forEach(pl => els.libPlaylists.appendChild(createPlaylistTile(pl, 'own')));
+    items.forEach(({ pl, mode }) => els.libPlaylists.appendChild(createPlaylistTile(pl, mode)));
   }
 
   function createPlaylistTile(pl, mode) {

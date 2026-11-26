@@ -1,54 +1,123 @@
-/* Pocu Music — экран «Избранное» (объединённое с медиатекой) */
+/* Pocu Music — экран «Избранное» (v2: превью-секции + overlay-страницы) */
 window.PocuFavoritesUI = (() => {
   let els = {};
   let initialized = false;
   let first = true;
   let lastHash = '';
 
-  const HISTORY_LIMIT = 7;
+  const LIKED_PREVIEW = 8;   // 4 ряда × 2 колонки
+  const ROW_LIMIT     = 8;
+
+  /* ---- История (фильтры + группировка) ---- */
+  let historyFilterKey = null;
+  let historyGroupsCache = [];
 
   function init() {
     if (initialized) return;
     initialized = true;
 
     els = {
-      container:        document.getElementById('favoritesList'),
-      recentSection:    document.getElementById('favRecent'),
-      recentRow:        document.getElementById('favRecentRow'),
-      albumsSection:    document.getElementById('favAlbums'),
-      albumsRow:        document.getElementById('favAlbumsRow'),
-      artistsSection:   document.getElementById('favArtists'),
-      artistsRow:       document.getElementById('favArtistsRow'),
-      tracksSection:    document.getElementById('favTracks'),
-      tracksList:       document.getElementById('favTracksList'),
-      playlistsSection: document.getElementById('favLikedPlaylists'),
-      playlistsRow:     document.getElementById('favLikedPlaylistsRow'),
-      emptyBlock:       document.getElementById('favEmpty')
+      /* Favorites */
+      emptyBlock:    document.getElementById('favEmpty'),
+      likedSection:  document.getElementById('favLiked'),
+      likedPreview:  document.getElementById('favLikedTracks'),
+      albumsSection: document.getElementById('favAlbums'),
+      albumsRow:     document.getElementById('favAlbumsRow'),
+      recentSection: document.getElementById('favRecent'),
+      recentRow:     document.getElementById('favRecentRow'),
+      artistsSection:document.getElementById('favArtists'),
+      artistsRow:    document.getElementById('favArtistsRow'),
+
+      /* Liked tracks page */
+      likedScreen:   document.getElementById('likedTracksScreen'),
+      likedBack:     document.getElementById('likedTracksBackBtn'),
+      likedInfo:     document.getElementById('likedTracksInfo'),
+      likedActions:  document.getElementById('likedTracksActions'),
+      likedList:     document.getElementById('likedTracksList'),
+
+      /* Liked albums page */
+      likedAlbumsScreen: document.getElementById('likedAlbumsScreen'),
+      likedAlbumsBack:   document.getElementById('likedAlbumsBackBtn'),
+      likedAlbumsInfo:   document.getElementById('likedAlbumsInfo'),
+      likedAlbumsList:   document.getElementById('likedAlbumsList'),
+
+      /* All playlists page */
+      allPlScreen:   document.getElementById('allPlaylistsScreen'),
+      allPlBack:     document.getElementById('allPlaylistsBackBtn'),
+      allPlInfo:     document.getElementById('allPlaylistsInfo'),
+      allPlList:     document.getElementById('allPlaylistsList'),
+
+      /* Liked artists page */
+      likedArtistsScreen: document.getElementById('likedArtistsScreen'),
+      likedArtistsBack:   document.getElementById('likedArtistsBackBtn'),
+      likedArtistsInfo:   document.getElementById('likedArtistsInfo'),
+      likedArtistsList:   document.getElementById('likedArtistsList')
     };
 
-    window.PocuPlayer.subscribe(state => {
-      PocuTrackCard.syncPlaying(els.tracksList, state);
-      syncRecentPlaying(state);
-      const $hist = document.getElementById('historyTracks');
-      if ($hist) PocuTrackCard.syncPlaying($hist, state);
+    /* --- ">" links --- */
+    document.querySelectorAll('.section-head-btn[data-open]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const t = btn.dataset.open;
+        if (t === 'liked-tracks')  openLikedTracks();
+        else if (t === 'liked-albums')  openLikedAlbums();
+        else if (t === 'all-playlists') openAllPlaylists();
+        else if (t === 'liked-artists') openLikedArtists();
+        else if (t === 'history')       openHistory();
+      });
     });
 
+    /* --- Back --- */
+    els.likedBack?.addEventListener('click', () => closeOverlay(els.likedScreen));
+    els.likedAlbumsBack?.addEventListener('click', () => closeOverlay(els.likedAlbumsScreen));
+    els.allPlBack?.addEventListener('click', () => closeOverlay(els.allPlScreen));
+    els.likedArtistsBack?.addEventListener('click', () => closeOverlay(els.likedArtistsScreen));
+    document.getElementById('historyBackBtn')?.addEventListener('click', () => closeOverlay(document.getElementById('historyScreen')));
+
+    /* --- Escape --- */
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      for (const scr of [els.likedScreen, els.likedAlbumsScreen, els.allPlScreen, els.likedArtistsScreen]) {
+        if (scr?.classList.contains('open')) { closeOverlay(scr); return; }
+      }
+      const h = document.getElementById('historyScreen');
+      if (h?.classList.contains('open')) closeOverlay(h);
+    });
+
+    /* --- Close on tab click (capture: до app.js) --- */
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.tab-item, #sidebarSettingsBtn')) return;
+      for (const scr of [els.likedScreen, els.likedAlbumsScreen, els.allPlScreen, els.likedArtistsScreen]) {
+        if (scr?.classList.contains('open')) closeOverlay(scr);
+      }
+      const h = document.getElementById('historyScreen');
+      if (h?.classList.contains('open')) closeOverlay(h);
+    }, true);
+
+    /* --- Player subscription --- */
+    window.PocuPlayer.subscribe(state => {
+      if (els.likedPreview)  PocuTrackCard.syncPlaying(els.likedPreview, state);
+      if (els.likedList)     PocuTrackCard.syncPlaying(els.likedList, state);
+      const h = document.getElementById('historyTracks');
+      if (h) PocuTrackCard.syncPlaying(h, state);
+      syncRecentPlaying(state);
+    });
+
+    /* --- Store subscription --- */
     window.PocuStore.subscribe(state => {
       const hash = [
         state.favorites.join(','),
         state.recent.map(r => r.id).join(','),
         state.favoriteAlbums.join(','),
-        state.favoriteArtists.join(',')
+        state.favoriteArtists.join(','),
+        (state.favoritePlaylists || []).map(p => p.id).join(',')
       ].join('|');
 
-      /* Сердечки в истории — на каждом тике стора */
-      const $hist = document.getElementById('historyTracks');
-      if ($hist) PocuTrackCard.syncHearts($hist, state.favorites);
+      if (els.likedPreview) PocuTrackCard.syncHearts(els.likedPreview, state.favorites);
+      if (els.likedList)    PocuTrackCard.syncHearts(els.likedList, state.favorites);
+      const h = document.getElementById('historyTracks');
+      if (h) PocuTrackCard.syncHearts(h, state.favorites);
 
-      if (hash === lastHash) {
-        PocuTrackCard.syncHearts(els.tracksList, state.favorites);
-        return;
-      }
+      if (hash === lastHash) return;
       lastHash = hash;
       render(first);
       first = false;
@@ -57,21 +126,13 @@ window.PocuFavoritesUI = (() => {
     document.addEventListener('album:favorites-change',  () => render(false));
     document.addEventListener('artist:favorites-change', () => render(false));
 
-    // «Вся история»
-    document.getElementById('favHistoryBtn')?.addEventListener('click', openHistory);
-    document.getElementById('historyBackBtn')?.addEventListener('click', () => {
-      const scr = document.getElementById('historyScreen');
-      scr.classList.remove('open');
-      scr.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('playlist-open');
-    });
-
     render(true);
     lastHash = [
       window.PocuStore.favorites.all().join(','),
       window.PocuStore.recent.all().map(r => r.id).join(','),
       window.PocuStore.favoriteAlbums.all().join(','),
-      window.PocuStore.favoriteArtists.all().join(',')
+      window.PocuStore.favoriteArtists.all().join(','),
+      (window.PocuStore.favoritePlaylists.all() || []).map(p => p.id).join(',')
     ].join('|');
     first = false;
   }
@@ -84,43 +145,449 @@ window.PocuFavoritesUI = (() => {
     });
   }
 
-  /* ============ Недавно прослушано ============ */
-  function renderRecent() {
-    const recents = window.PocuStore.recent.all();
-    if (!recents.length) { els.recentSection.hidden = true; return; }
+  /* ============================================================
+     Favorites preview sections
+     ============================================================ */
 
-    const all = window.PocuLibrary.all();
-    const map = new Map(all.map(t => [t.id, t]));
+  function render(animate) {
+    const liked   = window.PocuStore.favorites.all().length;
+    const albums  = window.PocuStore.favoriteAlbums.all().length;
+    const artists = window.PocuStore.favoriteArtists.all().length;
+    const recent  = window.PocuStore.recent.all().length;
+
+    const showEmpty = !liked && !albums && !artists && !recent;
+    if (els.emptyBlock) els.emptyBlock.hidden = !showEmpty;
+
+    renderLiked(animate);
+    renderAlbums();
+    renderRecent();
+    renderArtists();
+  }
+
+  function renderLiked(animate) {
+    if (!els.likedSection || !els.likedPreview) return;
+    const ids = window.PocuStore.favorites.all();
+    if (!ids.length) { els.likedSection.hidden = true; els.likedPreview.replaceChildren(); return; }
+
+    const lib = window.PocuLibrary.all();
+    const map = new Map(lib.map(t => [t.id, t]));
+    const ordered = ids.map(id => map.get(id)).filter(Boolean);
+    if (!ordered.length) { els.likedSection.hidden = true; return; }
+
+    els.likedSection.hidden = false;
+    const preview = ordered.slice(0, LIKED_PREVIEW);
+
+    els.likedPreview.replaceChildren();
+    const frag = document.createDocumentFragment();
+    preview.forEach((track, i) => {
+      frag.appendChild(PocuTrackCard.create(track, {
+        index: animate ? i : 0,
+        animate,
+        onPlay: () => window.PocuPlayer.playQueue(ordered, i)
+      }));
+    });
+    els.likedPreview.appendChild(frag);
+
+    PocuTrackCard.syncPlaying(els.likedPreview, window.PocuPlayer.getState());
+    PocuTrackCard.syncHearts(els.likedPreview, window.PocuStore.favorites.all());
+  }
+
+  function renderAlbums() {
+    if (!els.albumsSection || !els.albumsRow) return;
+    const list = window.PocuStore.favoriteAlbums.list();
+    if (!list.length) { els.albumsSection.hidden = true; els.albumsRow.replaceChildren(); return; }
+    els.albumsSection.hidden = false;
+    els.albumsRow.replaceChildren();
+
+    const lib = window.PocuLibrary.all();
+    list.slice(0, ROW_LIMIT).forEach(({ artist, album }) => {
+      const tracks = lib.filter(t => t.artist === artist && t.album === album);
+      const art = tracks.find(t => t.artwork)?.artwork || '';
+      els.albumsRow.appendChild(createAlbumTile(artist, album, art));
+    });
+  }
+
+  function renderRecent() {
+    if (!els.recentSection || !els.recentRow) return;
+    const recents = window.PocuStore.recent.all().slice(0, ROW_LIMIT);
+    if (!recents.length) { els.recentSection.hidden = true; els.recentRow.replaceChildren(); return; }
+
+    const lib = window.PocuLibrary.all();
+    const map = new Map(lib.map(t => [t.id, t]));
     const ordered = recents.map(r => map.get(r.id)).filter(Boolean);
     if (!ordered.length) { els.recentSection.hidden = true; return; }
 
     els.recentSection.hidden = false;
     els.recentRow.replaceChildren();
+    ordered.forEach(track => els.recentRow.appendChild(createRecentTile(track, ordered)));
+  }
 
-    const display = ordered.slice(0, HISTORY_LIMIT);
-    display.forEach(track => {
-      els.recentRow.appendChild(createRecentTile(track, ordered));
+  function renderArtists() {
+    if (!els.artistsSection || !els.artistsRow) return;
+    const ids = window.PocuStore.favoriteArtists.all();
+    if (!ids.length) { els.artistsSection.hidden = true; els.artistsRow.replaceChildren(); return; }
+    els.artistsSection.hidden = false;
+    els.artistsRow.replaceChildren();
+
+    const lib = window.PocuLibrary.all();
+    ids.slice(0, ROW_LIMIT).forEach(id => {
+      const pocu = window.PocuArtists.get(id);
+      let name, photo;
+      if (pocu) { name = pocu.name; photo = pocu.photo; }
+      else {
+        name = id;
+        const lower = id.toLowerCase();
+        const t = lib.filter(x => window.PocuArtists.splitArtists(x.artist).includes(lower));
+        photo = t.find(x => x.artwork)?.artwork || '';
+      }
+      els.artistsRow.appendChild(createArtistTile(id, name, photo));
+    });
+  }
+
+  /* ============================================================
+     Overlays
+     ============================================================ */
+
+  function openLikedTracks() {
+    if (!els.likedScreen) return;
+    const ids = window.PocuStore.favorites.all();
+    const lib = window.PocuLibrary.all();
+    const map = new Map(lib.map(t => [t.id, t]));
+    const ordered = ids.map(id => map.get(id)).filter(Boolean);
+
+    const totalSec = ordered.reduce((s, t) => s + (t.duration || 0), 0);
+    const totalMin = Math.round(totalSec / 60);
+    const parts = [`${ordered.length} ${plural(ordered.length)}`];
+    if (totalMin > 0) parts.push(`${totalMin} мин.`);
+    if (els.likedInfo) els.likedInfo.textContent = parts.join(' • ');
+
+    if (els.likedActions) {
+      els.likedActions.replaceChildren();
+      if (ordered.length) {
+        const play = document.createElement('button');
+        play.className = 'btn btn-primary';
+        play.textContent = 'Играть всё';
+        play.addEventListener('click', () => window.PocuPlayer.playQueue(ordered, 0));
+        const sh = document.createElement('button');
+        sh.className = 'btn btn-secondary';
+        sh.textContent = 'Перемешать';
+        sh.addEventListener('click', () => {
+          const s = [...ordered].sort(() => Math.random() - 0.5);
+          window.PocuPlayer.playQueue(s, 0);
+        });
+        els.likedActions.append(play, sh);
+      }
+    }
+
+    if (els.likedList) {
+      els.likedList.replaceChildren();
+      if (!ordered.length) {
+        els.likedList.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div></div>`;
+      } else {
+        const frag = document.createDocumentFragment();
+        ordered.forEach((t, i) => {
+          frag.appendChild(PocuTrackCard.create(t, {
+            index: i,
+            onPlay: () => window.PocuPlayer.playQueue(ordered, i)
+          }));
+        });
+        els.likedList.appendChild(frag);
+        PocuTrackCard.syncPlaying(els.likedList, window.PocuPlayer.getState());
+        PocuTrackCard.syncHearts(els.likedList, window.PocuStore.favorites.all());
+      }
+    }
+    openOverlay(els.likedScreen);
+  }
+
+  function openLikedAlbums() {
+    if (!els.likedAlbumsScreen) return;
+    const list = window.PocuStore.favoriteAlbums.list();
+    if (els.likedAlbumsInfo) els.likedAlbumsInfo.textContent = `${list.length} ${pluralAlbums(list.length)}`;
+
+    if (els.likedAlbumsList) {
+      els.likedAlbumsList.replaceChildren();
+      if (!list.length) {
+        els.likedAlbumsList.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div></div>`;
+      } else {
+        const lib = window.PocuLibrary.all();
+        list.forEach(({ artist, album }) => {
+          const tracks = lib.filter(t => t.artist === artist && t.album === album);
+          const art = tracks.find(t => t.artwork)?.artwork || '';
+          els.likedAlbumsList.appendChild(createAlbumTile(artist, album, art));
+        });
+      }
+    }
+    openOverlay(els.likedAlbumsScreen);
+  }
+
+  function openAllPlaylists() {
+    if (!els.allPlScreen) return;
+    const own   = window.PocuStore.playlists.all();
+    const liked = window.PocuStore.favoritePlaylists.all();
+    const items = [
+      ...own.map(pl => ({ pl, mode: 'own' })),
+      ...liked.map(pl => ({ pl, mode: 'public' }))
+    ];
+
+    if (els.allPlInfo) els.allPlInfo.textContent = `${items.length} ${pluralPlaylists(items.length)}`;
+
+    if (els.allPlList) {
+      els.allPlList.replaceChildren();
+      if (!items.length) {
+        els.allPlList.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div><div class="state-sub">Создай плейлист — он появится здесь</div></div>`;
+      } else {
+        items.forEach(({ pl, mode }) => els.allPlList.appendChild(createPlaylistTile(pl, mode)));
+      }
+    }
+    openOverlay(els.allPlScreen);
+  }
+
+  function openLikedArtists() {
+    if (!els.likedArtistsScreen) return;
+    const ids = window.PocuStore.favoriteArtists.all();
+    if (els.likedArtistsInfo) els.likedArtistsInfo.textContent = `${ids.length} ${pluralArtists(ids.length)}`;
+
+    if (els.likedArtistsList) {
+      els.likedArtistsList.replaceChildren();
+      if (!ids.length) {
+        els.likedArtistsList.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div></div>`;
+      } else {
+        const lib = window.PocuLibrary.all();
+        ids.forEach(id => {
+          const pocu = window.PocuArtists.get(id);
+          let name, photo;
+          if (pocu) { name = pocu.name; photo = pocu.photo; }
+          else {
+            name = id;
+            const lower = id.toLowerCase();
+            const t = lib.filter(x => window.PocuArtists.splitArtists(x.artist).includes(lower));
+            photo = t.find(x => x.artwork)?.artwork || '';
+          }
+          els.likedArtistsList.appendChild(createArtistTile(id, name, photo));
+        });
+      }
+    }
+    openOverlay(els.likedArtistsScreen);
+  }
+
+  /* ============================================================
+     History (carry over из предыдущего патча)
+     ============================================================ */
+
+  function openHistory() {
+    const $hist = document.getElementById('historyTracks');
+    const scr   = document.getElementById('historyScreen');
+    if (!$hist || !scr) return;
+
+    const recent = window.PocuStore.recent.all();
+    const lib    = window.PocuLibrary.all();
+    const map    = new Map(lib.map(t => [t.id, t]));
+    const items  = recent
+      .map(r => ({ track: map.get(r.id), t: r.t || 0 }))
+      .filter(x => x.track);
+
+    const groupsMap = new Map();
+    items.forEach(({ track, t }) => {
+      const d = new Date(t || Date.now());
+      const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+      if (!groupsMap.has(key)) groupsMap.set(key, { key, date: d, items: [] });
+      groupsMap.get(key).items.push({ track, t });
     });
 
-    if (ordered.length > HISTORY_LIMIT) {
-      const btn = document.createElement('div');
-      btn.className = 'recent-tile';
-      btn.setAttribute('role', 'button');
-      btn.setAttribute('tabindex', '0');
-      btn.innerHTML = `
-        <div class="recent-art-wrap">
-          <div class="recent-art" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);border:1px solid var(--glass-brd);">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-dim);"><path d="m9 18 6-6-6-6"/></svg>
-          </div>
-        </div>
-        <div class="recent-tile-info">
-          <div class="recent-tile-text">
-            <div class="recent-title">Вся история</div>
-          </div>
-        </div>`;
-      btn.addEventListener('click', openHistory);
-      els.recentRow.appendChild(btn);
+    historyGroupsCache = [...groupsMap.values()].sort((a, b) => b.date - a.date);
+    if (historyFilterKey && !historyGroupsCache.some(g => g.key === historyFilterKey)) {
+      historyFilterKey = null;
     }
+
+    renderHistoryFilters();
+    renderHistoryList();
+    openOverlay(scr);
+  }
+
+  function renderHistoryFilters() {
+    const $f = document.getElementById('historyFilters');
+    if (!$f) return;
+    $f.replaceChildren();
+    const top = historyGroupsCache.slice(0, 7);
+    if (!top.length) { $f.hidden = true; return; }
+    $f.hidden = false;
+
+    top.forEach(g => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip';
+      b.dataset.dateKey = g.key;
+      b.textContent = dateLabel(g.date);
+      if (historyFilterKey === g.key) b.classList.add('active');
+      b.addEventListener('click', () => {
+        historyFilterKey = (historyFilterKey === g.key) ? null : g.key;
+        renderHistoryFilters();
+        renderHistoryList();
+      });
+      $f.appendChild(b);
+    });
+  }
+
+  function renderHistoryList() {
+    const $hist = document.getElementById('historyTracks');
+    if (!$hist) return;
+    if (!historyGroupsCache.length) {
+      $hist.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div></div>`;
+      return;
+    }
+    const groups = historyFilterKey
+      ? historyGroupsCache.filter(g => g.key === historyFilterKey)
+      : historyGroupsCache;
+    const visible = [];
+    groups.forEach(g => g.items.forEach(it => visible.push(it.track)));
+
+    $hist.replaceChildren();
+    const frag = document.createDocumentFragment();
+    let idx = 0;
+    groups.forEach(g => {
+      const h = document.createElement('div');
+      h.className = 'history-date-header';
+      h.textContent = dateLabel(g.date);
+      frag.appendChild(h);
+      g.items.forEach(it => {
+        const myIdx = idx++;
+        frag.appendChild(PocuTrackCard.create(it.track, {
+          index: myIdx,
+          onPlay: () => window.PocuPlayer.playQueue(visible, myIdx)
+        }));
+      });
+    });
+    $hist.appendChild(frag);
+
+    PocuTrackCard.syncPlaying($hist, window.PocuPlayer.getState());
+    PocuTrackCard.syncHearts($hist, window.PocuStore.favorites.all());
+  }
+
+  function dateLabel(date) {
+    const now = new Date();
+    const todayStart  = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const targetStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const diffDays = Math.round((todayStart - targetStart) / 86400000);
+    if (diffDays === 0) return 'Сегодня';
+    if (diffDays === 1) return 'Вчера';
+    const opts = { day: 'numeric', month: 'long' };
+    if (date.getFullYear() !== now.getFullYear()) opts.year = 'numeric';
+    return date.toLocaleDateString('ru-RU', opts).replace(/\s*г\.$/, '');
+  }
+
+  /* ============================================================
+     Helpers
+     ============================================================ */
+
+  function createAlbumTile(artist, album, artwork) {
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'home-tile';
+
+    const artWrap = document.createElement('div');
+    artWrap.className = 'home-tile-art-wrap';
+    const art = document.createElement('div');
+    art.className = 'home-tile-art';
+    if (artwork) art.style.backgroundImage = `url("${artwork}")`;
+    artWrap.appendChild(art);
+
+    const info = document.createElement('div');
+    info.className = 'home-tile-info';
+    const text = document.createElement('div');
+    text.className = 'home-tile-text';
+    const name = document.createElement('div');
+    name.className = 'home-tile-name';
+    name.textContent = album;
+    const artistEl = document.createElement('div');
+    artistEl.className = 'home-tile-artist';
+    artistEl.textContent = artist;
+    text.append(name, artistEl);
+    info.appendChild(text);
+    tile.append(artWrap, info);
+
+    tile.addEventListener('click', () => window.PocuAlbumUI?.open?.(artist, album));
+    return tile;
+  }
+
+  function createArtistTile(id, name, photo) {
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'home-tile';
+
+    const artWrap = document.createElement('div');
+    artWrap.className = 'home-tile-art-wrap home-tile-art-wrap--round';
+    const art = document.createElement('div');
+    art.className = 'home-tile-art home-tile-art--round';
+    if (photo) art.style.backgroundImage = `url("${photo}")`;
+    else {
+      art.classList.add('home-tile-art--placeholder');
+      art.textContent = name.slice(0, 1).toUpperCase();
+    }
+    artWrap.appendChild(art);
+
+    const info = document.createElement('div');
+    info.className = 'home-tile-info';
+    const text = document.createElement('div');
+    text.className = 'home-tile-text';
+    const nameEl = document.createElement('div');
+    nameEl.className = 'home-tile-name';
+    nameEl.textContent = name;
+    text.appendChild(nameEl);
+    info.appendChild(text);
+    tile.append(artWrap, info);
+
+    tile.addEventListener('click', () => window.PocuArtistUI?.openArtist?.(id));
+    return tile;
+  }
+
+  function createPlaylistTile(pl, mode) {
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'home-tile';
+
+    const artWrap = document.createElement('div');
+    artWrap.className = 'home-tile-art-wrap';
+    const art = document.createElement('div');
+    art.className = 'home-tile-art';
+
+    if (pl.coverUrl) art.style.backgroundImage = `url("${pl.coverUrl}")`;
+    else {
+      const first = pl.trackIds?.[0] ? window.PocuLibrary.get(pl.trackIds[0]) : null;
+      if (first?.artwork) art.style.backgroundImage = `url("${first.artwork}")`;
+      else {
+        art.classList.add('home-tile-art--placeholder');
+        art.textContent = (pl.name || '?').slice(0, 1).toUpperCase();
+        art.style.background = 'linear-gradient(135deg, #7c5cff, #ff409e)';
+      }
+    }
+    artWrap.appendChild(art);
+
+    if (mode === 'public' || pl.isPublic) {
+      const badge = document.createElement('div');
+      badge.className = 'playlist-public-badge';
+      badge.innerHTML = '<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>';
+      artWrap.appendChild(badge);
+    }
+
+    const info = document.createElement('div');
+    info.className = 'home-tile-info';
+    const text = document.createElement('div');
+    text.className = 'home-tile-text';
+    const name = document.createElement('div');
+    name.className = 'home-tile-name';
+    name.textContent = pl.name;
+    const count = document.createElement('div');
+    count.className = 'home-tile-artist';
+    const n = (pl.trackIds || []).length;
+    count.textContent = mode === 'public' && pl.authorName
+      ? `${pl.authorName} · ${n} ${plural(n)}`
+      : `${n} ${plural(n)}`;
+    text.append(name, count);
+    info.appendChild(text);
+    tile.append(artWrap, info);
+
+    tile.addEventListener('click', () => window.PocuPlaylistsUI?.openPlaylist?.(pl.id, mode));
+    return tile;
   }
 
   function createRecentTile(track, ordered) {
@@ -131,7 +598,6 @@ window.PocuFavoritesUI = (() => {
 
     const artWrap = document.createElement('div');
     artWrap.className = 'recent-art-wrap';
-
     const art = document.createElement('div');
     art.className = 'recent-art';
     if (track.artwork) art.style.backgroundImage = `url("${track.artwork}")`;
@@ -145,10 +611,8 @@ window.PocuFavoritesUI = (() => {
 
     const info = document.createElement('div');
     info.className = 'recent-tile-info';
-
     const text = document.createElement('div');
     text.className = 'recent-tile-text';
-
     const title = document.createElement('div');
     title.className = 'recent-title';
     title.textContent = track.title;
@@ -164,16 +628,12 @@ window.PocuFavoritesUI = (() => {
       const r = menuBtn.getBoundingClientRect();
       window.PocuContextMenu?.openAt?.(track, r.right, r.top);
     });
-
-    title.addEventListener('click', e => {
-      e.stopPropagation();
-      window.PocuTrackCard.openTarget(track);
-    });
+    title.addEventListener('click', e => { e.stopPropagation(); window.PocuTrackCard.openTarget(track); });
 
     info.append(text, menuBtn);
     el.append(artWrap, info);
 
-    el.addEventListener('click', (e) => {
+    el.addEventListener('click', e => {
       if (window.PocuContextMenu?.isSuppressingClick?.()) { e.stopPropagation(); e.preventDefault(); return; }
       const idx = ordered.findIndex(t => t.id === track.id);
       if (idx >= 0) window.PocuPlayer.playQueue(ordered, idx);
@@ -182,339 +642,62 @@ window.PocuFavoritesUI = (() => {
     return el;
   }
 
-  /* ---- История: состояние фильтра + данные ---- */
-  let historyFilterKey = null;        // 'YYYY-M-D' | null (null = «все даты»)
-  let historyGroupsCache = [];        // [{ key, date, items: [{ track, t }] }]
-
-  function openHistory() {
-    const $hist = document.getElementById('historyTracks');
-    const scr   = document.getElementById('historyScreen');
-    if (!$hist || !scr) return;
-
-    /* 1. recent → треки (с фильтром мусора) */
-    const recent = window.PocuStore.recent.all();
-    const lib    = window.PocuLibrary.all();
-    const map    = new Map(lib.map(t => [t.id, t]));
-    const items  = recent
-      .map(r => ({ track: map.get(r.id), t: r.t || 0 }))
-      .filter(x => x.track);
-
-    /* 2. Группируем по календарной дате (локально) */
-    const groupsMap = new Map();
-    items.forEach(({ track, t }) => {
-      const d = new Date(t || Date.now());
-      const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-      if (!groupsMap.has(key)) groupsMap.set(key, { key, date: d, items: [] });
-      groupsMap.get(key).items.push({ track, t });
-    });
-
-    /* 3. Свежие — сверху */
-    historyGroupsCache = [...groupsMap.values()].sort((a, b) => b.date - a.date);
-
-    /* 4. Сброс фильтра, если выбранной даты больше нет */
-    if (historyFilterKey && !historyGroupsCache.some(g => g.key === historyFilterKey)) {
-      historyFilterKey = null;
-    }
-
-    /* 5. Рендер */
-    renderHistoryFilters();
-    renderHistoryList();
-
-    /* 6. Открываем */
+  function openOverlay(scr) {
+    if (!scr) return;
     window.PocuLayers?.front?.(scr);
     scr.classList.add('open');
     scr.setAttribute('aria-hidden', 'false');
     document.body.classList.add('playlist-open');
-
     requestAnimationFrame(() => {
       const inner = scr.querySelector('.playlist-overlay-inner');
       if (inner) inner.scrollTop = 0;
     });
   }
 
-  function renderHistoryFilters() {
-    const $filters = document.getElementById('historyFilters');
-    if (!$filters) return;
-    $filters.replaceChildren();
+  function closeOverlay(scr) {
+    if (!scr) return;
+    window.PocuLayers?.reset?.(scr);
+    scr.classList.remove('open');
+    scr.setAttribute('aria-hidden', 'true');
 
-    /* Показываем только 7 последних дат */
-    const top = historyGroupsCache.slice(0, 7);
-    if (!top.length) { $filters.hidden = true; return; }
-    $filters.hidden = false;
-
-    top.forEach(g => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'chip';
-      btn.dataset.dateKey = g.key;
-      btn.textContent = dateLabel(g.date);
-      if (historyFilterKey === g.key) btn.classList.add('active');
-
-      btn.addEventListener('click', () => {
-        if (historyFilterKey === g.key) historyFilterKey = null;
-        else historyFilterKey = g.key;
-        renderHistoryFilters();
-        renderHistoryList();
-      });
-
-      $filters.appendChild(btn);
-    });
+    let stillOpen = [els.likedScreen, els.likedAlbumsScreen, els.allPlScreen, els.likedArtistsScreen]
+      .some(s => s?.classList.contains('open'));
+    const h = document.getElementById('historyScreen');
+    if (h?.classList.contains('open')) stillOpen = true;
+    if (!stillOpen) document.body.classList.remove('playlist-open');
   }
 
-  function renderHistoryList() {
-    const $hist = document.getElementById('historyTracks');
-    if (!$hist) return;
-
-    if (!historyGroupsCache.length) {
-      $hist.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div><div class="state-sub">Здесь появится история прослушиваний</div></div>`;
-      return;
-    }
-
-    /* Какие группы показывать */
-    const groups = historyFilterKey
-      ? historyGroupsCache.filter(g => g.key === historyFilterKey)
-      : historyGroupsCache;
-
-    /* Плоский порядок «видимых» треков — для playQueue */
-    const visibleTracks = [];
-    groups.forEach(g => g.items.forEach(it => visibleTracks.push(it.track)));
-
-    $hist.replaceChildren();
-    const frag = document.createDocumentFragment();
-    let idx = 0;
-
-    groups.forEach(g => {
-      const header = document.createElement('div');
-      header.className = 'history-date-header';
-      header.textContent = dateLabel(g.date);
-      frag.appendChild(header);
-
-      g.items.forEach(it => {
-        const myIdx = idx++;
-        frag.appendChild(PocuTrackCard.create(it.track, {
-          index: myIdx,
-          onPlay: () => window.PocuPlayer.playQueue(visibleTracks, myIdx)
-        }));
-      });
-    });
-
-    $hist.appendChild(frag);
-
-    PocuTrackCard.syncPlaying($hist, window.PocuPlayer.getState());
-    PocuTrackCard.syncHearts($hist, window.PocuStore.favorites.all());
+  function plural(n) {
+    const m = n % 100;
+    if (m >= 11 && m <= 14) return 'треков';
+    const l = n % 10;
+    if (l === 1) return 'трек';
+    if (l >= 2 && l <= 4) return 'трека';
+    return 'треков';
   }
-
-  /* Лейбл даты: «Сегодня», «Вчера», «22 ноября», «22 ноября 2025» */
-  function dateLabel(date) {
-    const now = new Date();
-    const todayStart  = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const targetStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    const diffDays = Math.round((todayStart - targetStart) / 86400000);
-    if (diffDays === 0) return 'Сегодня';
-    if (diffDays === 1) return 'Вчера';
-    const opts = { day: 'numeric', month: 'long' };
-    if (date.getFullYear() !== now.getFullYear()) opts.year = 'numeric';
-    return date.toLocaleDateString('ru-RU', opts).replace(/\s*г\.$/, '');
+  function pluralAlbums(n) {
+    const m = n % 100;
+    if (m >= 11 && m <= 14) return 'альбомов';
+    const l = n % 10;
+    if (l === 1) return 'альбом';
+    if (l >= 2 && l <= 4) return 'альбома';
+    return 'альбомов';
   }
-
-  /* ============ Избранные альбомы ============ */
-  function renderAlbums() {
-    const list = window.PocuStore.favoriteAlbums.list();
-    if (!list.length) { els.albumsSection.hidden = true; return; }
-
-    els.albumsSection.hidden = false;
-    els.albumsRow.replaceChildren();
-
-    const lib = window.PocuLibrary.all();
-    list.forEach(({ artist, album }) => {
-      const tracks = lib.filter(t => t.artist === artist && t.album === album);
-      const firstWithArt = tracks.find(t => t.artwork);
-      els.albumsRow.appendChild(createAlbumTile(artist, album, firstWithArt?.artwork || ''));
-    });
+  function pluralPlaylists(n) {
+    const m = n % 100;
+    if (m >= 11 && m <= 14) return 'плейлистов';
+    const l = n % 10;
+    if (l === 1) return 'плейлист';
+    if (l >= 2 && l <= 4) return 'плейлиста';
+    return 'плейлистов';
   }
-
-  function createAlbumTile(artist, album, artwork) {
-    const tile = document.createElement('button');
-    tile.type = 'button';
-    tile.className = 'home-tile';
-
-    const artWrap = document.createElement('div');
-    artWrap.className = 'home-tile-art-wrap';
-
-    const art = document.createElement('div');
-    art.className = 'home-tile-art';
-    if (artwork) art.style.backgroundImage = `url("${artwork}")`;
-    artWrap.appendChild(art);
-
-    const info = document.createElement('div');
-    info.className = 'home-tile-info';
-    const text = document.createElement('div');
-    text.className = 'home-tile-text';
-
-    const name = document.createElement('div');
-    name.className = 'home-tile-name';
-    name.textContent = album;
-
-    const artistEl = document.createElement('div');
-    artistEl.className = 'home-tile-artist';
-    artistEl.textContent = artist;
-
-    text.append(name, artistEl);
-    info.appendChild(text);
-    tile.append(artWrap, info);
-
-    tile.addEventListener('click', () => window.PocuAlbumUI?.open?.(artist, album));
-    return tile;
-  }
-
-  /* ============ Избранные артисты ============ */
-  function renderArtists() {
-    const ids = window.PocuStore.favoriteArtists.all();
-    if (!ids.length) { els.artistsSection.hidden = true; return; }
-
-    els.artistsSection.hidden = false;
-    els.artistsRow.replaceChildren();
-
-    const lib = window.PocuLibrary.all();
-    ids.forEach(id => {
-      const pocu = window.PocuArtists.get(id);
-      let name, photo;
-      if (pocu) { name = pocu.name; photo = pocu.photo; }
-      else {
-        name = id;
-        const lower = id.toLowerCase();
-        const tracks = lib.filter(t => window.PocuArtists.splitArtists(t.artist).includes(lower));
-        photo = tracks.find(t => t.artwork)?.artwork || '';
-      }
-      els.artistsRow.appendChild(createArtistTile(id, name, photo));
-    });
-  }
-
-  function createArtistTile(id, name, photo) {
-    const tile = document.createElement('button');
-    tile.type = 'button';
-    tile.className = 'home-tile';
-
-    const artWrap = document.createElement('div');
-    artWrap.className = 'home-tile-art-wrap home-tile-art-wrap--round';
-
-    const art = document.createElement('div');
-    art.className = 'home-tile-art home-tile-art--round';
-    if (photo) art.style.backgroundImage = `url("${photo}")`;
-    else {
-      art.classList.add('home-tile-art--placeholder');
-      art.textContent = name.slice(0, 1).toUpperCase();
-    }
-    artWrap.appendChild(art);
-
-    const info = document.createElement('div');
-    info.className = 'home-tile-info';
-    const text = document.createElement('div');
-    text.className = 'home-tile-text';
-
-    const nameEl = document.createElement('div');
-    nameEl.className = 'home-tile-name';
-    nameEl.textContent = name;
-
-    text.appendChild(nameEl);
-    info.appendChild(text);
-    tile.append(artWrap, info);
-
-    tile.addEventListener('click', () => window.PocuArtistUI?.openArtist?.(id));
-    return tile;
-  }
-
-  /* ============ Избранные треки ============ */
-  function renderTracks(animate) {
-    const ids = window.PocuStore.favorites.all();
-    const all = window.PocuLibrary.all();
-    const map = new Map(all.map(t => [t.id, t]));
-    const ordered = ids.map(id => map.get(id)).filter(Boolean);
-
-    els.tracksList.replaceChildren();
-
-    if (!ordered.length) {
-      els.tracksSection.hidden = true;
-      return;
-    }
-    els.tracksSection.hidden = false;
-
-    const frag = document.createDocumentFragment();
-    ordered.forEach((track, i) => {
-      frag.appendChild(PocuTrackCard.create(track, {
-        index: animate ? i : 0,
-        animate,
-        onPlay: () => window.PocuPlayer.playQueue(ordered, i)
-      }));
-    });
-    els.tracksList.appendChild(frag);
-
-    PocuTrackCard.syncPlaying(els.tracksList, window.PocuPlayer.getState());
-    PocuTrackCard.syncHearts(els.tracksList, window.PocuStore.favorites.all());
-  }
-
-  /* ============ Полный рендер ============ */
-  function render(animate) {
-    const favCount   = window.PocuStore.favorites.all().length;
-    const albumCount = window.PocuStore.favoriteAlbums.all().length;
-    const artCount   = window.PocuStore.favoriteArtists.all().length;
-    const recentHas  = window.PocuStore.recent.all().length > 0;
-    const plCount    = window.PocuStore.playlists.all().length;
-
-    const likedCount = window.PocuStore.favoritePlaylists.all().length;
-    const showEmpty = !favCount && !albumCount && !artCount && !recentHas && !plCount && !likedCount;
-    if (els.emptyBlock) els.emptyBlock.hidden = !showEmpty;
-
-    renderRecent();
-    renderAlbums();
-    renderArtists();
-    renderLikedPlaylists();
-    renderTracks(animate);
-  }
-
-  function renderLikedPlaylists() {
-    const sec = document.getElementById('favLikedPlaylists');
-    const row = document.getElementById('favLikedPlaylistsRow');
-    if (!sec || !row) return;
-    const list = window.PocuStore.favoritePlaylists.all();
-    if (!list.length) { sec.hidden = true; return; }
-    sec.hidden = false;
-    row.replaceChildren();
-    list.forEach(pl => {
-      const tile = document.createElement('button');
-      tile.type = 'button';
-      tile.className = 'home-tile';
-      const artWrap = document.createElement('div');
-      artWrap.className = 'home-tile-art-wrap';
-      const art = document.createElement('div');
-      art.className = 'home-tile-art';
-      if (pl.coverUrl) art.style.backgroundImage = `url("${pl.coverUrl}")`;
-      else {
-        const first = pl.trackIds[0] ? window.PocuLibrary.get(pl.trackIds[0]) : null;
-        if (first?.artwork) art.style.backgroundImage = `url("${first.artwork}")`;
-        else {
-          art.classList.add('home-tile-art--placeholder');
-          art.textContent = (pl.name || '?').slice(0, 1).toUpperCase();
-          art.style.background = 'linear-gradient(135deg, #7c5cff, #ff409e)';
-        }
-      }
-      artWrap.appendChild(art);
-      const info = document.createElement('div');
-      info.className = 'home-tile-info';
-      const text = document.createElement('div');
-      text.className = 'home-tile-text';
-      const name = document.createElement('div');
-      name.className = 'home-tile-name';
-      name.textContent = pl.name;
-      const sub = document.createElement('div');
-      sub.className = 'home-tile-artist';
-      sub.textContent = pl.authorName || 'Аноним';
-      text.append(name, sub);
-      info.appendChild(text);
-      tile.append(artWrap, info);
-      tile.addEventListener('click', () => window.PocuPlaylistsUI?.openPlaylist?.(pl.id, 'public'));
-      row.appendChild(tile);
-    });
+  function pluralArtists(n) {
+    const m = n % 100;
+    if (m >= 11 && m <= 14) return 'артистов';
+    const l = n % 10;
+    if (l === 1) return 'артист';
+    if (l >= 2 && l <= 4) return 'артиста';
+    return 'артистов';
   }
 
   return { init };

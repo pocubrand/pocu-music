@@ -279,46 +279,61 @@
       <div class="state-sub">Лайкай треки, альбомы и артистов — они появятся здесь</div>
     </div>
 
-    <div class="lib-section">
+    <!-- Мне нравится -->
+    <div class="lib-section" id="favLiked" hidden>
       <div class="section-head">
-        <h2>Плейлисты</h2>
-        <button class="btn-text" id="createPlaylistBtn">+ Создать</button>
+        <button class="section-head-btn" data-open="liked-tracks" type="button">
+          <h2>Мне нравится</h2>
+          <svg class="section-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
       </div>
-      <div id="libPlaylists" class="home-row"></div>
+      <div id="favLikedTracks" class="liked-tracks-preview"></div>
     </div>
 
+    <!-- Любимые альбомы -->
+    <div class="lib-section" id="favAlbums" hidden>
+      <div class="section-head">
+        <button class="section-head-btn" data-open="liked-albums" type="button">
+          <h2>Любимые альбомы</h2>
+          <svg class="section-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div id="favAlbumsRow" class="fav-row"></div>
+    </div>
+
+    <!-- Недавно прослушано -->
     <div class="lib-section" id="favRecent" hidden>
-      <div class="section-head"><h2>Недавно прослушано</h2></div>
+      <div class="section-head">
+        <button class="section-head-btn" data-open="history" type="button">
+          <h2>Недавно прослушано</h2>
+          <svg class="section-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+      </div>
       <div class="recent-row" id="favRecentRow"></div>
     </div>
 
-    <div class="lib-section" id="favAlbums" hidden>
-      <div class="section-head"><h2>Альбомы</h2></div>
-      <div class="home-row" id="favAlbumsRow"></div>
+    <!-- Плейлисты -->
+    <div class="lib-section">
+      <div class="section-head">
+        <button class="section-head-btn" data-open="all-playlists" type="button">
+          <h2>Плейлисты</h2>
+          <svg class="section-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+        <button class="btn-text" id="createPlaylistBtn">+ Создать</button>
+      </div>
+      <div id="libPlaylists" class="fav-row"></div>
     </div>
 
+    <!-- Артисты -->
     <div class="lib-section" id="favArtists" hidden>
-      <div class="section-head"><h2>Артисты</h2></div>
-      <div class="home-row" id="favArtistsRow"></div>
+      <div class="section-head">
+        <button class="section-head-btn" data-open="liked-artists" type="button">
+          <h2>Артисты</h2>
+          <svg class="section-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div id="favArtistsRow" class="fav-row"></div>
     </div>
-
-    <div class="lib-section" id="favLikedPlaylists" hidden>
-      <div class="section-head"><h2>Сохранённые плейлисты</h2></div>
-      <div class="home-row" id="favLikedPlaylistsRow"></div>
-    </div>
-
-    <div class="lib-section" id="favTracks" hidden>
-      <div class="section-head"><h2>Треки</h2></div>
-      <div id="favTracksList" class="results"></div>
-    </div>
-
-    <div class="lib-section" id="favPocuArtists" hidden>
-      <div class="section-head"><h2>Артисты Pocu</h2></div>
-      <div class="home-row" id="favPocuArtistsRow"></div>
-    </div>
-
-    <div id="favoritesList" style="display:none"></div>
-    <button id="favHistoryBtn" style="display:none"></button>
   </section>
 
   <!-- ПРОФИЛЬ -->
@@ -518,6 +533,100 @@
     <h1 class="title">История</h1>
     <div class="history-filters" id="historyFilters"></div>
     <div id="historyTracks" class="results"></div>
+  </div>
+</section>
+
+<!-- Лайкнутые треки -->
+<section class="playlist-overlay" id="likedTracksScreen" aria-hidden="true">
+  <div class="playlist-overlay-inner entity-page">
+    <div class="entity-header">
+      <button class="back-btn entity-back" id="likedTracksBackBtn" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Назад</span>
+      </button>
+      <div class="entity-cover-wrap">
+        <div class="entity-cover entity-cover--heart">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.2s-7.2-4.4-7.2-9.3A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7.2 2.7c0 4.9-7.2 9.3-7.2 9.3z"/></svg>
+        </div>
+      </div>
+      <div class="entity-meta">
+        <div class="entity-type">Коллекция</div>
+        <h1 class="entity-title">Мне нравится</h1>
+        <div class="entity-info" id="likedTracksInfo">—</div>
+        <div class="entity-actions" id="likedTracksActions"></div>
+      </div>
+    </div>
+    <div class="entity-tracks" id="likedTracksList"></div>
+  </div>
+</section>
+
+<!-- Любимые альбомы -->
+<section class="playlist-overlay" id="likedAlbumsScreen" aria-hidden="true">
+  <div class="playlist-overlay-inner entity-page">
+    <div class="entity-header">
+      <button class="back-btn entity-back" id="likedAlbumsBackBtn" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Назад</span>
+      </button>
+      <div class="entity-cover-wrap">
+        <div class="entity-cover entity-cover--vinyl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg>
+        </div>
+      </div>
+      <div class="entity-meta">
+        <div class="entity-type">Коллекция</div>
+        <h1 class="entity-title">Любимые альбомы</h1>
+        <div class="entity-info" id="likedAlbumsInfo">—</div>
+      </div>
+    </div>
+    <div class="entity-grid" id="likedAlbumsList"></div>
+  </div>
+</section>
+
+<!-- Все плейлисты (свои + лайкнутые) -->
+<section class="playlist-overlay" id="allPlaylistsScreen" aria-hidden="true">
+  <div class="playlist-overlay-inner entity-page">
+    <div class="entity-header">
+      <button class="back-btn entity-back" id="allPlaylistsBackBtn" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Назад</span>
+      </button>
+      <div class="entity-cover-wrap">
+        <div class="entity-cover entity-cover--playlist">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h10"/><circle cx="18" cy="16" r="3"/><path d="M21 16V8l-3 1"/></svg>
+        </div>
+      </div>
+      <div class="entity-meta">
+        <div class="entity-type">Коллекция</div>
+        <h1 class="entity-title">Плейлисты</h1>
+        <div class="entity-info" id="allPlaylistsInfo">—</div>
+        <div class="entity-actions" id="allPlaylistsActions"></div>
+      </div>
+    </div>
+    <div class="entity-grid" id="allPlaylistsList"></div>
+  </div>
+</section>
+
+<!-- Лайкнутые артисты -->
+<section class="playlist-overlay" id="likedArtistsScreen" aria-hidden="true">
+  <div class="playlist-overlay-inner entity-page">
+    <div class="entity-header">
+      <button class="back-btn entity-back" id="likedArtistsBackBtn" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Назад</span>
+      </button>
+      <div class="entity-cover-wrap">
+        <div class="entity-cover entity-cover--artist">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+        </div>
+      </div>
+      <div class="entity-meta">
+        <div class="entity-type">Коллекция</div>
+        <h1 class="entity-title">Артисты</h1>
+        <div class="entity-info" id="likedArtistsInfo">—</div>
+      </div>
+    </div>
+    <div class="entity-grid" id="likedArtistsList"></div>
   </div>
 </section>
 
