@@ -176,27 +176,84 @@ window.PocuFavoritesUI = (() => {
   }
 
   function openHistory() {
-    const ordered = window.PocuStore.recent.all()
-      .map(r => window.PocuLibrary.get(r.id)).filter(Boolean);
-
     const $hist = document.getElementById('historyTracks');
-    $hist.replaceChildren();
-    const frag = document.createDocumentFragment();
-    ordered.forEach((track, i) => {
-      frag.appendChild(PocuTrackCard.create(track, {
-        index: i,
-        onPlay: () => window.PocuPlayer.playQueue(ordered, i)
-      }));
+    const scr   = document.getElementById('historyScreen');
+    if (!$hist || !scr) return;
+
+    /* 1. Собираем recent → треки (с фильтром) */
+    const recent = window.PocuStore.recent.all();
+    const lib    = window.PocuLibrary.all();
+    const map    = new Map(lib.map(t => [t.id, t]));
+    const items  = recent
+      .map(r => ({ track: map.get(r.id), t: r.t || 0 }))
+      .filter(x => x.track);
+
+    /* 2. Группируем по календарной дате (локальное время) */
+    const groupsMap = new Map();
+    items.forEach(({ track, t }) => {
+      const d = new Date(t || Date.now());
+      const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+      if (!groupsMap.has(key)) groupsMap.set(key, { date: d, items: [] });
+      groupsMap.get(key).items.push({ track, t });
     });
-    $hist.appendChild(frag);
 
-    PocuTrackCard.syncPlaying($hist, window.PocuPlayer.getState());
-    PocuTrackCard.syncHearts($hist, window.PocuStore.favorites.all());
+    /* 3. Свежие группы — сверху */
+    const groups = [...groupsMap.values()].sort((a, b) => b.date - a.date);
 
-    const scr = document.getElementById('historyScreen');
+    /* 4. Плоский порядок для playQueue */
+    const ordered = [];
+    groups.forEach(g => g.items.forEach(it => ordered.push(it.track)));
+
+    /* 5. Рендер: заголовок группы + треклист */
+    $hist.replaceChildren();
+    if (!ordered.length) {
+      $hist.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div><div class="state-sub">Здесь появится история прослушиваний</div></div>`;
+    } else {
+      const frag = document.createDocumentFragment();
+      let idx = 0;
+      groups.forEach(g => {
+        const header = document.createElement('div');
+        header.className = 'history-date-header';
+        header.textContent = dateLabel(g.date);
+        frag.appendChild(header);
+
+        g.items.forEach(it => {
+          const myIdx = idx++;
+          frag.appendChild(PocuTrackCard.create(it.track, {
+            index: myIdx,
+            onPlay: () => window.PocuPlayer.playQueue(ordered, myIdx)
+          }));
+        });
+      });
+      $hist.appendChild(frag);
+
+      PocuTrackCard.syncPlaying($hist, window.PocuPlayer.getState());
+      PocuTrackCard.syncHearts($hist, window.PocuStore.favorites.all());
+    }
+
+    /* 6. Открываем */
+    window.PocuLayers?.front?.(scr);
     scr.classList.add('open');
     scr.setAttribute('aria-hidden', 'false');
     document.body.classList.add('playlist-open');
+
+    requestAnimationFrame(() => {
+      const inner = scr.querySelector('.playlist-overlay-inner');
+      if (inner) inner.scrollTop = 0;
+    });
+  }
+
+  /* Лейбл даты: «Сегодня», «Вчера», «22 ноября», «22 ноября 2025» */
+  function dateLabel(date) {
+    const now = new Date();
+    const todayStart  = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const targetStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const diffDays = Math.round((todayStart - targetStart) / 86400000);
+    if (diffDays === 0) return 'Сегодня';
+    if (diffDays === 1) return 'Вчера';
+    const opts = { day: 'numeric', month: 'long' };
+    if (date.getFullYear() !== now.getFullYear()) opts.year = 'numeric';
+    return date.toLocaleDateString('ru-RU', opts).replace(/\s*г\.$/, '');
   }
 
   /* ============ Избранные альбомы ============ */
