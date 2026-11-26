@@ -708,3 +708,9 @@ html { transition: background-color .3s ease; }
 [data-theme="light"] .settings-account-inner .settings-info {
   border-top-color: rgba(0,0,0,.06);
 }
+
+[data-theme="light"] .history-filters .chip.active {
+  background: linear-gradient(135deg, rgba(167,139,250,.22), rgba(106,168,255,.22));
+  border-color: rgba(124,92,255,.45);
+  color: var(--accent);
+}

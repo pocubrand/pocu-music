@@ -7009,8 +7009,33 @@ img:not([src]) {
 }
 
 /* =========================================================
-   HISTORY PAGE — группировка по датам
+   HISTORY PAGE — фильтры по датам + группировка
    ========================================================= */
+
+/* Капсулы-фильтры под заголовком «История» */
+.history-filters {
+  display: flex;
+  gap: 8px;
+  margin: 4px 0 18px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+.history-filters::-webkit-scrollbar { display: none; }
+.history-filters[hidden] { display: none; }
+
+.history-filters .chip {
+  flex: none;
+  padding: 8px 14px;
+  font-size: 13px;
+  border-radius: 999px;
+}
+.history-filters .chip.active {
+  background: linear-gradient(135deg, rgba(167,139,250,.35), rgba(106,168,255,.35));
+  border-color: rgba(167,139,250,.55);
+  color: #fff;
+}
 
 /* Заголовок группы внутри списка */
 .history-date-header {
@@ -7019,23 +7044,24 @@ img:not([src]) {
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin: 22px 4px 6px;
+  margin: 20px 4px 6px;
   padding: 0 4px;
 }
 .history-date-header:first-child {
-  margin-top: 8px;
+  margin-top: 0;
 }
 
-/* ПК: заголовки в одну колонку с треклистом */
+/* ПК: список на всю ширину */
 @media (min-width: 900px) {
   #historyScreen #historyTracks {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-width: 900px;
   }
   .history-date-header {
-    margin-top: 28px;
     font-size: 12px;
+  }
+  .history-date-header:not(:first-child) {
+    margin-top: 24px;
   }
 }

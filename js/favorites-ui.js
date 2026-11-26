@@ -175,12 +175,16 @@ window.PocuFavoritesUI = (() => {
     return el;
   }
 
+  /* ---- История: состояние фильтра + данные ---- */
+  let historyFilterKey = null;        // 'YYYY-M-D' | null (null = «все даты»)
+  let historyGroupsCache = [];        // [{ key, date, items: [{ track, t }] }]
+
   function openHistory() {
     const $hist = document.getElementById('historyTracks');
     const scr   = document.getElementById('historyScreen');
     if (!$hist || !scr) return;
 
-    /* 1. Собираем recent → треки (с фильтром) */
+    /* 1. recent → треки (с фильтром мусора) */
     const recent = window.PocuStore.recent.all();
     const lib    = window.PocuLibrary.all();
     const map    = new Map(lib.map(t => [t.id, t]));
@@ -188,48 +192,26 @@ window.PocuFavoritesUI = (() => {
       .map(r => ({ track: map.get(r.id), t: r.t || 0 }))
       .filter(x => x.track);
 
-    /* 2. Группируем по календарной дате (локальное время) */
+    /* 2. Группируем по календарной дате (локально) */
     const groupsMap = new Map();
     items.forEach(({ track, t }) => {
       const d = new Date(t || Date.now());
       const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-      if (!groupsMap.has(key)) groupsMap.set(key, { date: d, items: [] });
+      if (!groupsMap.has(key)) groupsMap.set(key, { key, date: d, items: [] });
       groupsMap.get(key).items.push({ track, t });
     });
 
-    /* 3. Свежие группы — сверху */
-    const groups = [...groupsMap.values()].sort((a, b) => b.date - a.date);
+    /* 3. Свежие — сверху */
+    historyGroupsCache = [...groupsMap.values()].sort((a, b) => b.date - a.date);
 
-    /* 4. Плоский порядок для playQueue */
-    const ordered = [];
-    groups.forEach(g => g.items.forEach(it => ordered.push(it.track)));
-
-    /* 5. Рендер: заголовок группы + треклист */
-    $hist.replaceChildren();
-    if (!ordered.length) {
-      $hist.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div><div class="state-sub">Здесь появится история прослушиваний</div></div>`;
-    } else {
-      const frag = document.createDocumentFragment();
-      let idx = 0;
-      groups.forEach(g => {
-        const header = document.createElement('div');
-        header.className = 'history-date-header';
-        header.textContent = dateLabel(g.date);
-        frag.appendChild(header);
-
-        g.items.forEach(it => {
-          const myIdx = idx++;
-          frag.appendChild(PocuTrackCard.create(it.track, {
-            index: myIdx,
-            onPlay: () => window.PocuPlayer.playQueue(ordered, myIdx)
-          }));
-        });
-      });
-      $hist.appendChild(frag);
-
-      PocuTrackCard.syncPlaying($hist, window.PocuPlayer.getState());
-      PocuTrackCard.syncHearts($hist, window.PocuStore.favorites.all());
+    /* 4. Сброс фильтра, если выбранной даты больше нет */
+    if (historyFilterKey && !historyGroupsCache.some(g => g.key === historyFilterKey)) {
+      historyFilterKey = null;
     }
+
+    /* 5. Рендер */
+    renderHistoryFilters();
+    renderHistoryList();
 
     /* 6. Открываем */
     window.PocuLayers?.front?.(scr);
@@ -241,6 +223,78 @@ window.PocuFavoritesUI = (() => {
       const inner = scr.querySelector('.playlist-overlay-inner');
       if (inner) inner.scrollTop = 0;
     });
+  }
+
+  function renderHistoryFilters() {
+    const $filters = document.getElementById('historyFilters');
+    if (!$filters) return;
+    $filters.replaceChildren();
+
+    /* Показываем только 7 последних дат */
+    const top = historyGroupsCache.slice(0, 7);
+    if (!top.length) { $filters.hidden = true; return; }
+    $filters.hidden = false;
+
+    top.forEach(g => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chip';
+      btn.dataset.dateKey = g.key;
+      btn.textContent = dateLabel(g.date);
+      if (historyFilterKey === g.key) btn.classList.add('active');
+
+      btn.addEventListener('click', () => {
+        if (historyFilterKey === g.key) historyFilterKey = null;
+        else historyFilterKey = g.key;
+        renderHistoryFilters();
+        renderHistoryList();
+      });
+
+      $filters.appendChild(btn);
+    });
+  }
+
+  function renderHistoryList() {
+    const $hist = document.getElementById('historyTracks');
+    if (!$hist) return;
+
+    if (!historyGroupsCache.length) {
+      $hist.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div><div class="state-sub">Здесь появится история прослушиваний</div></div>`;
+      return;
+    }
+
+    /* Какие группы показывать */
+    const groups = historyFilterKey
+      ? historyGroupsCache.filter(g => g.key === historyFilterKey)
+      : historyGroupsCache;
+
+    /* Плоский порядок «видимых» треков — для playQueue */
+    const visibleTracks = [];
+    groups.forEach(g => g.items.forEach(it => visibleTracks.push(it.track)));
+
+    $hist.replaceChildren();
+    const frag = document.createDocumentFragment();
+    let idx = 0;
+
+    groups.forEach(g => {
+      const header = document.createElement('div');
+      header.className = 'history-date-header';
+      header.textContent = dateLabel(g.date);
+      frag.appendChild(header);
+
+      g.items.forEach(it => {
+        const myIdx = idx++;
+        frag.appendChild(PocuTrackCard.create(it.track, {
+          index: myIdx,
+          onPlay: () => window.PocuPlayer.playQueue(visibleTracks, myIdx)
+        }));
+      });
+    });
+
+    $hist.appendChild(frag);
+
+    PocuTrackCard.syncPlaying($hist, window.PocuPlayer.getState());
+    PocuTrackCard.syncHearts($hist, window.PocuStore.favorites.all());
   }
 
   /* Лейбл даты: «Сегодня», «Вчера», «22 ноября», «22 ноября 2025» */
