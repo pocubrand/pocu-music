@@ -29,6 +29,8 @@ window.PocuFavoritesUI = (() => {
     window.PocuPlayer.subscribe(state => {
       PocuTrackCard.syncPlaying(els.tracksList, state);
       syncRecentPlaying(state);
+      const $hist = document.getElementById('historyTracks');
+      if ($hist) PocuTrackCard.syncPlaying($hist, state);
     });
 
     window.PocuStore.subscribe(state => {
@@ -38,6 +40,11 @@ window.PocuFavoritesUI = (() => {
         state.favoriteAlbums.join(','),
         state.favoriteArtists.join(',')
       ].join('|');
+
+      /* Сердечки в истории — на каждом тике стора */
+      const $hist = document.getElementById('historyTracks');
+      if ($hist) PocuTrackCard.syncHearts($hist, state.favorites);
+
       if (hash === lastHash) {
         PocuTrackCard.syncHearts(els.tracksList, state.favorites);
         return;
