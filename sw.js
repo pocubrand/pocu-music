@@ -1,5 +1,5 @@
 /* Pocu Music — Service Worker */
-const VERSION = 'v192';
+const VERSION = 'v193';
 const SHELL_CACHE = `pocu-shell-${VERSION}`;
 const MEDIA_CACHE = `pocu-media-${VERSION}`;
 
