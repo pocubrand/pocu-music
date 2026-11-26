@@ -7107,11 +7107,10 @@ img:not([src]) {
   .liked-tracks-preview { gap: 12px 16px; }
 }
 
-/* Превью одного ряда (горизонтальный скролл на всех экранах) */
+/* Превью одного ряда — 1:1 с recent-row */
 .fav-row {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 12px;
+  gap: 16px;
   overflow-x: auto;
   scrollbar-width: none;
   padding-bottom: 4px;
@@ -7121,12 +7120,29 @@ img:not([src]) {
 .fav-row::-webkit-scrollbar { display: none; }
 .fav-row > * {
   flex: 0 0 auto;
-  width: 118px;
+  width: 140px;   /* = .recent-tile на мобилке */
   min-width: 0;
 }
+
 @media (min-width: 900px) {
-  .fav-row { gap: 16px; }
-  .fav-row > * { width: 140px; }
+  .fav-row {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 16px;
+    overflow: visible;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  .fav-row > * { width: 100%; }
+}
+@media (min-width: 1200px) {
+  .fav-row { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (min-width: 1500px) {
+  .fav-row { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+@media (min-width: 1800px) {
+  .fav-row { grid-template-columns: repeat(8, minmax(0, 1fr)); }
 }
 
 /* Обложка-градиент с иконкой для overlay-страниц */
