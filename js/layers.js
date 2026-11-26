@@ -15,16 +15,19 @@ window.PocuLayers = (() => {
     // Поднимает элемент на самый верх (но не выше MAX_Z)
     front(el) {
       if (!el) return;
-
       let maxZ = BASE_Z;
       document.querySelectorAll(SELECTOR).forEach(o => {
         if (o === el) return;
-        const z = parseInt(o.style.zIndex, 10);
-        if (Number.isFinite(z) && z > maxZ) maxZ = z;
+        // Берём «эффективный» z-index: inline, если он есть, иначе computed (CSS)
+        const inline = parseInt(o.style.zIndex, 10);
+        const computed = parseInt(getComputedStyle(o).zIndex, 10);
+        const z = Number.isFinite(inline) ? inline
+                : Number.isFinite(computed) ? computed
+                : 0;
+        if (z > maxZ) maxZ = z;
       });
-
       el.style.zIndex = Math.min(MAX_Z, maxZ + 1);
-    },
+    }
     // Сбрасывает z-index (вызывать при закрытии)
     reset(el) {
       if (el) el.style.zIndex = '';

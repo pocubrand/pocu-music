@@ -493,70 +493,70 @@
     </div>
   </section>
 
-  <!-- ОВЕРЛЕИ -->
-  <section class="playlist-overlay" id="playlistScreen" aria-hidden="true">
-    <div class="playlist-overlay-inner">
-      <button class="back-btn" id="playlistBackBtn" aria-label="Назад">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        <span>Назад</span>
-      </button>
-      <div class="playlist-banner" id="playlistBanner"></div>
-      <h1 class="title" id="playlistTitle" style="display:none"></h1>
-      <div id="playlistActions" class="playlist-actions"></div>
-      <div id="playlistTracks" class="results"></div>
-    </div>
-  </section>
-
-  <section class="playlist-overlay" id="historyScreen" aria-hidden="true">
-    <div class="playlist-overlay-inner">
-      <button class="back-btn" id="historyBackBtn" aria-label="Назад">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        <span>Назад</span>
-      </button>
-      <h1 class="title">История прослушиваний</h1>
-      <div id="historyTracks" class="results"></div>
-    </div>
-  </section>
-
-  <section class="artist-overlay" id="artistScreen" aria-hidden="true">
-    <div class="artist-overlay-inner">
-      <button class="back-btn" id="artistBackBtn" aria-label="Назад">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        <span>Назад</span>
-      </button>
-      <div class="artist-hero">
-        <div class="artist-photo" id="artistPhoto"></div>
-        <h1 class="artist-name" id="artistName">—</h1>
-        <p class="artist-bio" id="artistBio" hidden></p>
-      </div>
-      <div id="artistActions" class="playlist-actions"></div>
-      <div id="artistTracks" class="results"></div>
-    </div>
-  </section>
-
-  <section class="track-overlay" id="trackScreen" aria-hidden="true">
-    <div class="track-overlay-inner entity-page">
-      <div class="entity-header">
-        <button class="back-btn entity-back" id="trackBackBtn" aria-label="Назад">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-          <span>Назад</span>
-        </button>
-        <div class="entity-cover-wrap">
-          <img class="entity-cover" id="trackPageArt" alt="">
-        </div>
-        <div class="entity-meta">
-          <div class="entity-type">Трек</div>
-          <h1 class="entity-title" id="trackPageTitle">—</h1>
-          <div class="entity-sub" id="trackPageArtist">—</div>
-          <div class="entity-info" id="trackPageInfo"></div>
-          <div class="entity-actions" id="trackPageActions"></div>
-        </div>
-      </div>
-      <div class="entity-tracks" id="trackPageTracks"></div>
-    </div>
-  </section>
-
 </main>
+
+<!-- ОВЕРЛЕИ -->
+<section class="playlist-overlay" id="playlistScreen" aria-hidden="true">
+  <div class="playlist-overlay-inner">
+    <button class="back-btn" id="playlistBackBtn" aria-label="Назад">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Назад</span>
+    </button>
+    <div class="playlist-banner" id="playlistBanner"></div>
+    <h1 class="title" id="playlistTitle" style="display:none"></h1>
+    <div id="playlistActions" class="playlist-actions"></div>
+    <div id="playlistTracks" class="results"></div>
+  </div>
+</section>
+
+<section class="playlist-overlay" id="historyScreen" aria-hidden="true">
+  <div class="playlist-overlay-inner">
+    <button class="back-btn" id="historyBackBtn" aria-label="Назад">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Назад</span>
+    </button>
+    <h1 class="title">История прослушиваний</h1>
+    <div id="historyTracks" class="results"></div>
+  </div>
+</section>
+
+<section class="artist-overlay" id="artistScreen" aria-hidden="true">
+  <div class="artist-overlay-inner">
+    <button class="back-btn" id="artistBackBtn" aria-label="Назад">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Назад</span>
+    </button>
+    <div class="artist-hero">
+      <div class="artist-photo" id="artistPhoto"></div>
+      <h1 class="artist-name" id="artistName">—</h1>
+      <p class="artist-bio" id="artistBio" hidden></p>
+    </div>
+    <div id="artistActions" class="playlist-actions"></div>
+    <div id="artistTracks" class="results"></div>
+  </div>
+</section>
+
+<section class="track-overlay" id="trackScreen" aria-hidden="true">
+  <div class="track-overlay-inner entity-page">
+    <div class="entity-header">
+      <button class="back-btn entity-back" id="trackBackBtn" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Назад</span>
+      </button>
+      <div class="entity-cover-wrap">
+        <img class="entity-cover" id="trackPageArt" alt="">
+      </div>
+      <div class="entity-meta">
+        <div class="entity-type">Трек</div>
+        <h1 class="entity-title" id="trackPageTitle">—</h1>
+        <div class="entity-sub" id="trackPageArtist">—</div>
+        <div class="entity-info" id="trackPageInfo"></div>
+        <div class="entity-actions" id="trackPageActions"></div>
+      </div>
+    </div>
+    <div class="entity-tracks" id="trackPageTracks"></div>
+  </div>
+</section>
 
 <div class="miniplayer" id="miniplayer" hidden>
   <img class="mp-art" id="mpArt" alt="">
