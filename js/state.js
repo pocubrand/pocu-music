@@ -45,5 +45,15 @@ window.PocuState = (() => {
     return String(s == null ? '' : s).replace(/"/g, '&quot;');
   }
 
-  return { html, node, icons: ICONS };
+  /**
+   * Переключает overlay в «пустое» состояние.
+   * Когда isEmpty=true: скрывает header (кроме back), h1.title, filters;
+   * центрирует state-block по вертикали.
+   */
+  function setEmptyState(overlayEl, isEmpty) {
+    if (!overlayEl) return;
+    overlayEl.classList.toggle('page--empty', !!isEmpty);
+  }
+
+  return { html, node, icons: ICONS, setEmptyState };
 })();

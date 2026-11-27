@@ -7243,3 +7243,53 @@ img:not([src]) {
   flex: 0 0 auto;
   min-width: 140px;
 }
+
+/* =========================================================
+   EMPTY PAGE — центрирование state-block в пустых overlay
+   ========================================================= */
+
+/* Скрываем cover/meta, оставляем только «Назад» */
+.page--empty .entity-header {
+  display: block;
+  padding: 0;
+  margin-bottom: 32px;
+  min-height: 0;
+}
+.page--empty .entity-header > .entity-cover-wrap,
+.page--empty .entity-header > .entity-meta {
+  display: none;
+}
+.page--empty .entity-header > .entity-back {
+  position: static;
+  margin: 0 0 16px;
+  display: inline-flex;
+}
+
+/* Скрываем статичные заголовки и фильтры (История, playlistTitle и т.д.) */
+.page--empty .playlist-overlay-inner > h1.title,
+.page--empty .history-filters {
+  display: none !important;
+}
+
+/* Центр по вертикали для сетки / треклиста */
+.page--empty .entity-grid,
+.page--empty .entity-tracks,
+.page--empty .results {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 320px);
+  max-width: 100%;
+}
+@media (min-width: 900px) {
+  .page--empty .entity-grid,
+  .page--empty .entity-tracks,
+  .page--empty .results {
+    min-height: calc(100vh - 380px);
+  }
+}
+
+/* Внутри пустой grid не нужен auto-fill */
+.page--empty .entity-grid > * {
+  grid-column: auto !important;
+}

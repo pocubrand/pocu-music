@@ -827,6 +827,7 @@ window.PocuPlaylistsUI = (() => {
     openPlaylistScreen,
     openPlaylist,
     closePlaylistScreen: closeScreen,
-    renderPlaylists
+    renderPlaylists,
+    openCreateSheet: openSheet
   };
 })();

@@ -292,7 +292,9 @@ window.PocuFavoritesUI = (() => {
           title: 'Здесь будут любимые треки',
           sub: 'Лайкай треки — они появятся здесь'
         });
+        PocuState.setEmptyState(els.likedScreen, true);
       } else {
+        PocuState.setEmptyState(els.likedScreen, false);
         const frag = document.createDocumentFragment();
         ordered.forEach((t, i) => {
           frag.appendChild(PocuTrackCard.create(t, {
@@ -321,7 +323,9 @@ window.PocuFavoritesUI = (() => {
           title: 'Здесь будут альбомы',
           sub: 'Лайкай альбомы — они появятся здесь'
         });
+        PocuState.setEmptyState(els.likedAlbumsScreen, true);
       } else {
+        PocuState.setEmptyState(els.likedAlbumsScreen, false);
         const lib = window.PocuLibrary.all();
         list.forEach(({ artist, album }) => {
           const tracks = lib.filter(t => t.artist === artist && t.album === album);
@@ -354,9 +358,15 @@ window.PocuFavoritesUI = (() => {
           cta: { label: '+ Создать плейлист', id: 'allPlCta' }
         });
         els.allPlList.querySelector('#allPlCta')?.addEventListener('click', () => {
-          document.getElementById('createPlaylistBtn')?.click();
+          if (window.PocuPlaylistsUI?.openCreateSheet) {
+            window.PocuPlaylistsUI.openCreateSheet();
+          } else {
+            document.getElementById('createPlaylistBtn')?.click();
+          }
         });
+        PocuState.setEmptyState(els.allPlScreen, true);
       } else {
+        PocuState.setEmptyState(els.allPlScreen, false);
         items.forEach(({ pl, mode }) => els.allPlList.appendChild(createPlaylistTile(pl, mode)));
       }
     }
@@ -376,7 +386,9 @@ window.PocuFavoritesUI = (() => {
           title: 'Здесь будут артисты',
           sub: 'Лайкай артистов — они появятся здесь'
         });
+        PocuState.setEmptyState(els.likedArtistsScreen, true);
       } else {
+        PocuState.setEmptyState(els.likedArtistsScreen, false);
         const lib = window.PocuLibrary.all();
         ids.forEach(id => {
           const pocu = window.PocuArtists.get(id);
@@ -426,6 +438,7 @@ window.PocuFavoritesUI = (() => {
 
     renderHistoryFilters();
     renderHistoryList();
+    PocuState.setEmptyState(scr, historyGroupsCache.length === 0);
     openOverlay(scr);
   }
 
