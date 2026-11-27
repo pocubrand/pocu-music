@@ -513,7 +513,8 @@ window.PocuPlaylistsUI = (() => {
         title: 'Плейлист пуст',
         sub: 'Добавь треки через ⋯ на странице трека'
       });
-    } else {
+      return;
+    }
 
     const isOwn = current.mode === 'own';
     const frag = document.createDocumentFragment();
