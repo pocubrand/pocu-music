@@ -202,7 +202,11 @@ window.PocuAlbumUI = (() => {
   function renderTracks(tracks) {
     els.tracks.replaceChildren();
     if (!tracks.length) {
-      els.tracks.innerHTML = `<div class="state-block"><div class="state-title">Пока нет треков</div></div>`;
+      els.tracks.innerHTML = PocuState.html({
+        iconName: 'vinyl',
+        title: 'Пока нет треков',
+        sub: 'Треки этого альбома ещё не добавлены'
+      });
       return;
     }
 

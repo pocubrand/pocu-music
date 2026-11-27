@@ -7196,3 +7196,50 @@ img:not([src]) {
   }
 }
 .entity-grid > .home-tile { width: 100%; }
+
+/* =========================================================
+   STATE BLOCK v2 — единый компонент пустых состояний
+   ========================================================= */
+
+.state-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 48px 24px;
+  text-align: center;
+}
+.state-block--compact { padding: 32px 20px; }
+
+.state-block-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--ui-hi);
+  color: var(--text-dim);
+  display: grid;
+  place-items: center;
+  margin-bottom: 4px;
+}
+.state-block-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.state-title {
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -.02em;
+  line-height: 1.3;
+}
+.state-sub {
+  font-size: 13.5px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  max-width: 320px;
+}
+.state-block-cta {
+  margin-top: 10px;
+  flex: 0 0 auto;
+  min-width: 140px;
+}

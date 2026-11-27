@@ -54,6 +54,11 @@ window.PocuFavoritesUI = (() => {
       likedArtistsList:   document.getElementById('likedArtistsList')
     };
 
+    /* --- CTA в пустом Избранном --- */
+    document.getElementById('favEmptyCta')?.addEventListener('click', () => {
+      document.querySelector('.tab-item[data-tab="charts"]')?.click();
+    });
+
     /* --- ">" links --- */
     document.querySelectorAll('.section-head-btn[data-open]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -282,7 +287,11 @@ window.PocuFavoritesUI = (() => {
     if (els.likedList) {
       els.likedList.replaceChildren();
       if (!ordered.length) {
-        els.likedList.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div></div>`;
+        els.likedList.innerHTML = PocuState.html({
+          iconName: 'heart',
+          title: 'Здесь будут любимые треки',
+          sub: 'Лайкай треки — они появятся здесь'
+        });
       } else {
         const frag = document.createDocumentFragment();
         ordered.forEach((t, i) => {
@@ -307,7 +316,11 @@ window.PocuFavoritesUI = (() => {
     if (els.likedAlbumsList) {
       els.likedAlbumsList.replaceChildren();
       if (!list.length) {
-        els.likedAlbumsList.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div></div>`;
+        els.likedAlbumsList.innerHTML = PocuState.html({
+          iconName: 'vinyl',
+          title: 'Здесь будут альбомы',
+          sub: 'Лайкай альбомы — они появятся здесь'
+        });
       } else {
         const lib = window.PocuLibrary.all();
         list.forEach(({ artist, album }) => {
@@ -334,7 +347,15 @@ window.PocuFavoritesUI = (() => {
     if (els.allPlList) {
       els.allPlList.replaceChildren();
       if (!items.length) {
-        els.allPlList.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div><div class="state-sub">Создай плейлист — он появится здесь</div></div>`;
+        els.allPlList.innerHTML = PocuState.html({
+          iconName: 'playlist',
+          title: 'Пока пусто',
+          sub: 'Создай первый плейлист — он появится здесь',
+          cta: { label: '+ Создать плейлист', id: 'allPlCta' }
+        });
+        els.allPlList.querySelector('#allPlCta')?.addEventListener('click', () => {
+          document.getElementById('createPlaylistBtn')?.click();
+        });
       } else {
         items.forEach(({ pl, mode }) => els.allPlList.appendChild(createPlaylistTile(pl, mode)));
       }
@@ -350,7 +371,11 @@ window.PocuFavoritesUI = (() => {
     if (els.likedArtistsList) {
       els.likedArtistsList.replaceChildren();
       if (!ids.length) {
-        els.likedArtistsList.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div></div>`;
+        els.likedArtistsList.innerHTML = PocuState.html({
+          iconName: 'artist',
+          title: 'Здесь будут артисты',
+          sub: 'Лайкай артистов — они появятся здесь'
+        });
       } else {
         const lib = window.PocuLibrary.all();
         ids.forEach(id => {
@@ -432,7 +457,11 @@ window.PocuFavoritesUI = (() => {
     const $hist = document.getElementById('historyTracks');
     if (!$hist) return;
     if (!historyGroupsCache.length) {
-      $hist.innerHTML = `<div class="state-block"><div class="state-title">Пока пусто</div></div>`;
+      $hist.innerHTML = PocuState.html({
+        iconName: 'history',
+        title: 'История пуста',
+        sub: 'Здесь появится то, что ты недавно слушал'
+      });
       return;
     }
     const groups = historyFilterKey

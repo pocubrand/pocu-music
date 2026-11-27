@@ -714,3 +714,8 @@ html { transition: background-color .3s ease; }
   border-color: rgba(124,92,255,.45);
   color: var(--accent);
 }
+
+[data-theme="light"] .state-block-icon {
+  background: var(--ui-hi);
+  color: var(--text-dim);
+}

@@ -496,11 +496,12 @@ window.PocuHomeUI = (() => {
     const all = window.PocuLibrary.all();
     if (!all.length) {
       els.picksSection.hidden = false;
-      els.picksRow.innerHTML = `
-        <div class="state-block" style="padding: 20px 0;">
-          <div class="state-title">Библиотека пуста</div>
-          <div class="state-sub">Добавь треки — здесь появятся рекомендации</div>
-        </div>`;
+      els.picksRow.innerHTML = PocuState.html({
+        iconName: 'music',
+        title: 'Библиотека пуста',
+        sub: 'Добавь треки — здесь появятся рекомендации',
+        compact: true
+      });
       lastPicksHash = '';
       return;
     }

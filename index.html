@@ -259,14 +259,21 @@
     <div class="section-head"><h2>Чарт недели</h2></div>
     <div id="chartsTopList" class="charts-top-list"></div>
     <div id="chartsTopEmpty" class="state-block" hidden>
-      <div class="state-title">Пока пусто</div>
-      <div class="state-sub">Топ появится, когда накопятся прослушивания</div>
+      <div class="state-block-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>
+      </div>
+      <div class="state-title">Чарт пока пуст</div>
+      <div class="state-sub">Он появится, когда накопятся прослушивания</div>
     </div>
 
     <div class="section-head"><h2>Новинки</h2></div>
     <div class="home-row" id="chartsNewList"></div>
     <div id="chartsNewEmpty" class="state-block" hidden>
-      <div class="state-title">Пока пусто</div>
+      <div class="state-block-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 16.9l-5.4 2.9 1-6.1L3.2 9.4l6.1-.9z"/></svg>
+      </div>
+      <div class="state-title">Новинок пока нет</div>
+      <div class="state-sub">Здесь появятся свежие релизы</div>
     </div>
   </section>
 
@@ -275,8 +282,12 @@
     <h1 class="title">Избранное</h1>
 
     <div id="favEmpty" class="state-block" hidden>
-      <div class="state-title">Пока пусто</div>
+      <div class="state-block-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <div class="state-title">Начни собирать музыку</div>
       <div class="state-sub">Лайкай треки, альбомы и артистов — они появятся здесь</div>
+      <button class="btn btn-primary state-block-cta" id="favEmptyCta" type="button">Найти музыку</button>
     </div>
 
     <!-- Мне нравится -->
@@ -342,10 +353,13 @@
 
     <div id="profileGuest" class="profile-guest">
       <div class="state-block">
+        <div class="state-block-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        </div>
         <div class="state-title">Локальный режим</div>
         <div class="state-sub">Войди, чтобы сохранять музыку в облаке</div>
+        <button class="btn btn-primary state-block-cta" id="profileLoginBtn">Войти</button>
       </div>
-      <button class="btn btn-primary" id="profileLoginBtn" style="width:100%;max-width:320px;margin:0 auto;display:block;">Войти</button>
     </div>
 
     <div id="profileContent" class="entity-page" hidden>
@@ -868,6 +882,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/layers.js"></script>
+<script src="js/state.js"></script>
 <script src="js/store.js"></script>
 <script src="js/library.js"></script>
 <script src="js/artists.js"></script>

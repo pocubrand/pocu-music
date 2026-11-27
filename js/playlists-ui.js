@@ -508,9 +508,12 @@ window.PocuPlaylistsUI = (() => {
   function renderTracks(pl, ordered) {
     els.tracks.replaceChildren();
     if (!ordered.length) {
-      els.tracks.innerHTML = `<div class="state-block"><div class="state-title">Плейлист пуст</div></div>`;
-      return;
-    }
+      els.tracks.innerHTML = PocuState.html({
+        iconName: 'playlist',
+        title: 'Плейлист пуст',
+        sub: 'Добавь треки через ⋯ на странице трека'
+      });
+    } else {
 
     const isOwn = current.mode === 'own';
     const frag = document.createDocumentFragment();
