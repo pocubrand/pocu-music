@@ -7293,3 +7293,6 @@ img:not([src]) {
 .page--empty .entity-grid > * {
   grid-column: auto !important;
 }
+
+/* hidden должен работать даже с display: flex */
+.state-block[hidden] { display: none !important; }
