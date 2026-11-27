@@ -7097,18 +7097,28 @@ img:not([src]) {
   flex: none;
 }
 
-/* Превью лайкнутых треков: 2 кол × 4 ряда — жёстко 50/50 */
+/* Горизонтальный ряд карточек (альтернатива сетке 2×4) */
 .liked-tracks-preview {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 10px;
+  grid-template-rows: repeat(4, auto);   /* 4 ряда */
+  grid-auto-flow: column;                /* но колонки скроллятся вбок */
+  grid-auto-columns: minmax(280px, 320px);
+  gap: 8px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
 }
-.liked-tracks-preview > * {
-  min-width: 0;
-  overflow: hidden;
-}
+.liked-tracks-preview::-webkit-scrollbar { display: none; }
 @media (min-width: 900px) {
-  .liked-tracks-preview { gap: 12px 16px; }
+  .liked-tracks-preview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(4, auto);
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    overflow: visible;
+    padding-bottom: 0;
+  }
 }
 
 /* Превью одного ряда — 1:1 с recent-row */
